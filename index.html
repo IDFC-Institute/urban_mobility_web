@@ -8,7 +8,7 @@
 <div id="mapid"></div>
 
 <style>
-#mapid { height: 466px; width: 333px; }
+#mapid { height: 100vh; width: 150vh; }
 </style>
 
 
@@ -17,7 +17,7 @@
 
 var map = L
       .map('mapid')
-      .setView([18.9860, 72.8411], 12);
+      .setView([18.9990, 72.8411], 12);
     
     // Tile type: openstreetmap normal
 var openstreetmap = L.tileLayer(
@@ -27,62 +27,16 @@ var openstreetmap = L.tileLayer(
       maxZoom: 14
     })
 
-    const radius = 1933;
+    const radius = 500;
     const tti = 2.2;
 
     //https://leafletjs.com/examples/quick-start/
-var circle = L.circle([19.0103, 72.8353], {
+var circle = L.circle([19.0605751, 72.8626837], {
     color: 'red',
     fillColor: '#f03',
     fillOpacity: 0.3,
     radius: radius
 }).addTo(map);
-
-var circle1 = L.circle([19.0103, 72.8353], {
-    color: 'blue',
-    fillColor: 'blue',
-    fillOpacity: 0.3,
-    radius: radius*tti
-}).addTo(map);
-
-var circle2 = L.circle([19.0103, 72.8353], {
-    color: 'black',
-    fillColor: 'black',
-    fillOpacity: 1,
-    radius: 100
-}).addTo(map);
-
-var circle3 = L.circle([19.0103, 72.8353], {
-    color: 'black',
-    fillColor: 'black',
-    fillOpacity: 0,
-    radius: 130
-}).addTo(map);
-
-// https://codepen.io/kad3nce/pen/bEdwOE
-circle1.on('mousedown', function (event) {
-  //L.DomEvent.stop(event);
-  map.dragging.disable();
-  let {lat: circleStartingLat, lng: circleStartingLng} = circle1._latlng;
-  let {lat: mouseStartingLat, lng: mouseStartingLng} = event.latlng;
-
-  map.on('mousemove', event => {
-    let {lat: mouseNewLat, lng: mouseNewLng} = event.latlng;
-    let latDifference = mouseStartingLat - mouseNewLat;
-    let lngDifference = mouseStartingLng - mouseNewLng;
-
-    let center = [circleStartingLat-latDifference, circleStartingLng-lngDifference];
-    circle1.setLatLng(center);
-    circle.setLatLng(center);
-    circle2.setLatLng(center);
-    circle3.setLatLng(center);
-  });
-});
-
-map.on('mouseup', () => { 
-  map.dragging.enable();
-  map.removeEventListener('mousemove');
-});
     
     // Initialize with openstreetmap
     openstreetmap.addTo(map);
