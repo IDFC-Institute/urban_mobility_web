@@ -63,29 +63,26 @@ var popup = L.popup({
     const radius = 500;
     const tti = 2.2;
 
-    //https://leafletjs.com/examples/quick-start/
-var circle1 = L.circle([19.0605751, 72.8626837], {
+  //https://leafletjs.com/examples/quick-start/
+
+  // var marker = new L.marker([19.06, 72.86], { opacity: 1 });
+// marker.addTo(map);
+
+
+var circle_bkc = L.circle([19.0605751, 72.8626837], {
     color: 'red',
     fillColor: 'red',
     fillOpacity: 0.3,
     radius: radius
-}).addTo(map);
-
+}).addTo(map).bindTooltip("BKC", {permanent: true, className: "my-label", offset: [0, 0] });
 //https://gis.stackexchange.com/questions/59571/how-to-add-text-only-labels-on-leaflet-map-with-no-icon
-var marker = new L.marker([19.0605751, 72.8626837], { opacity: 0.01 }); //opacity may be set to zero
-marker.bindTooltip("BKC", {permanent: true, className: "my-label", offset: [0, 0] });
-marker.addTo(map);
 
-var circle2 = L.circle([18.9347773, 72.8217133], {
+var circle_borivali = L.circle([18.9347773, 72.8217133], {
     color: 'blue',
     fillColor: 'blue',
     fillOpacity: 0.3,
     radius: radius
-}).addTo(map);
-
-var marker = new L.marker([18.9347773, 72.8217133], { opacity: 0.01 }); //opacity may be set to zero
-marker.bindTooltip("Borivali", {permanent: true, className: "my-label", offset: [0, 0] });
-marker.addTo(map);
+}).addTo(map).bindTooltip("Borivali", {permanent: true, className: "my-label", offset: [0, 0] });
 
 //https://www.liedman.net/leaflet-routing-machine/tutorials/basic-usage/
 L.Routing.control({
