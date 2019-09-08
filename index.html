@@ -139,8 +139,6 @@ var circle_chembur = L.circle([19.0443516, 72.8919425], {
     radius: radius
 }).addTo(map).bindTooltip("Chembur", {permanent: true, className: "my-label", offset: [0, 0] });
 
-circle_chembur.on("mouseover", function (d, i){ d3.select("#circle_chembur" + i).attr("r", "20px");})
-
 var origin_lat = 19.0605751;
 var origin_lon = 72.8626837;
 var dest_lat = 18.9347773;
@@ -161,23 +159,7 @@ L.Routing.control({
 }).addTo(map);
 
     
-    
-    // Initialize with openstreetmap
-    openstreetmap.addTo(map);
-
-
-
-    // map.selectAll("circle")
-    //             .data(values[1])
-    //             .enter()
-    //             .append("circle")
-    //             .attr("cx", function(d) { return projection([d.Longitude, d.Latitude])[0];} )
-    //             .attr("cy", function(d) { return projection([d.Longitude, d.Latitude])[1];} )
-    //             .attr("r", "15px")
-    //             .style("fill", "red")
-    //             .attr("id", function(d, i){ return "circle" + i; })
-    //             .on("mouseover", function (d, i){ d3.select("#circle" + i).attr("r", "20px"); d3.select("#text" + i).attr("fill", "blue");})
-    //             .on("mouseout", function (d, i){ d3.select("#circle" + i).attr("r", "10px"); d3.select("#text" + i).attr("fill", "red");}),
+ openstreetmap.addTo(map);
 
     
     </script>
