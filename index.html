@@ -7,10 +7,30 @@
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 <!-- <script src="https://d3js.org/d3.v5.min.js"></script> -->
 
-<div id="mapid"></div>
+<div id="mapid" class='custom-popup' ></div>
 
 <style>
 #mapid { height: 100vh; width: 150vh; }
+
+.custom-popup .leaflet-popup-content-wrapper {
+  background:#FFFFFF;
+  color:#000033;
+  font-size:16px;
+  line-height:24px;
+  border-radius: 0px;
+  }
+.custom-popup .leaflet-popup-content-wrapper a {
+    color:rgba(255,255,255,0.1);
+  }
+.custom-popup .leaflet-popup-tip-container {
+  width:30px;
+  height:15px;
+  }
+.custom-popup .leaflet-popup-tip {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
 </style>
 
 
@@ -18,8 +38,10 @@
 <script>
 
 var map = L
-      .map('mapid')
+      .map('mapid', {closePopupOnClick: false})
       .setView([18.9990, 72.8411], 9);
+
+      // var map = L.map('map', { closePopupOnClick: false}).setView([39.7392, -104.9903], 17);
     
 // Tile type: openstreetmap normal
 var openstreetmap = L.tileLayer(
@@ -28,6 +50,14 @@ var openstreetmap = L.tileLayer(
       minZoom: 12,
       maxZoom: 14
     })
+
+var popup = L.popup({
+          closeButton: false,
+          autoClose: false
+        })
+        .setLatLng([19.0805751, 72.67])
+        .setContent('<p>Welcome to IDFC\'s xxx</p>')
+        .openOn(map);
 
     const radius = 500;
     const tti = 2.2;
