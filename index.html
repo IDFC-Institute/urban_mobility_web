@@ -71,26 +71,38 @@ var popup = L.popup({
 //https://gis.stackexchange.com/questions/59571/how-to-add-text-only-labels-on-leaflet-map-with-no-icon
 
 
-var circle_bkc = L.circle([19.0605751, 72.8626837], {
-    color: 'red',
-    fillColor: 'red',
-    fillOpacity: 0.3,
-    radius: radius
-}).addTo(map).bindTooltip("BKC", {permanent: true, className: "my-label", offset: [0, 0] });
+bkc_lat = 19.0605751;
+bkc_lon = 72.8626837;
+bkc_name = "Bandra-Kurla Complex";
 
-var circle_andherieast = L.circle([19.1155649, 72.8608375], {
-    color: 'red',
-    fillColor: 'red',
-    fillOpacity: 0.3,
-    radius: radius
-}).addTo(map).bindTooltip("Andheri East", {permanent: true, className: "my-label", offset: [0, 0] });
+andherieast_lat = 19.1155649;
+andherieast_lon = 72.8608375;
+andherieast_name = "Andheri East";
 
-var circle_malad = L.circle([19.1852403, 72.8577155], {
+malad_lat = 19.1852403;
+malad_lon = 72.8577155;
+malad_name = "Malad";
+
+var circle_bkc = L.circle([bkc_lat, bkc_lon], {
     color: 'red',
     fillColor: 'red',
     fillOpacity: 0.3,
     radius: radius
-}).addTo(map).bindTooltip("Malad", {permanent: true, className: "my-label", offset: [0, 0] });
+}).addTo(map).bindTooltip(bkc_name, {permanent: true, className: "my-label", offset: [0, 0] });
+
+var circle_andherieast = L.circle([andherieast_lat, andherieast_lon], {
+    color: 'red',
+    fillColor: 'red',
+    fillOpacity: 0.3,
+    radius: radius
+}).addTo(map).bindTooltip(andherieast_name, {permanent: true, className: "my-label", offset: [0, 0] });
+
+var circle_malad = L.circle([malad_lat, malad_lon], {
+    color: 'red',
+    fillColor: 'red',
+    fillOpacity: 0.3,
+    radius: radius
+}).addTo(map).bindTooltip(malad_name, {permanent: true, className: "my-label", offset: [0, 0] });
 
 var circle_narimanpoint = L.circle([18.9279097, 72.8217757], {
     color: 'red',
@@ -127,14 +139,21 @@ var circle_chembur = L.circle([19.0443516, 72.8919425], {
     radius: radius
 }).addTo(map).bindTooltip("Chembur", {permanent: true, className: "my-label", offset: [0, 0] });
 
+circle_chembur.on("mouseover", function (d, i){ d3.select("#circle_chembur" + i).attr("r", "20px");})
+
+var origin_lat = 19.0605751;
+var origin_lon = 72.8626837;
+var dest_lat = 18.9347773;
+var dest_lon = 72.8217133;
+
 //https://www.liedman.net/leaflet-routing-machine/tutorials/basic-usage/
 L.Routing.control({
   createMarker: function() { return null; },
   waypoints: [
-    L.latLng(19.0605751, 72.8626837),
-    L.latLng(18.9347773, 72.8217133)
+    L.latLng(origin_lat, origin_lon),
+    L.latLng(dest_lat, dest_lon)
   ],
-  lineOptions: { styles: [{color: 'black', opacity: 1, weight: 5}]},
+  lineOptions: { styles: [{color: 'navy', opacity: 1, weight: 5}]},
   routeWhileDragging: false,
   geometryOnly: true,
   show: false,
