@@ -40,12 +40,21 @@ var circle1 = L.circle([19.0605751, 72.8626837], {
     radius: radius
 }).addTo(map);
 
+//https://gis.stackexchange.com/questions/59571/how-to-add-text-only-labels-on-leaflet-map-with-no-icon
+var marker = new L.marker([19.0605751, 72.8626837], { opacity: 0.01 }); //opacity may be set to zero
+marker.bindTooltip("BKC", {permanent: true, className: "my-label", offset: [0, 0] });
+marker.addTo(map);
+
 var circle2 = L.circle([18.9347773, 72.8217133], {
     color: 'blue',
     fillColor: 'blue',
     fillOpacity: 0.3,
     radius: radius
 }).addTo(map);
+
+var marker = new L.marker([18.9347773, 72.8217133], { opacity: 0.01 }); //opacity may be set to zero
+marker.bindTooltip("Lower Parel", {permanent: true, className: "my-label", offset: [0, 0] });
+marker.addTo(map);
 
 //https://www.liedman.net/leaflet-routing-machine/tutorials/basic-usage/
 L.Routing.control({
