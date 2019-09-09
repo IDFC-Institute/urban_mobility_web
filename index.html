@@ -38,6 +38,8 @@ L.svg().addTo(map);
 
 var g = d3.select("#mapid").select("svg"); // Condenses the SVG selection into g
 
+g.attr('pointer-events', 'all'); //https://stackoverflow.com/a/17495417/7207315
+
 g.append("text") // Why is this text in the "wrong" place?
     // .attr("id", (d) => "ConstituencyNameText" ) 
     .attr("x", -5)
