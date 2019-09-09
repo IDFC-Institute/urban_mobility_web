@@ -21,15 +21,15 @@ var origin_lat = 19.0605751;
 var origin_lon = 72.8626837;
 var dest_lat = 18.9347773;
 var dest_lon = 72.8217133;
+var route = L.Routing.control({
+    createMarker: function() { return null; },
+    waypoints: []
+  });
 
 function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
-{
-  //Here we need to remove the previously-shown route
-  if(typeof route !== 'undefined')
-  {
-    map.removeLayer(route);
-  }
-  
+{ 
+  map.removeControl(route);
+
   //https://www.liedman.net/leaflet-routing-machine/tutorials/basic-usage/
   route = L.Routing.control({
     createMarker: function() { return null; },
