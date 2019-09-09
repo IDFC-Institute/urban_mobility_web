@@ -11,26 +11,6 @@
 
 <style>
 #mapid { height: 100vh; width: 150vh; }
-
-.custom-popup .leaflet-popup-content-wrapper {
-  background:#FFFFFF;
-  color:#000033;
-  font-size:16px;
-  line-height:24px;
-  border-radius: 0px;
-  }
-.custom-popup .leaflet-popup-content-wrapper a {
-    color:rgba(255,255,255,0.1);
-  }
-.custom-popup .leaflet-popup-tip-container {
-  width:30px;
-  height:15px;
-  }
-.custom-popup .leaflet-popup-tip {
-    background: transparent;
-    border: none;
-    box-shadow: none;
-  }
 </style>
 
 
@@ -51,21 +31,21 @@ var openstreetmap = L.tileLayer(
       maxZoom: 14
     })
 
-//https://codepen.io/owenjam/pen/xRPMao
-var popup = L.popup({
-          closeButton: false,
-          autoClose: false
-        })
-        .setLatLng([19.0805751, 72.67])
-        .setContent('<p>Residential areas are in red; business districts in blue. Click a residential area and a business district to get route and congestion information between them.</p>')
-        .openOn(map);
 
-    const radius = 500;
-    const tti = 2.2;
-
-  //https://leafletjs.com/examples/quick-start/
+//https://leafletjs.com/examples/quick-start/
 
 L.svg().addTo(map);
+
+d3.select("#mapid")
+            .select("svg")
+            .append("text")
+            // .attr("id", (d) => "ConstituencyNameText" ) 
+            .attr("x", -1000)
+            .attr("y", -1000)
+            .style("font-family", "Georgia")
+            .style("font-weight", "bold")
+            .style("font-size", "20px")
+            .text("Welcome!");
 
 var places = d3.csv("places.csv");
 
@@ -114,7 +94,7 @@ Promise.all([places]).then(
 
 
 
-    function update() {
+  function update() {
       d3.selectAll("circle")
         .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
         .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y });
