@@ -13,8 +13,6 @@
 #mapid { height: 100vh; width: 150vh; }
 </style>
 
-
-
 <script>
 
 var route = L.Routing.control({
@@ -59,9 +57,9 @@ var openstreetmap = L.tileLayer(
 
 L.svg().addTo(map);
 
-var origin_lat = 19.0605751;
+var origin_lat = 19.0605751; // Origin should always be a business district
 var origin_lon = 72.8626837;
-var dest_lat = 18.9347773;
+var dest_lat = 18.9347773; // Destination should always be residential
 var dest_lon = 72.8217133;
 DrawARoute(origin_lat, origin_lon, dest_lat, dest_lon);
 
@@ -83,6 +81,7 @@ var places = d3.csv("places.csv");
 Promise.all([places]).then(
     function(values)
     {    
+
         g.selectAll("circle")
             .data(values[0])
             .enter()
@@ -94,7 +93,20 @@ Promise.all([places]).then(
             .attr("id", function(d, i){ return "circle" + i; })
             .on("mouseover", function (d, i){ d3.select("#circle" + i).attr("r", "20px"); d3.select("#text" + i).attr("fill", "blue");})
             .on("mouseout", function (d, i){ d3.select("#circle" + i).attr("r", "10px"); d3.select("#text" + i).attr("fill", "red");})
-            .on("click", function (d){ DrawARoute(d.Lat,d.Lon, dest_lat, dest_lon); }),
+            .on("click", function (d){ 
+
+              if (d.Type=="business")
+              {
+                origin_lat = d.Lat;
+                origin_lon = d.Lon;
+              }
+              if (d.Type=="residential")
+              {
+                dest_lat = d.Lat;
+                dest_lon = d.Lon;
+              }
+              
+              DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon); }),
             // .style("fill", function (d)
             // {
             //  // d.total = data.get(d.id) || 0;
