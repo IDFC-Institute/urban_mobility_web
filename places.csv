@@ -1,10 +1,10 @@
-Name,Lat,Lon,Type
-Bandra-Kurla Complex,19.0605751,72.8626837,business
-Nariman Point,18.9279097,72.8217757,business
-Malad,19.1852403,72.8577155,business
-Lower Parel,18.9991801,72.8289638,business
-Borivali,19.2205771,72.862368,residential
-Marine Drive,18.9347773,72.8217133,residential
-Andheri West,19.1339977,72.8339749,residential
-Chembur,19.0443516,72.8919425,residential
-Andheri East,19.1155649,72.8608375,business
+ID,Name,Lat,Lon,Type
+bkc,Bandra-Kurla Complex,19.0605751,72.8626837,business
+nariman_point,Nariman Point,18.9279097,72.8217757,business
+malad,Malad,19.1852403,72.8577155,business
+lower_parel,Lower Parel,18.9991801,72.8289638,business
+borivali,Borivali,19.2205771,72.862368,residential
+marine_drive,Marine Drive,18.9347773,72.8217133,residential
+andheri_west,Andheri West,19.1339977,72.8339749,residential
+chembur,Chembur,19.0443516,72.8919425,residential
+andheri_east,Andheri East,19.1155649,72.8608375,business
