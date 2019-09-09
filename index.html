@@ -40,8 +40,8 @@ var g = d3.select("#mapid").select("svg"); // Condenses the SVG selection into g
 
 g.append("text") // Why is this text in the "wrong" place?
     // .attr("id", (d) => "ConstituencyNameText" ) 
-    .attr("x", -1000)
-    .attr("y", -1000)
+    .attr("x", -5)
+    .attr("y", -5)
     .style("font-family", "Georgia")
     .style("font-weight", "bold")
     .style("font-size", "20px")
@@ -82,25 +82,19 @@ Promise.all([places]).then(
     }
   );
 
+//https://www.d3-graph-gallery.com/graph/bubblemap_leaflet_basic.html
+function update()
+{
+    d3.selectAll("circle")
+      .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
+      .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y });
 
+    d3.selectAll("text")
+      .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
+      .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 5; })
+}
 
-
-
-
-
-
-
-  function update() {
-      d3.selectAll("circle")
-        .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
-        .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y });
-
-      d3.selectAll("text")
-        .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
-        .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 5; })
-    }
-
-    map.on("moveend", update)
+map.on("moveend", update)
 
 var origin_lat = 19.0605751;
 var origin_lon = 72.8626837;
