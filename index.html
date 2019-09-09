@@ -36,9 +36,9 @@ var openstreetmap = L.tileLayer(
 
 L.svg().addTo(map);
 
-d3.select("#mapid")
-            .select("svg")
-            .append("text")
+var g = d3.select("#mapid").select("svg"); // Condenses the SVG selection into g
+
+        g.append("text")
             // .attr("id", (d) => "ConstituencyNameText" ) 
             .attr("x", -1000)
             .attr("y", -1000)
@@ -52,9 +52,7 @@ var places = d3.csv("places.csv");
 Promise.all([places]).then(
     function(values)
     {    
-        d3.select("#mapid")
-            .select("svg")
-            .selectAll("circle")
+        g.selectAll("circle")
             .data(values[0])
             .enter()
             .append("circle")
@@ -70,9 +68,7 @@ Promise.all([places]).then(
             //  // d.total = data.get(d.id) || 0;
             //  return colorScale(d.Population)
             // }),
-        d3.select("#mapid")
-            .select("svg")
-            .selectAll("text")
+        g.selectAll("text")
             .data(values[0])
             .enter()
             .append("text")
