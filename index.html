@@ -17,10 +17,6 @@
 
 <script>
 
-var origin_lat = 19.0605751;
-var origin_lon = 72.8626837;
-var dest_lat = 18.9347773;
-var dest_lon = 72.8217133;
 var route = L.Routing.control({
     createMarker: function() { return null; },
     waypoints: []
@@ -63,18 +59,24 @@ var openstreetmap = L.tileLayer(
 
 L.svg().addTo(map);
 
+var origin_lat = 19.0605751;
+var origin_lon = 72.8626837;
+var dest_lat = 18.9347773;
+var dest_lon = 72.8217133;
+DrawARoute(origin_lat, origin_lon, dest_lat, dest_lon);
+
 var g = d3.select("#mapid").select("svg"); // Condenses the SVG selection into g
 
 g.attr('pointer-events', 'all'); //https://stackoverflow.com/a/17495417/7207315
 
-g.append("text") // Why is this text in the "wrong" place?
-    // .attr("id", (d) => "ConstituencyNameText" ) 
-    .attr("x", -5)
-    .attr("y", -5)
-    .style("font-family", "Georgia")
-    .style("font-weight", "bold")
-    .style("font-size", "20px")
-    .text("Welcome!");
+// g.append("text") // Why is this text in the "wrong" place?
+//     // .attr("id", (d) => "ConstituencyNameText" ) 
+//     .attr("x", -5)
+//     .attr("y", -5)
+//     .style("font-family", "Georgia")
+//     .style("font-weight", "bold")
+//     .style("font-size", "20px")
+//     .text("Welcome!");
 
 var places = d3.csv("places.csv");
 
