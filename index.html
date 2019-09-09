@@ -81,7 +81,7 @@ Promise.all([places]).then(
             .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
             .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y })
             .attr("r", "10px")
-            .style("fill", "red")
+            .style("fill", function(d){ if(d.Type=="residential") { return "red"; } else { return "blue"; } })
             .attr("id", function(d, i){ return "circle" + i; })
             .on("mouseover", function (d, i){ d3.select("#circle" + i).attr("r", "20px"); d3.select("#text" + i).attr("fill", "blue");})
             .on("mouseout", function (d, i){ d3.select("#circle" + i).attr("r", "10px"); d3.select("#text" + i).attr("fill", "red");}),
@@ -90,7 +90,9 @@ Promise.all([places]).then(
             //  // d.total = data.get(d.id) || 0;
             //  return colorScale(d.Population)
             // }),
-        svg.selectAll("text")
+        d3.select("#mapid")
+            .select("svg")
+            .selectAll("text")
             .data(values[0])
             .enter()
             .append("text")
@@ -115,7 +117,11 @@ Promise.all([places]).then(
     function update() {
       d3.selectAll("circle")
         .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
-        .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y })
+        .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y });
+
+      d3.selectAll("text")
+        .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
+        .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 5; })
     }
 
     map.on("moveend", update)
