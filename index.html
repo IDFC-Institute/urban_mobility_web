@@ -5,7 +5,7 @@
 <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin=""></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
-<!-- <script src="https://d3js.org/d3.v5.min.js"></script> -->
+<script src="https://d3js.org/d3.v5.min.js"></script>
 
 <div id="mapid" class='custom-popup' ></div>
 
@@ -42,7 +42,7 @@ var map = L
       .setView([18.9990, 72.8411], 9);
 
       // var map = L.map('map', { closePopupOnClick: false}).setView([39.7392, -104.9903], 17);
-    
+
 // Tile type: openstreetmap normal
 var openstreetmap = L.tileLayer(
       'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -65,79 +65,106 @@ var popup = L.popup({
 
   //https://leafletjs.com/examples/quick-start/
 
-  // var marker = new L.marker([19.06, 72.86], { opacity: 1 });
-// marker.addTo(map);
+L.svg().addTo(map);
+
+var bubbles = [
+  {lat:19.0605751, long:72.8626837}, //bkc
+];
+
+d3.select("#mapid")
+  .select("svg")
+  .selectAll("myCircles")
+  .data(bubbles)
+  .enter()
+  .append("circle")
+    .attr("cx", function(d){ return map.latLngToLayerPoint([d.lat, d.long]).x })
+    .attr("cy", function(d){ return map.latLngToLayerPoint([d.lat, d.long]).y })
+    .attr("r", 14)
+    .style("fill", "red")
+    .attr("stroke", "red")
+    .attr("stroke-width", 3)
+    .attr("fill-opacity", .4)
+
+// Function that update circle position if something change
+    function update() {
+      d3.selectAll("circle")
+        .attr("cx", function(d){ return map.latLngToLayerPoint([d.lat, d.long]).x })
+        .attr("cy", function(d){ return map.latLngToLayerPoint([d.lat, d.long]).y })
+    }
+
+// If the user change the map (zoom or drag), I update circle position:
+    map.on("moveend", update)
 
 //https://gis.stackexchange.com/questions/59571/how-to-add-text-only-labels-on-leaflet-map-with-no-icon
 
 
-bkc_lat = 19.0605751;
-bkc_lon = 72.8626837;
-bkc_name = "Bandra-Kurla Complex";
-
-andherieast_lat = 19.1155649;
-andherieast_lon = 72.8608375;
-andherieast_name = "Andheri East";
-
-malad_lat = 19.1852403;
-malad_lon = 72.8577155;
-malad_name = "Malad";
-
-var circle_bkc = L.circle([bkc_lat, bkc_lon], {
-    color: 'red',
-    fillColor: 'red',
-    fillOpacity: 0.3,
-    radius: radius
-}).addTo(map).bindTooltip(bkc_name, {permanent: true, className: "my-label", offset: [0, 0] });
-
-var circle_andherieast = L.circle([andherieast_lat, andherieast_lon], {
-    color: 'red',
-    fillColor: 'red',
-    fillOpacity: 0.3,
-    radius: radius
-}).addTo(map).bindTooltip(andherieast_name, {permanent: true, className: "my-label", offset: [0, 0] });
-
-var circle_malad = L.circle([malad_lat, malad_lon], {
-    color: 'red',
-    fillColor: 'red',
-    fillOpacity: 0.3,
-    radius: radius
-}).addTo(map).bindTooltip(malad_name, {permanent: true, className: "my-label", offset: [0, 0] });
-
-var circle_narimanpoint = L.circle([18.9279097, 72.8217757], {
-    color: 'red',
-    fillColor: 'red',
-    fillOpacity: 0.3,
-    radius: radius
-}).addTo(map).bindTooltip("Nariman Point", {permanent: true, className: "my-label", offset: [0, 0] });
-
-var circle_borivali = L.circle([18.9347773, 72.8217133], {
-    color: 'blue',
-    fillColor: 'blue',
-    fillOpacity: 0.3,
-    radius: radius
-}).addTo(map).bindTooltip("Borivali", {permanent: true, className: "my-label", offset: [0, 0] });
-
-var circle_andheriwest = L.circle([19.1339977, 72.8339749], {
-    color: 'blue',
-    fillColor: 'blue',
-    fillOpacity: 0.3,
-    radius: radius
-}).addTo(map).bindTooltip("Andheri West", {permanent: true, className: "my-label", offset: [0, 0] });
-
-var circle_marinedrive = L.circle([18.9347773, 72.8217133], {
-    color: 'blue',
-    fillColor: 'blue',
-    fillOpacity: 0.3,
-    radius: radius
-}).addTo(map).bindTooltip("Marine Drive", {permanent: true, className: "my-label", offset: [0, 0] });
-
-var circle_chembur = L.circle([19.0443516, 72.8919425], {
-    color: 'blue',
-    fillColor: 'blue',
-    fillOpacity: 0.3,
-    radius: radius
-}).addTo(map).bindTooltip("Chembur", {permanent: true, className: "my-label", offset: [0, 0] });
+// bkc_lat = 19.0605751;
+// bkc_lon = 72.8626837;
+// bkc_name = "Bandra-Kurla Complex";
+//
+// andherieast_lat = 19.1155649;
+// andherieast_lon = 72.8608375;
+// andherieast_name = "Andheri East";
+//
+// malad_lat = 19.1852403;
+// malad_lon = 72.8577155;
+// malad_name = "Malad";
+//
+// var circle_bkc = L.circle([bkc_lat, bkc_lon], {
+//     color: 'red',
+//     fillColor: 'red',
+//     fillOpacity: 0.3,
+//     radius: radius
+// }).addTo(map).bindTooltip(bkc_name, {permanent: true, className: "my-label", offset: [0, 0] });
+//
+// var circle_andherieast = L.circle([andherieast_lat, andherieast_lon], {
+//     color: 'red',
+//     fillColor: 'red',
+//     fillOpacity: 0.3,
+//     radius: radius
+// }).addTo(map).bindTooltip(andherieast_name, {permanent: true, className: "my-label", offset: [0, 0] });
+//
+// var circle_malad = L.circle([malad_lat, malad_lon], {
+//     color: 'red',
+//     fillColor: 'red',
+//     fillOpacity: 0.3,
+//     radius: radius
+// }).addTo(map).bindTooltip(malad_name, {permanent: true, className: "my-label", offset: [0, 0] });
+//
+// var circle_narimanpoint = L.circle([18.9279097, 72.8217757], {
+//     color: 'red',
+//     fillColor: 'red',
+//     fillOpacity: 0.3,
+//     radius: radius
+// }).addTo(map).bindTooltip("Nariman Point", {permanent: true, className: "my-label", offset: [0, 0] });
+//
+// var circle_borivali = L.circle([18.9347773, 72.8217133], {
+//     color: 'blue',
+//     fillColor: 'blue',
+//     fillOpacity: 0.3,
+//     radius: radius
+// }).addTo(map).bindTooltip("Borivali", {permanent: true, className: "my-label", offset: [0, 0] });
+//
+// var circle_andheriwest = L.circle([19.1339977, 72.8339749], {
+//     color: 'blue',
+//     fillColor: 'blue',
+//     fillOpacity: 0.3,
+//     radius: radius
+// }).addTo(map).bindTooltip("Andheri West", {permanent: true, className: "my-label", offset: [0, 0] });
+//
+// var circle_marinedrive = L.circle([18.9347773, 72.8217133], {
+//     color: 'blue',
+//     fillColor: 'blue',
+//     fillOpacity: 0.3,
+//     radius: radius
+// }).addTo(map).bindTooltip("Marine Drive", {permanent: true, className: "my-label", offset: [0, 0] });
+//
+// var circle_chembur = L.circle([19.0443516, 72.8919425], {
+//     color: 'blue',
+//     fillColor: 'blue',
+//     fillOpacity: 0.3,
+//     radius: radius
+// }).addTo(map).bindTooltip("Chembur", {permanent: true, className: "my-label", offset: [0, 0] });
 
 var origin_lat = 19.0605751;
 var origin_lon = 72.8626837;
@@ -158,8 +185,8 @@ L.Routing.control({
   addWaypoints: false
 }).addTo(map);
 
-    
+
  openstreetmap.addTo(map);
 
-    
+
     </script>
