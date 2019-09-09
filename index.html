@@ -38,14 +38,14 @@ L.svg().addTo(map);
 
 var g = d3.select("#mapid").select("svg"); // Condenses the SVG selection into g
 
-        g.append("text")
-            // .attr("id", (d) => "ConstituencyNameText" ) 
-            .attr("x", -1000)
-            .attr("y", -1000)
-            .style("font-family", "Georgia")
-            .style("font-weight", "bold")
-            .style("font-size", "20px")
-            .text("Welcome!");
+g.append("text") // Why is this text in the "wrong" place?
+    // .attr("id", (d) => "ConstituencyNameText" ) 
+    .attr("x", -1000)
+    .attr("y", -1000)
+    .style("font-family", "Georgia")
+    .style("font-weight", "bold")
+    .style("font-size", "20px")
+    .text("Welcome!");
 
 var places = d3.csv("places.csv");
 
