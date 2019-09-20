@@ -13,6 +13,46 @@
 #mapid { height: 100vh; width: 150vh; }
 </style>
 
+//add style elements for displaying the legend
+<style>
+  /* .legend {
+      text-align: left;
+      line-height: 18px;
+      color: #000000;
+  } */
+
+  .info {
+      width: 200px;
+      height:200px;
+      padding: 8px 8px;
+      background: white;
+      background: rgba(255,255,255,1);
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 2px;
+
+  }
+
+  .info h1 {
+      margin: 0 0 10px;
+      color: #000000;
+  }
+
+  .legend {
+    width:200px;
+    height:100px;
+  	line-height: 18px;
+  	color: #555;
+  }
+
+  .legend i {
+  	width: 18px;
+  	height: 18px;
+  	float: left;
+  	margin-right: 8px;
+  	opacity: 0.7;
+  }
+</style>
+
 <script>
 
 var route = L.Routing.control({
@@ -20,9 +60,18 @@ var route = L.Routing.control({
     waypoints: []
   });
 
+//var url = http://15.206.6.188:9966/?z=17&center=19.060120%2C72.853619&loc=19.058569%2C72.855824&loc=19.058974%2C72.852960&hl=en&alt=0;
+
+//var host = 'http://15.206.6.188:9966/';
+
 function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
-{ 
+{
   map.removeControl(route);
+  console.log("displaying lat lons");
+  console.log(OriginLat);
+  console.log(OriginLon);
+  console.log(DestLat);
+  console.log(DestLon);
 
   //https://www.liedman.net/leaflet-routing-machine/tutorials/basic-usage/
   route = L.Routing.control({
@@ -31,6 +80,11 @@ function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
       L.latLng(OriginLat, OriginLon),
       L.latLng(DestLat, DestLon)
     ],
+
+    // router: new L.Routing.OSRMv1({
+    //   serviceUrl: 'http://15.206.6.188:9966/?z=17&center=19.060120%2C72.853619&loc=19.058569%2C72.855824&loc=19.058974%2C72.852960&hl=en&alt=0'
+    // }),
+
     lineOptions: { styles: [{color: 'navy', opacity: 1, weight: 5}]},
     routeWhileDragging: false,
     geometryOnly: true,
@@ -50,7 +104,7 @@ var openstreetmap = L.tileLayer(
       'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'Map: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
       minZoom: 12,
-      maxZoom: 14
+      maxZoom: 20
     })
 
 //https://leafletjs.com/examples/quick-start/
@@ -65,10 +119,8 @@ DrawARoute(origin_lat, origin_lon, dest_lat, dest_lon);
 
 var g = d3.select("#mapid").select("svg"); // Condenses the SVG selection into g
 
-g.attr('pointer-events', 'all'); //https://stackoverflow.com/a/17495417/7207315
-
 // g.append("text") // Why is this text in the "wrong" place?
-//     // .attr("id", (d) => "ConstituencyNameText" ) 
+//     // .attr("id", (d) => "ConstituencyNameText" )
 //     .attr("x", -5)
 //     .attr("y", -5)
 //     .style("font-family", "Georgia")
@@ -76,11 +128,14 @@ g.attr('pointer-events', 'all'); //https://stackoverflow.com/a/17495417/7207315
 //     .style("font-size", "20px")
 //     .text("Welcome!");
 
+
+g.attr('pointer-events', 'all'); //https://stackoverflow.com/a/17495417/7207315
+
 var places = d3.csv("places.csv");
 
 Promise.all([places]).then(
     function(values)
-    {    
+    {
 
         g.selectAll("circle")
             .data(values[0])
@@ -93,19 +148,22 @@ Promise.all([places]).then(
             .attr("id", function(d, i){ return "circle" + i; })
             .on("mouseover", function (d, i){ d3.select("#circle" + i).attr("r", "20px"); d3.select("#text" + i).attr("fill", "blue");})
             .on("mouseout", function (d, i){ d3.select("#circle" + i).attr("r", "10px"); d3.select("#text" + i).attr("fill", "red");})
-            .on("click", function (d){ 
+            .on("click", function (d){
 
               if (d.Type=="business")
               {
+                //transition()
+                //.attr("fill","purple");
                 origin_lat = d.Lat;
                 origin_lon = d.Lon;
+
               }
               if (d.Type=="residential")
               {
                 dest_lat = d.Lat;
                 dest_lon = d.Lon;
               }
-              
+
               DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon); }),
             // .style("fill", function (d)
             // {
@@ -139,6 +197,41 @@ function update()
 }
 
 map.on("moveend", update)
+
+//info from https://leafletjs.com/examples/choropleth/
+var info = L.control({position: 'topleft'});
+
+info.onAdd = function (map) {
+	this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+	this.update();
+	return this._div;
+};
+
+// method that we will use to update the control based on feature properties passed
+info.update = function (props) {
+	this._div.innerHTML = '<h1>Urban Mobility: Commuting Patterns </h1>' +  (props ?
+		'<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
+		: 'Click on a residential area (red) and a business district (blue) to see a path between them.');
+};
+
+//create legend
+var legend = L.control({position: 'bottomleft'});
+//define what happens when legend is loaded
+
+//create div to store legend in
+legend.onAdd = function (map) {var div = L.DomUtil.create("div", "info legend"); return div;
+this.update();
+return this._div;
+};
+
+legend.update = function (items){
+  this._div.innerHTML = '<h2>Legend</h2>' + items ? '<b>' + items.name : 'Distance Values Here'
+};
+
+//add empty legend and info to map
+legend.addTo(map);
+info.addTo(map);
+
 
 
 
