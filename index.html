@@ -10,7 +10,7 @@
 <div id="mapid" class='custom-popup' ></div>
 
 <style>
-#mapid { height: 100vh; width: 150vh; }
+#mapid { height: 100vh; width: 299vh; }
 </style>
 
 //add style elements for displaying the legend
@@ -59,10 +59,6 @@ var route = L.Routing.control({
     createMarker: function() { return null; },
     waypoints: []
   });
-
-//var url = http://15.206.6.188:9966/?z=17&center=19.060120%2C72.853619&loc=19.058569%2C72.855824&loc=19.058974%2C72.852960&hl=en&alt=0;
-
-var host = 'http://15.206.6.188:9966/';
 
 function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
 {
@@ -134,7 +130,11 @@ var g = d3.select("#mapid").select("svg"); // Condenses the SVG selection into g
 
 g.attr('pointer-events', 'all'); //https://stackoverflow.com/a/17495417/7207315
 
-var places = d3.csv("places.csv");
+//var places = d3.csv("places.csv");
+var places = d3.csv("mumbai_centroids.csv");
+//rename this later
+
+console.log(places);
 
 Promise.all([places]).then(
     function(values)
@@ -153,37 +153,55 @@ Promise.all([places]).then(
             .on("mouseout", function (d, i){ d3.select("#circle" + i).attr("r", "10px"); d3.select("#text" + i).attr("fill", "red");})
             .on("click", function (d){
 
-              if (d.Type=="business")
-              {
-                //transition()
-                //.attr("fill","purple");
+              //allow for click anywhere on the map
+              //when you click, origin_lat will change, dest_lat will not change
+
+              if(d.Type = "business"){
                 origin_lat = d.Lat;
                 origin_lon = d.Lon;
-
-              }
-              if (d.Type=="residential")
-              {
-                dest_lat = d.Lat;
-                dest_lon = d.Lon;
               }
 
-              DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon); }),
+
+              //next click, b becomes a, and next click becomes b
+
+
+              //dest_lat = d.Lat;
+              //dest_Lon = d.Lon;
+
+
+              // if (d.Type=="business")
+              // {
+              //   //transition()
+              //   //.attr("fill","purple");
+              //   origin_lat = d.Lat;
+              //   origin_lon = d.Lon;
+              //
+              // }
+              // if (d.Type=="residential")
+              // {
+              //   dest_lat = d.Lat;
+              //   dest_lon = d.Lon;
+              // }
+
+            DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon); })
             // .style("fill", function (d)
             // {
             //  // d.total = data.get(d.id) || 0;
             //  return colorScale(d.Population)
             // }),
-        g.selectAll("text")
-            .data(values[0])
-            .enter()
-            .append("text")
-            .text(function(d) { return d.Name; })
-            .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
-            .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 5; })
-            .attr("fill", "red")
-            .attr("id", function(d, i){ return "text" + i; })
-            .on("mouseover", function (d, i){ d3.select("#circle" + i).attr("r", "20px"); d3.select("#text" + i).attr("fill", "blue");})
-            .on("mouseout", function (d, i){ d3.select("#circle" + i).attr("r", "10px"); d3.select("#text" + i).attr("fill", "red");});
+
+        //displays Names for points
+        // g.selectAll("text")
+        //     .data(values[0])
+        //     .enter()
+        //     .append("text")
+        //     .text(function(d) { return d.Name; })
+        //     .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
+        //     .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 5; })
+        //     .attr("fill", "red")
+        //     .attr("id", function(d, i){ return "text" + i; })
+        //     .on("mouseover", function (d, i){ d3.select("#circle" + i).attr("r", "20px"); d3.select("#text" + i).attr("fill", "blue");})
+        //     .on("mouseout", function (d, i){ d3.select("#circle" + i).attr("r", "10px"); d3.select("#text" + i).attr("fill", "red");});
     }
   );
 
