@@ -135,6 +135,7 @@ var places = d3.csv("mumbai_centroids.csv");
 //rename this later
 
 console.log(places);
+var a = 1;
 
 Promise.all([places]).then(
     function(values)
@@ -153,17 +154,18 @@ Promise.all([places]).then(
             .on("mouseout", function (d, i){ d3.select("#circle" + i).attr("r", "10px"); d3.select("#text" + i).attr("fill", "red");})
             .on("click", function (d){
 
-              //allow for click anywhere on the map
-              //when you click, origin_lat will change, dest_lat will not change
-
-              if(d.Type = "business"){
+              //allow for two clicks anywhere on the map
+              //1 means first click, 0 means second click; pattern alternates between 1 and 0
+              if(a == 1){
                 origin_lat = d.Lat;
                 origin_lon = d.Lon;
+                a = a - 1;
               }
-
-
-              //next click, b becomes a, and next click becomes b
-
+              else if(a == 0){
+                dest_lat = d.Lat;
+                dest_lon = d.Lon;
+                a = a + 1;
+              }
 
               //dest_lat = d.Lat;
               //dest_Lon = d.Lon;
