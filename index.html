@@ -62,7 +62,7 @@ var route = L.Routing.control({
 
 //var url = http://15.206.6.188:9966/?z=17&center=19.060120%2C72.853619&loc=19.058569%2C72.855824&loc=19.058974%2C72.852960&hl=en&alt=0;
 
-//var host = 'http://15.206.6.188:9966/';
+var host = 'http://15.206.6.188:9966/';
 
 function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
 {
@@ -73,6 +73,9 @@ function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
   console.log(DestLat);
   console.log(DestLon);
 
+  var full_url = "http://15.206.6.188:9966/route/v1/driving/"+OriginLat+","+OriginLon+";"+DestLat+","+DestLon+"?overview=false&alternatives=true&steps=true"
+  console.log(full_url)
+
   //https://www.liedman.net/leaflet-routing-machine/tutorials/basic-usage/
   route = L.Routing.control({
     createMarker: function() { return null; },
@@ -81,9 +84,9 @@ function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
       L.latLng(DestLat, DestLon)
     ],
 
-    // router: new L.Routing.OSRMv1({
-    //   serviceUrl: 'http://15.206.6.188:9966/?z=17&center=19.060120%2C72.853619&loc=19.058569%2C72.855824&loc=19.058974%2C72.852960&hl=en&alt=0'
-    // }),
+     router: new L.Routing.OSRMv1({
+        serviceUrl: 'http://15.206.6.188:5000/route/v1'
+      }),
 
     lineOptions: { styles: [{color: 'navy', opacity: 1, weight: 5}]},
     routeWhileDragging: false,
