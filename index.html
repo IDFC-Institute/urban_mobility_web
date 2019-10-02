@@ -134,12 +134,29 @@ g.attr('pointer-events', 'all'); //https://stackoverflow.com/a/17495417/7207315
 var places = d3.csv("mumbai_centroids.csv");
 //rename this later
 
+let polygons = d3.json("mumbai_hexclusters.json");
+
+
+        var myStyle = {
+          "color": "#ff7800",
+          "weight": 5,
+          "opacity": 0.65
+        };
+
+        L.geoJSON(polygons, {
+          style: myStyle
+        }).addTo(map);
+
 console.log(places);
 var a = 1;
 
 Promise.all([places]).then(
     function(values)
     {
+
+
+
+
 
         g.selectAll("circle")
             .data(values[0])
