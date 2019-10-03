@@ -109,12 +109,12 @@ var openstreetmap = L.tileLayer(
 //https://leafletjs.com/examples/quick-start/
 
 L.svg().addTo(map);
-
-var origin_lat = 19.0605751; // Origin should always be a business district
-var origin_lon = 72.8626837;
-var dest_lat = 18.9347773; // Destination should always be residential
-var dest_lon = 72.8217133;
-DrawARoute(origin_lat, origin_lon, dest_lat, dest_lon);
+// 
+// var origin_lat = 19.0605751; // Origin should always be a business district
+// var origin_lon = 72.8626837;
+// var dest_lat = 18.9347773; // Destination should always be residential
+// var dest_lon = 72.8217133;
+// DrawARoute(origin_lat, origin_lon, dest_lat, dest_lon);
 
 var g = d3.select("#mapid").select("svg"); // Condenses the SVG selection into g
 
@@ -153,10 +153,6 @@ var a = 1;
 Promise.all([places]).then(
     function(values)
     {
-
-
-
-
 
         g.selectAll("circle")
             .data(values[0])
