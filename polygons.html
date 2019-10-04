@@ -151,6 +151,7 @@ function onClick(d){
   }
   console.log(origin_lat);
   console.log(dest_lat);
+  console.log(d.properties.MOVEMENT_ID);
   DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon);
 
 }
@@ -160,17 +161,24 @@ function onClick(d){
   //https://www.d3-graph-gallery.com/graph/bubblemap_leaflet_basic.html
   function update()
   {
-      d3.selectAll("circle")
-        .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
-        .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y });
+  //     d3.selectAll("circle")
+  //       .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
+  //       .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y });
+  //
+  //     d3.selectAll("text")
+  //       .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
+  //       .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 5; })
 
-      d3.selectAll("text")
-        .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
-        .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 5; })
-  }
+  d3.selectAll("polygon")
+  .attr("cx", function(d){ return map.latLngToLayerPoint([d.properties.mumbai_centroids_Lat, d.properties.mumbai_centroids_Lon]).x })
+  .attr("cy", function(d){ return map.latLngToLayerPoint([d.properties.mumbai_centroids_Lat, d.properties.mumbai_centroids_Lon]).y });
+
+
+
+}
 
   map.on("moveend", update)
-
+  openstreetmap.addTo(map);
 
 
 </script>
