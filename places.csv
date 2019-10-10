@@ -1,0 +1,10 @@
+ID,Name,Lat,Lon,Type,Taz
+bkc,Bandra-Kurla Complex,19.0605751,72.8626837,business,182
+nariman_point,Nariman Point,18.9279097,72.8217757,business,382
+malad,Malad,19.1852403,72.8577155,business,350
+lower_parel,Lower Parel,18.9991801,72.8289638,business,239
+borivali,Borivali,19.2205771,72.862368,residential,265
+marine_drive,Marine Drive,18.9347773,72.8217133,residential,577
+andheri_west,Andheri West,19.1339977,72.8339749,residential,403
+chembur,Chembur,19.0443516,72.8919425,residential,598
+andheri_east,Andheri East,19.1155649,72.8608375,business,357

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Testmap</title>
+  <title>Mumbai: Costs of Commuting</title>
   <meta charset="utf-8" />
   <!-- https://www.d3-graph-gallery.com/graph/backgroundmap_leaflet_buttonLayer.html -->
   <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin=""></script>
@@ -13,6 +13,37 @@
 
   <style>
   @import url(http://cdn.leafletjs.com/leaflet-0.6.1/leaflet.css);
+
+  .info {
+      width: 200px;
+      height:200px;
+      padding: 8px 8px;
+      background: white;
+      background: rgba(255,255,255,1);
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 2px;
+  }
+
+  .info h1 {
+      margin: 0 0 10px;
+      color: #000000;
+  }
+
+  .legend {
+    width:200px;
+    height:100px;
+    line-height: 18px;
+    color: #555;
+  }
+
+  .legend i {
+    width: 18px;
+    height: 18px;
+    float: left;
+    margin-right: 8px;
+    opacity: 0.7;
+  }
+
   </style>
 </head>
 <body>
@@ -27,12 +58,7 @@
   function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
   {
     map.removeControl(route);
-    // console.log("displaying lat lons");
-    // console.log(OriginLat);
-    // console.log(OriginLon);
-    // console.log(DestLat);
-    // console.log(DestLon);
-    //
+
     var full_url = "http://15.206.6.188:9966/route/v1/driving/"+OriginLat+","+OriginLon+";"+DestLat+","+DestLon+"?overview=false&alternatives=true&steps=true"
     console.log(full_url)
 
@@ -57,20 +83,25 @@
 
   }
 
-
-  var map = L.map('map').setView([19.0760,72.8777], 11);
+  var zoomlevel = 12;
+  var map = L.map('map').setView([19.0760,72.8777], zoomlevel);
   map.scrollWheelZoom.disable();
-  map.dragging.disable();
-
+  //map.dragging.disable();
   var toolserver = L.tileLayer('http://{s}.www.toolserver.org/tiles/bw-mapnik/{z}/{x}/{y}.png');
-  var tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: 'Map: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>', minZoom: 11, maxZoom:11}).addTo(map);
+  var tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: 'Map: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>', minZoom: zoomlevel, maxZoom:zoomlevel}).addTo(map);
   var baseLayers = {"tiles": tiles, "toolserver-mapnik":toolserver};
-  L.control.layers(baseLayers).addTo(map);</script>
+  var overlays = {
+    "layer 1": layer1,
+    "layer 2": layer2
+  }
+
+  L.control.layers(baseLayers, overlays).addTo(map);</script>
  </body>
 </html>
 
 <script>
 var a = 1;
+var dist_result;
 var o_id;
 var d_id;
 
@@ -79,6 +110,78 @@ var svg = d3.select(map.getPanes().overlayPane).append("svg"),
   g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
 g.attr('pointer-events','all');
+
+//display the CBD and residential points as circles
+var places = d3.csv("places.csv");
+
+console.log(places);
+
+Promise.all([places]).then(
+  function(values)
+  {
+    g.selectAll("circle")
+      .data(values[0])
+      .enter()
+      .append("circle")
+      .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
+      .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y })
+      .attr("r", "10px")
+      .style("fill", function(d){ if(d.Type=="residential") { return "red"; } else { return "blue"; } })
+      .attr("id", function(d, i){ return "circle" + i; });
+  }
+);
+
+
+// Promise.all([places]).then(
+//     function(values)
+//     {
+//         g.selectAll("circle")
+//             .data(values[0])
+//             .enter()
+//             .append("circle")
+//             .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
+//             .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y })
+//             .attr("r", "10px")
+//             .style("fill", function(d){ if(d.Type=="residential") { return "red"; } else { return "blue"; } })
+//             .attr("id", function(d, i){ return "circle" + i; })
+//             .on("mouseover", function (d, i){ d3.select("#circle" + i).attr("r", "20px"); d3.select("#text" + i).attr("fill", "blue");})
+//             .on("mouseout", function (d, i){ d3.select("#circle" + i).attr("r", "10px"); d3.select("#text" + i).attr("fill", "red");})
+//             .on("click", function (d){
+//
+//               //dest_lat = d.Lat;
+//               //dest_Lon = d.Lon;
+//
+//
+//               if (d.Type=="business")
+//               {
+//                 //transition()
+//                 //.attr("fill","purple");
+//                 origin_lat = d.Lat;
+//                 origin_lon = d.Lon;
+//
+//               }
+//               if (d.Type=="residential")
+//               {
+//                 dest_lat = d.Lat;
+//                 dest_lon = d.Lon;
+//               }
+//
+//         //displays Names for points
+//         // g.selectAll("text")
+//         //     .data(values[0])
+//         //     .enter()
+//         //     .append("text")
+//         //     .text(function(d) { return d.Name; })
+//         //     .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
+//         //     .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 5; })
+//         //     .attr("fill", "red")
+//         //     .attr("id", function(d, i){ return "text" + i; })
+//         //     .on("mouseover", function (d, i){ d3.select("#circle" + i).attr("r", "20px"); d3.select("#text" + i).attr("fill", "blue");})
+//         //     .on("mouseout", function (d, i){ d3.select("#circle" + i).attr("r", "10px"); d3.select("#text" + i).attr("fill", "red");});
+//     }
+//   )
+// );
+
 
 //also display the centroid points which are within the Joined file
 d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
@@ -182,20 +285,30 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
     DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon);
 
     //read the CSV and get all the values needed for the user
-    d3.csv("mumbai_all_tazs.csv", function(data){
+    function get_stats(){
+      d3.csv("mumbai_all_tazs.csv", function(data){
         for(var i = 0; i < data.length; i++){
           if(data[i].unique_id == o_d_pair){
+            console.log("calculating for TAZs: ");
             console.log(data[i].unique_id);
-            console.log(data[i].distance);
+            console.log("opportunity cost: ");
             console.log(data[i].opp_cost);
+            console.log("distance: ")
+            console.log(data[i].distance);
+            return data[i].distance;
           }
         }
-      });
-
+      })
+    }
+    
+    get_stats();
+    console.log("done");
+    dist_result = get_stats();
     reset();
   }
 
     });
+
 
   //https://www.d3-graph-gallery.com/graph/bubblemap_leaflet_basic.html
   function update()
@@ -214,6 +327,53 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
 
 }
   map.on("moveend", update)
+
+
+  //info from https://leafletjs.com/examples/choropleth/
+  var info = L.control({position: 'topleft'});
+
+  info.onAdd = function (map) {
+  	this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+  	this.update();
+  	return this._div;
+  };
+
+  // method that we will use to update the control based on feature properties passed
+  info.update = function (props) {
+  	this._div.innerHTML = '<h1>The Costs of Commuting in Mumbai</h1>'
+    + (props ? '<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
+  		: 'Click your home area and your work area to get your cost of commuting.' + '<br />  <br /> <b>Your distance: </b>'+dist_result);
+  };
+
+  //color ramp for distances
+  function getColor(d) {
+  	return d > 1000 ? '#800026' :
+  	       d > 500  ? '#BD0026' :
+  	       d > 200  ? '#E31A1C' :
+  	       d > 100  ? '#FC4E2A' :
+  	       d > 50   ? '#FD8D3C' :
+  	       d > 20   ? '#FEB24C' :
+  	       d > 10   ? '#FED976' :
+  	                  '#FFEDA0';
+  }
+
+  //create legend
+  var legend = L.control({position: 'bottomleft'});
+  //define what happens when legend is loaded
+
+  //create div to store legend in
+  legend.onAdd = function (map) {var div = L.DomUtil.create("div", "info legend"); return div;
+  this.update();
+  return this._div;
+  };
+
+  legend.update = function (items){
+    this._div.innerHTML = '<h2>Legend</h2>' + items ? '<b>' + items.name : getColor()
+  };
+
+  //add empty legend and info to map
+  legend.addTo(map);
+  info.addTo(map);
   openstreetmap.addTo(map);
 
 

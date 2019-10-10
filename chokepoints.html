@@ -1,91 +1,150 @@
-  <!DOCTYPE html>
-<html>
-<head>
-  <title>Chokepoints</title>
-  <meta charset="utf-8" />
-  <!-- https://www.d3-graph-gallery.com/graph/backgroundmap_leaflet_buttonLayer.html -->
-  <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin=""></script>
+<!DOCTYPE html>
+<meta charset="utf-8">
+<!-- https://www.d3-graph-gallery.com/graph/backgroundmap_leaflet_buttonLayer.html -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin=""></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+<script src="https://d3js.org/d3.v5.min.js"></script>
 
-  <!-- <script src="http://cdn.leafletjs.com/leaflet-0.6.1/leaflet.js"></script> -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
-  <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
-  <script src="http://d3js.org/d3.v3.min.js"></script>
+<div id="mapid" class='custom-popup' ></div>
 
-  <style>
-  @import url(http://cdn.leafletjs.com/leaflet-0.6.1/leaflet.css);
-  </style>
-</head>
-<body>
-  <div id="map" style="width: 2000px; height: 1000px"></div>
-  <script>
+<style>
+#mapid { height: 100vh; width: 299vh; }
+</style>
 
-  var route = L.Routing.control({
-      createMarker: function() { return null; },
-      waypoints: []
-    });
+//add style elements for displaying the legend
+<style>
+  /* .legend {
+      text-align: left;
+      line-height: 18px;
+      color: #000000;
+  } */
 
-  function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
-  {
-    map.removeControl(route);
-    console.log("displaying lat lons");
-    console.log(OriginLat);
-    console.log(OriginLon);
-    console.log(DestLat);
-    console.log(DestLon);
-
-    var full_url = "http://15.206.6.188:9966/route/v1/driving/"+OriginLat+","+OriginLon+";"+DestLat+","+DestLon+"?overview=false&alternatives=true&steps=true"
-    console.log(full_url)
-
-    //https://www.liedman.net/leaflet-routing-machine/tutorials/basic-usage/
-    route = L.Routing.control({
-      createMarker: function() { return null; },
-      waypoints: [
-        L.latLng(OriginLat, OriginLon),
-        L.latLng(DestLat, DestLon)
-      ],
-
-       router: new L.Routing.OSRMv1({
-          serviceUrl: 'http://15.206.6.188:5000/route/v1'
-        }),
-
-      lineOptions: { styles: [{color: 'navy', opacity: 1, weight: 5}]},
-      routeWhileDragging: false,
-      geometryOnly: true,
-      show: false,
-      addWaypoints: false
-    }).addTo(map);
-    console.log(route);
-    console.log(route._router);
-    console.log(JSON.stringify(route));
-    console.log(util.inspect(route, {_line}));
-    console.log("%j", jsonObj);
-    console.log(route.Object.summary);
-    console.log(route._line);
-    console.log(route.line);
+  .info {
+      width: 200px;
+      height:200px;
+      padding: 8px 8px;
+      background: white;
+      background: rgba(255,255,255,1);
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 2px;
 
   }
 
+  .info h1 {
+      margin: 0 0 10px;
+      color: #000000;
+  }
 
-  var map = L.map('map').setView([19.0760,72.8777], 11);
+  .legend {
+    width:200px;
+    height:100px;
+  	line-height: 18px;
+  	color: #555;
+  }
 
-  var toolserver = L.tileLayer('http://{s}.www.toolserver.org/tiles/bw-mapnik/{z}/{x}/{y}.png');
-  var tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: 'Map: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'}).addTo(map);
-  var baseLayers = {"tiles": tiles, "toolserver-mapnik":toolserver};
-  L.control.layers(baseLayers).addTo(map);</script>
- </body>
-</html>
+  .legend i {
+  	width: 18px;
+  	height: 18px;
+  	float: left;
+  	margin-right: 8px;
+  	opacity: 0.7;
+  }
+</style>
 
 <script>
-var a = 1;
 
-//https://gist.github.com/d3noob/9211665
-var svg = d3.select(map.getPanes().overlayPane).append("svg"),
-  g = svg.append("g").attr("class", "leaflet-zoom-hide");
+var route = L.Routing.control({
+    createMarker: function() { return null; },
+    waypoints: []
+  });
 
-g.attr('pointer-events','all');
+function DrawSpeeds(OriginLat, OriginLon, DestLat, DestLon)
+{
+  //draw the geoJSON route on the map
+  //first get the unique ID based on on the o_id and d_id
 
-//also display the centroid points which are within the Joined file
-d3.json("segments_merged.geojson", function(geoShape) {
+
+
+  //color each segment according to the speed
+
+
+
+}
+
+
+function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
+{
+  map.removeControl(route);
+
+  var full_url = "http://15.206.6.188:9966/route/v1/driving/"+OriginLat+","+OriginLon+";"+DestLat+","+DestLon+"?overview=false&alternatives=true&steps=true"
+  console.log(full_url)
+
+  //https://www.liedman.net/leaflet-routing-machine/tutorials/basic-usage/
+  route = L.Routing.control({
+    createMarker: function() { return null; },
+    waypoints: [
+      L.latLng(OriginLat, OriginLon),
+      L.latLng(DestLat, DestLon)
+    ],
+
+     router: new L.Routing.OSRMv1({
+        serviceUrl: 'http://15.206.6.188:5000/route/v1'
+      }),
+
+    lineOptions: { styles: [{color: 'navy', opacity: 1, weight: 5}]},
+    routeWhileDragging: false,
+    geometryOnly: true,
+    show: false,
+    addWaypoints: false
+  }).addTo(map);
+}
+
+var map = L
+      .map('mapid', {closePopupOnClick: false})
+      .setView([18.9990, 72.8411], 12);
+
+      // var map = L.map('map', { closePopupOnClick: false}).setView([39.7392, -104.9903], 17);
+
+// Tile type: openstreetmap normal
+var openstreetmap = L.tileLayer(
+      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Map: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
+      minZoom: 12,
+      maxZoom: 12
+    })
+
+//https://leafletjs.com/examples/quick-start/
+
+L.svg().addTo(map);
+//
+// var origin_lat = 19.0605751; // Origin should always be a business district
+// var origin_lon = 72.8626837;
+// var dest_lat = 18.9347773; // Destination should always be residential
+// var dest_lon = 72.8217133;
+// DrawARoute(origin_lat, origin_lon, dest_lat, dest_lon);
+
+var g = d3.select("#mapid").select("svg"); // Condenses the SVG selection into g
+
+// g.append("text") // Why is this text in the "wrong" place?
+//     // .attr("id", (d) => "ConstituencyNameText" )
+//     .attr("x", -5)
+//     .attr("y", -5)
+//     .style("font-family", "Georgia")
+//     .style("font-weight", "bold")
+//     .style("font-size", "20px")
+//     .text("Welcome!");
+
+
+g.attr('pointer-events', 'all'); //https://stackoverflow.com/a/17495417/7207315
+
+//var places = d3.csv("places.csv");
+var places = d3.csv("places.csv");
+var segments_am = "segments_merged_am.geojson";
+var segments_pm = "segments_merged_pm.geojson";
+
+d3.json("segments_merged_am.geojson", function(geoShape) {
 
 let clickEnabled = false;
 
@@ -97,109 +156,213 @@ var transform = d3.geo.transform({point: projectPoint}),
 d3_features = g.selectAll("path")
   .data(geoShape.features)
   .enter().append("path");
-map.on("viewreset", reset);
-reset();
+  map.on("viewreset", reset);
+  reset();
 
-// fit the SVG element to leaflet's map layer
-function reset() {
 
-  bounds = path.bounds(geoShape);
-  var topLeft = bounds[0],
-    bottomRight = bounds[1];
-  svg .attr("width", bottomRight[0] - topLeft[0])
-    .attr("height", bottomRight[1] - topLeft[1])
-    .style("left", topLeft[0] + "px")
-    .style("top", topLeft[1] + "px");
-  g .attr("transform", "translate(" + -topLeft[0] + ","
-                                    + -topLeft[1] + ")");
-  // initialize the path data
-  d3_features.attr("d", path)
-    .style("fill-opacity", 0)
-    .attr('fill','blue');
-}
-// Use Leaflet to implement a D3 geometric transformation.
-function projectPoint(x, y) {
-  var point = map.latLngToLayerPoint(new L.LatLng(y, x));
-  this.stream.point(point.x, point.y);
-}
-
-d3_features.on("mouseover", mouseOver)
-.on("mouseout", mouseOut)
-.on("click",onClick);
-
-function mouseOver(d) {
-    d3.select(this)
-        .enter()
-        .transition()
-        //.duration(100)
-        .style("stroke", "red")
-        .style("fill", "red")
-        .exit();
-      }
-function mouseOut(d){
-  d3.select(this)
-  .transition()
-  .style("fill-opacity",0)
-  .style("stroke-opacity",0);
-}
-function onClick(d){
-
-  //loop through the entire CSV
-  //for each row, run the DrawRoute for the origin_lat/lon and dest_lat/lon
-  origin_lat = d.lat_o
-  origin_lon = d.lng_o
-  dest_lat = d.lat_d
-  dest_lon = d.lon_d
-
-  speed = avg_speed_kmh
-  //display each row's Route on the map
-  //color each Route according to the speed scale
-
-  d3.select(this)
-  .style("fill-opacity",0.5)
-  .style("fill","blue");
-  // console.log(d.properties.mumbai_centroids_Lat);
-  // console.log(d.properties.mumbai_centroids_Lon);
-  if(a == 1){
-    origin_lat = d.properties.mumbai_centroids_Lat;
-    origin_lon = d.properties.mumbai_centroids_Lon;
-    a = a - 1;
+  // Use Leaflet to implement a D3 geometric transformation.
+  function projectPoint(x, y) {
+    var point = map.latLngToLayerPoint(new L.LatLng(y, x));
+    this.stream.point(point.x, point.y);
   }
-  else if(a == 0){
-    dest_lat = d.properties.mumbai_centroids_Lat;
-    dest_lon = d.properties.mumbai_centroids_Lon;
-    a = a + 1;
+
+  // fit the SVG element to leaflet's map layer
+  function reset() {
+
+    bounds = path.bounds(geoShape);
+    var topLeft = bounds[0],
+      bottomRight = bounds[1];
+    svg .attr("width", bottomRight[0] - topLeft[0])
+      .attr("height", bottomRight[1] - topLeft[1])
+      .style("left", topLeft[0] + "px")
+      .style("top", topLeft[1] + "px");
+
+    g .attr("transform", "translate(" + -topLeft[0] + ","
+                                     + -topLeft[1] + ")");
+
+    // initialize the path data
+    d3_features.attr("d", path)
+      .style("fill-opacity", 0)
+      .attr('fill','blue');
   }
-  console.log(origin_lat);
-  console.log(dest_lat);
-  console.log(d.properties.MOVEMENT_ID);
-  DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon);
 
-}
 
-  });
 
-  //https://www.d3-graph-gallery.com/graph/bubblemap_leaflet_basic.html
-  function update()
-  {
-  //     d3.selectAll("circle")
-  //       .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
-  //       .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y });
-  //
-  //     d3.selectAll("text")
-  //       .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
-  //       .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 5; })
 
-  d3.selectAll("polygon")
-  .attr("cx", function(d){ return map.latLngToLayerPoint([d.properties.mumbai_centroids_Lat, d.properties.mumbai_centroids_Lon]).x })
-  .attr("cy", function(d){ return map.latLngToLayerPoint([d.properties.mumbai_centroids_Lat, d.properties.mumbai_centroids_Lon]).y });
+
+
 
 
 
 }
-
-  map.on("moveend", update)
-  openstreetmap.addTo(map);
+)
 
 
-</script>
+
+
+
+
+
+console.log(places);
+var a = 1;
+var o_id;
+var d_id;
+
+Promise.all([places]).then(
+    function(values)
+    {
+
+        g.selectAll("circle")
+            .data(values[0])
+            .enter()
+            .append("circle")
+            .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
+            .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y })
+            .attr("r", "10px")
+            .style("fill", function(d){ if(d.Type=="residential") { return "red"; } else { return "blue"; } })
+            .attr("id", function(d, i){ return "circle" + i; })
+            .on("mouseover", function (d, i){ d3.select("#circle" + i).attr("r", "20px"); d3.select("#text" + i).attr("fill", "blue");})
+            .on("mouseout", function (d, i){ d3.select("#circle" + i).attr("r", "10px"); d3.select("#text" + i).attr("fill", "red");})
+            .on("click", function (d){
+
+              //allow for two clicks anywhere on the map
+              //1 means first click, 0 means second click; pattern alternates between 1 and 0
+              if(a == 1){
+                origin_lat = d.Lat;
+                origin_lon = d.Lon;
+
+                if(o_id == null){
+                  o_id = d.Taz; //get the o_id
+                  console.log("taz origin");
+                  console.log(o_id);
+                  console.log("taz dest");
+                  console.log(d_id);
+                  a = a - 1;
+
+                }
+                else {
+                  o_id = d_id;
+                  d_id = d.Taz;
+                  console.log("taz origin");
+                  console.log(o_id);
+                  console.log("taz dest");
+                  console.log(d_id);
+                  a = a - 1;
+                }
+                    }
+              else if(a == 0){
+                dest_lat = d.Lat;
+                dest_lon = d.Lon;
+                if(d_id == null){
+                  d_id = d.Taz;
+                  console.log("taz origin");
+                  console.log(o_id);
+                  console.log("taz dest");
+                  console.log(d_id);
+                  a = a + 1;
+                }
+                else{
+                  o_id = d_id;
+                  d_id = d.Taz;
+                  console.log("taz origin");
+                  console.log(o_id);
+                  console.log("taz dest");
+                  console.log(d_id);
+                  a = a + 1;
+                }
+              }
+
+              // if (d.Type=="business")
+              // {
+              //   //transition()
+              //   //.attr("fill","purple");
+              //   origin_lat = d.Lat;
+              //   origin_lon = d.Lon;
+              //
+              // }
+              // if (d.Type=="residential")
+              // {
+              //   dest_lat = d.Lat;
+              //   dest_lon = d.Lon;
+              // }
+
+            //DrawSpeeds(origin_lat, origin_lon, dest_lat, dest_lon);
+
+            DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon); })
+            // .style("fill", function (d)
+            // {
+            //  // d.total = data.get(d.id) || 0;
+            //  return colorScale(d.Population)
+            // }),
+
+        //displays Names for points
+        // g.selectAll("text")
+        //     .data(values[0])
+        //     .enter()
+        //     .append("text")
+        //     .text(function(d) { return d.Name; })
+        //     .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
+        //     .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 5; })
+        //     .attr("fill", "red")
+        //     .attr("id", function(d, i){ return "text" + i; })
+        //     .on("mouseover", function (d, i){ d3.select("#circle" + i).attr("r", "20px"); d3.select("#text" + i).attr("fill", "blue");})
+        //     .on("mouseout", function (d, i){ d3.select("#circle" + i).attr("r", "10px"); d3.select("#text" + i).attr("fill", "red");});
+    }
+  );
+
+//https://www.d3-graph-gallery.com/graph/bubblemap_leaflet_basic.html
+function update()
+{
+    d3.selectAll("circle")
+      .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
+      .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y });
+
+    d3.selectAll("text")
+      .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
+      .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 5; })
+}
+
+map.on("moveend", update)
+
+//info from https://leafletjs.com/examples/choropleth/
+var info = L.control({position: 'topleft'});
+
+info.onAdd = function (map) {
+	this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+	this.update();
+	return this._div;
+};
+
+// method that we will use to update the control based on feature properties passed
+info.update = function (props) {
+	this._div.innerHTML = '<h1>Chokepoints: Mumbai </h1>' +  (props ?
+		'<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
+		: 'Click on a residential area (red) and a business district (blue) to see the chokepoints on that route.');
+};
+
+//create legend
+var legend = L.control({position: 'bottomleft'});
+//define what happens when legend is loaded
+
+//create div to store legend in
+legend.onAdd = function (map) {var div = L.DomUtil.create("div", "info legend"); return div;
+this.update();
+return this._div;
+};
+
+legend.update = function (items){
+  this._div.innerHTML = '<h2>Legend</h2>' + items ? '<b>' + items.name : 'Distance Values Here'
+};
+
+//add empty legend and info to map
+legend.addTo(map);
+info.addTo(map);
+
+
+
+
+
+ openstreetmap.addTo(map);
+
+
+    </script>
