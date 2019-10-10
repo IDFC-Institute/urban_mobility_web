@@ -27,12 +27,12 @@
   function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
   {
     map.removeControl(route);
-    console.log("displaying lat lons");
-    console.log(OriginLat);
-    console.log(OriginLon);
-    console.log(DestLat);
-    console.log(DestLon);
-
+    // console.log("displaying lat lons");
+    // console.log(OriginLat);
+    // console.log(OriginLon);
+    // console.log(DestLat);
+    // console.log(DestLon);
+    //
     var full_url = "http://15.206.6.188:9966/route/v1/driving/"+OriginLat+","+OriginLon+";"+DestLat+","+DestLon+"?overview=false&alternatives=true&steps=true"
     console.log(full_url)
 
@@ -54,14 +54,6 @@
       show: false,
       addWaypoints: false
     }).addTo(map);
-    console.log(route);
-    console.log("i am the route");
-    console.log(route._map);
-    console.log("i am the map...");
-    //look up the distance and get the total cost
-    //print the distance and the cost together
-    console.log("i am the line.");
-    console.log()
 
   }
 
@@ -153,10 +145,7 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
     d3.select(this)
     .style("fill-opacity",0.5)
     .style("fill","blue");
-    // console.log(d.properties.mumbai_centroids_Lat);
-    // console.log(d.properties.mumbai_centroids_Lon);
-    console.log("a is now");
-    console.log(a);
+
     if(a == 1){
       origin_lat = d.properties.mumbai_centroids_Lat;
       origin_lon = d.properties.mumbai_centroids_Lon;
@@ -186,13 +175,23 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
       }
           }
 
-    console.log("here are the pairs:");
-    console.log(o_id);
-    console.log(d_id);
-    //get the DIST value from centroids_combined_csv
-
+    //make a unique O-D pair variable to filter the CSV data
+    o_d_pair = o_id.concat("-",d_id)
+    console.log(o_d_pair);
 
     DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon);
+
+    //read the CSV and get all the values needed for the user
+    d3.csv("mumbai_all_tazs.csv", function(data){
+        for(var i = 0; i < data.length; i++){
+          if(data[i].unique_id == o_d_pair){
+            console.log(data[i].unique_id);
+            console.log(data[i].distance);
+            console.log(data[i].opp_cost);
+          }
+        }
+      });
+
     reset();
   }
 
