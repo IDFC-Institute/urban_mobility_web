@@ -51,6 +51,7 @@
   <script>
 var wage;
 var oc;
+var econ;
 
 
   var route = L.Routing.control({
@@ -112,6 +113,8 @@ var d_id;
 var svg = d3.select(map.getPanes().overlayPane).append("svg"),
   g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
+
+
 g.attr('pointer-events','all');
 
 //display the CBD and residential points as circles
@@ -133,7 +136,6 @@ Promise.all([places]).then(
       .attr("id", function(d, i){ return "circle" + i; });
   }
 );
-
 
 // Promise.all([places]).then(
 //     function(values)
@@ -212,6 +214,54 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
     this.stream.point(point.x, point.y);
   }
 
+  svg.append("rect")
+    .attr("id", (d) => "Description")
+    .attr("x", 0)
+    .attr("y", 100)
+    .attr("width", 500)
+    .attr("height", 200)
+    .attr("fill","white");
+
+  svg.append("text")
+    .attr("id", (d) => "Title")
+    .attr("x", 0)
+    .attr("y", 200)
+    .style("font-family", "Georgia")
+    .style("font-weight", "bold")
+    .style("font-size", "30px");
+
+  svg.append("text")
+    .attr("id", (d) => "Description")
+    .attr("x", 0)
+    .attr("y", 250)
+    .style("font-family", "Georgia")
+    .style("font-weight", "bold")
+    .style("font-size", "20px");
+
+  svg.append("text")
+      .attr("id", (d) => "TextDistance" ) //name the box ResultsText
+      .attr("x", 0) //x location of the box
+      .attr("y", 300) //y location of the box
+      .style("font-family", "Georgia")
+      .style("font-weight", "bold")
+      .style("font-size", "20px");
+
+  svg.append("text")
+      .attr("id", (d) => "TextOC" ) //name the box ResultsText
+      .attr("x", 0) //x location of the box
+      .attr("y", 350) //y location of the box
+      .style("font-family", "Georgia")
+      .style("font-weight", "bold")
+      .style("font-size", "20px");
+
+  svg.append("text")
+    .attr("id", (d) => "TextFuelCost" ) //name the box ResultsText
+    .attr("x", 0) //x location of the box
+    .attr("y", 400) //y location of the box
+    .style("font-family", "Georgia")
+    .style("font-weight", "bold")
+    .style("font-size", "20px");
+
   // fit the SVG element to leaflet's map layer
   function reset() {
 
@@ -231,21 +281,27 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
       .style("fill-opacity", 0)
       .attr('fill','blue');
   }
+  d3.select("#Title").text("The Costs of Commuting in Mumbai");
+
+
+
 
   function mouseOver(d) {
       d3.select(this)
           .enter()
           .transition()
-          //.duration(100)
+          .duration(100)
           .style("stroke", "red")
           .style("fill", "red")
           .exit();
         }
   function mouseOut(d){
     d3.select(this)
+    .enter()
     .transition()
     .style("fill-opacity",0)
-    .style("stroke-opacity",0);
+    .style("stroke-opacity",0)
+    .exit();
   }
   function onClick(d){
     d3.select(this)
@@ -286,34 +342,34 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
     console.log(o_d_pair);
 
     DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon);
-
     //read the CSV and get all the values needed for the user
-    function get_stats(){
       d3.csv("mumbai_all_tazs.csv", function(data){
         for(var i = 0; i < data.length; i++){
           if(data[i].unique_id == o_d_pair){
             console.log("calculating for TAZs: ");
             console.log(data[i].unique_id);
             console.log("opportunity cost: ");
-            //console.log(data[i].opp_cost);
             //Opportunity cost of congestion = Additional hours in commute *
             //((probability of working * wage cost) + (probability of leisure * (wage cost/2)))
             //9 hour workday, 7 day workweek. what's weekly equation, then convert to hourly
             wage = 12600;
+            dist = data[i].distance;
             oc = data[i].additional_hours_commuting*((0.5*(wage/9/7/4))+(0.5*(wage/9/7/4)));
-            console.log(oc);
+            econ = data[i].total_economic_costs;
+            d3.select("#TextDistance").text("Distance: "+ dist + " km");
+            d3.select("#TextOC").text("Opportunity Cost: "+ Math.round(oc) +" INR");
+            d3.select("#TextFuelCost").text("Total Economic Costs: " + Math.round(econ) + " INR");
+            d3.select("#Description").text("Click your home area and your work area to get your cost of commuting.");
+            //make 2 points
+            d3.select("#point_src");
+            d3.select("#point_dest");
 
-            console.log("distance: ")
-            console.log(data[i].distance);
-            return data[i].distance;
+
           }
         }
       })
-    }
 
-    get_stats();
     console.log("done");
-    dist_result = get_stats();
     reset();
   }
 
@@ -352,7 +408,7 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
   info.update = function (props) {
   	this._div.innerHTML = '<h1>The Costs of Commuting in Mumbai</h1>'
     + (props ? '<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
-  		: 'Click your home area and your work area to get your cost of commuting.' + '<br />  <br /> <b>Your distance: </b>'+dist_result);
+  		: 'Click your home area and your work area to get your cost of commuting.');
   };
 
   //color ramp for distances
