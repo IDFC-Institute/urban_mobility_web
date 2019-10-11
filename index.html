@@ -134,8 +134,8 @@ var g = d3.select("#mapid").select("svg");
 
 g.attr('pointer-events', 'all'); //https://stackoverflow.com/a/17495417/7207315
 
-//var places = d3.csv("places.csv");
-var places = d3.csv("mumbai_centroids.csv");
+var places = d3.csv("places.csv");
+//var places = d3.csv("mumbai_centroids.csv");
 //rename this later
 var hex = d3.json("mumbai_hexclusters.json", function(geoShape){
   let clickEnabled = false;

@@ -49,6 +49,9 @@
 <body>
   <div id="map" style="width: 2000px; height: 1000px"></div>
   <script>
+var wage;
+var oc;
+
 
   var route = L.Routing.control({
       createMarker: function() { return null; },
@@ -292,7 +295,14 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
             console.log("calculating for TAZs: ");
             console.log(data[i].unique_id);
             console.log("opportunity cost: ");
-            console.log(data[i].opp_cost);
+            //console.log(data[i].opp_cost);
+            //Opportunity cost of congestion = Additional hours in commute *
+            //((probability of working * wage cost) + (probability of leisure * (wage cost/2)))
+            //9 hour workday, 7 day workweek. what's weekly equation, then convert to hourly
+            wage = 12600;
+            oc = data[i].additional_hours_commuting*((0.5*(wage/9/7/4))+(0.5*(wage/9/7/4)));
+            console.log(oc);
+
             console.log("distance: ")
             console.log(data[i].distance);
             return data[i].distance;
@@ -300,7 +310,7 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
         }
       })
     }
-    
+
     get_stats();
     console.log("done");
     dist_result = get_stats();
