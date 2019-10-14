@@ -122,8 +122,13 @@
 
 <script>
 var wage;
+var dist;
 var oc;
 var econ;
+
+d3.select("#TextDistance").text(" - km");
+d3.select("#TextOC").text("- INR");
+d3.select("#TextFuelCost").text("- INR");
 
   var route = L.Routing.control({
       createMarker: function() { return null; },
