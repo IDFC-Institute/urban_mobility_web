@@ -47,7 +47,8 @@
   </style>
 </head>
 <body>
-  <div id="map" style="width: 2000px; height: 1000px"></div>
+  <div id="map" style="width: 100vw; height: 50vw"></div>
+  <!-- <div id="info" style="width: 2000" -->
   <script>
 var wage;
 var oc;
@@ -89,17 +90,30 @@ var econ;
 
   var zoomlevel = 12;
   var map = L.map('map').setView([19.0760,72.8777], zoomlevel);
-  map.scrollWheelZoom.disable();
+  //map.scrollWheelZoom.disable();
   //map.dragging.disable();
   var toolserver = L.tileLayer('http://{s}.www.toolserver.org/tiles/bw-mapnik/{z}/{x}/{y}.png');
   var tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: 'Map: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>', minZoom: zoomlevel, maxZoom:zoomlevel}).addTo(map);
+
   var baseLayers = {"tiles": tiles, "toolserver-mapnik":toolserver};
   var overlays = {
     "layer 1": layer1,
     "layer 2": layer2
   }
 
-  L.control.layers(baseLayers, overlays).addTo(map);</script>
+var layer1 = L.geoJson(joined_centroidshexclusters.geojson, {
+        style: drawStyle,
+        onEachFeature: function (feature, layer) {
+            layer.bindPopup(joined_centroidshexclusters.unique_id);
+        }
+    });
+
+map.addLayer(layer1);
+  L.control.layers(baseLayers, overlays).addTo(map);
+  map.addOverlay(layer1);
+
+</script>
+
  </body>
 </html>
 
@@ -112,8 +126,6 @@ var d_id;
 //https://gist.github.com/d3noob/9211665
 var svg = d3.select(map.getPanes().overlayPane).append("svg"),
   g = svg.append("g").attr("class", "leaflet-zoom-hide");
-
-
 
 g.attr('pointer-events','all');
 
@@ -214,50 +226,64 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
     this.stream.point(point.x, point.y);
   }
 
+  var rectStartWidth = 600;
+  var rectStartHeight = 300;
+  var rectX = 500;
+  var rectY = 400;
+
   svg.append("rect")
-    .attr("id", (d) => "Description")
-    .attr("x", 0)
-    .attr("y", 100)
-    .attr("width", 500)
-    .attr("height", 200)
+    .attr("id", (d) => "InfoBox")
+    .attr("x", rectX)
+    .attr("y", rectY)
+    .attr("width", rectStartWidth)
+    .attr("height", rectStartHeight)
     .attr("fill","white");
 
   svg.append("text")
     .attr("id", (d) => "Title")
-    .attr("x", 0)
-    .attr("y", 200)
+    .attr("x", rectX + 15)
+    .attr("y", rectY + 50)
+    //.transform=translate(x=900,y=10)
     .style("font-family", "Georgia")
     .style("font-weight", "bold")
     .style("font-size", "30px");
 
   svg.append("text")
     .attr("id", (d) => "Description")
-    .attr("x", 0)
-    .attr("y", 250)
+    .attr("x", rectX + 15)
+    .attr("y", rectY + 80)
     .style("font-family", "Georgia")
     .style("font-weight", "bold")
     .style("font-size", "20px");
 
+      svg.append("text")
+        .attr("id", (d) => "DescriptionLine2")
+        .attr("x", rectX + 15)
+        .attr("y", rectY + 110)
+        .style("font-family", "Georgia")
+        .style("font-weight", "bold")
+        .style("font-size", "20px");
+
   svg.append("text")
       .attr("id", (d) => "TextDistance" ) //name the box ResultsText
-      .attr("x", 0) //x location of the box
-      .attr("y", 300) //y location of the box
+      .attr("x", rectX + 15) //x location of the box
+      .attr("y", rectY + 150) //y location of the box
       .style("font-family", "Georgia")
       .style("font-weight", "bold")
       .style("font-size", "20px");
 
   svg.append("text")
       .attr("id", (d) => "TextOC" ) //name the box ResultsText
-      .attr("x", 0) //x location of the box
-      .attr("y", 350) //y location of the box
+      .attr("x", rectX + 15) //x location of the box
+      .attr("y", rectY + 200) //y location of the box
       .style("font-family", "Georgia")
       .style("font-weight", "bold")
       .style("font-size", "20px");
 
   svg.append("text")
     .attr("id", (d) => "TextFuelCost" ) //name the box ResultsText
-    .attr("x", 0) //x location of the box
-    .attr("y", 400) //y location of the box
+    .attr("x", rectX + 15) //x location of the box
+    .attr("y", rectY + 250) //y location of the box
     .style("font-family", "Georgia")
     .style("font-weight", "bold")
     .style("font-size", "20px");
@@ -281,10 +307,10 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
       .style("fill-opacity", 0)
       .attr('fill','blue');
   }
+
   d3.select("#Title").text("The Costs of Commuting in Mumbai");
-
-
-
+  d3.select("#Description").text("Click your home area and your work area to get your");
+  d3.select("#DescriptionLine2").text("cost of commuting.");
 
   function mouseOver(d) {
       d3.select(this)
@@ -358,8 +384,7 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
             econ = data[i].total_economic_costs;
             d3.select("#TextDistance").text("Distance: "+ dist + " km");
             d3.select("#TextOC").text("Opportunity Cost: "+ Math.round(oc) +" INR");
-            d3.select("#TextFuelCost").text("Total Economic Costs: " + Math.round(econ) + " INR");
-            d3.select("#Description").text("Click your home area and your work area to get your cost of commuting.");
+            d3.select("#TextFuelCost").text("Total Economic Cost: " + Math.round(econ) + " INR");
             //make 2 points
             d3.select("#point_src");
             d3.select("#point_dest");

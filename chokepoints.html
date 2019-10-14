@@ -63,7 +63,11 @@ var route = L.Routing.control({
 function DrawSpeeds(OriginLat, OriginLon, DestLat, DestLon)
 {
   //draw the geoJSON route on the map
+
   //first get the unique ID based on on the o_id and d_id
+  var o_id;
+  var d_id;
+
 
 
 
@@ -127,16 +131,6 @@ L.svg().addTo(map);
 
 var g = d3.select("#mapid").select("svg"); // Condenses the SVG selection into g
 
-// g.append("text") // Why is this text in the "wrong" place?
-//     // .attr("id", (d) => "ConstituencyNameText" )
-//     .attr("x", -5)
-//     .attr("y", -5)
-//     .style("font-family", "Georgia")
-//     .style("font-weight", "bold")
-//     .style("font-size", "20px")
-//     .text("Welcome!");
-
-
 g.attr('pointer-events', 'all'); //https://stackoverflow.com/a/17495417/7207315
 
 //var places = d3.csv("places.csv");
@@ -144,6 +138,15 @@ var places = d3.csv("places.csv");
 var segments_am = "segments_merged_am.geojson";
 var segments_pm = "segments_merged_pm.geojson";
 
+
+//
+// svg.append("circle")
+//   .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
+//   .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y })
+//   .attr("r", "10px")
+//   .style("fill", function(d){ if(d.Type=="residential") { return "red"; } else { return "blue"; } })
+//
+//
 d3.json("segments_merged_am.geojson", function(geoShape) {
 
 let clickEnabled = false;
