@@ -17,7 +17,8 @@
 
   .navigation {
     position: absolute;
-    right: 0px;
+    right: 50px;
+    top: 10px;
   }
 
   .info {
@@ -54,45 +55,59 @@
     width: 300px;
     height: 800px;
   }
-  .h3.b TextDistance{
-    fill:"red";
+
+  .container{
+    width:100%;
   }
 
-
+  .col-xs{
+    width:30%;
+    height:50%;
+  }
   </style>
 </head>
+
 <body>
-  <div class="navigation">
-    <h2>The Costs of Commuting in Mumbai</h2>
-    <h3>Click your home area and your work area to </h3>
-    <h3> get your cost of commuting.</h3>
-    <br></br>
-    <div class="Metric">
-      <h3>Distance: <b id="TextDistance"></b></h3>
-      <h3>Opportunity Cost: <b id="TextOC"></b></h3>
-      <h3>Total Economic Cost: <b id="TextFuelCost"></b></h3>
-    </div>
+  <div class="container">
+    <div class="row">
 
-    <br></br>
-    <div class="col align-items-center">
-      <h3> i am the center </h3>
-
-      <div class="col-sm-4">
-        <h3>slider</h3>
-        <p id="slider-vertical"></p>
-      </div>
-
-      <div class="col-sm-8">
-        <h3>value</h3>
-        <div id="value-vertical"></div>
-      </div>
-
-    </div>
+  <div class="col-xs-6">
+      <!-- <div id="map"></div> -->
+      <div id="map" style="width: 70vw; height: 99vh"></div>
   </div>
 
-  <div class="class_map">
-    <div id="map" style="width: 80vw; height: 95vh"></div>
+  <div class="col-xs-6">
+    <div class="navigation">
+      <h2>The Costs of Commuting in Mumbai</h2>
+      <h3>Click your home area and your work area to </h3>
+      <h3> get your cost of commuting.</h3>
+      <br></br>
+      <div class="Metric">
+        <h3>Distance: <b id="TextDistance"></b></h3>
+        <h3>Opportunity Cost: <b id="TextOC"></b></h3>
+        <h3>Total Economic Cost: <b id="TextFuelCost"></b></h3>
+      </div>
+
+      <br></br>
+      <div class="col align-items-center">
+        <h3> i am the center </h3>
+
+        <div class="col-sm">
+          <h3>slider</h3>
+          <p id="slider-vertical"></p>
+        </div>
+
+        <div class="col-sm">
+          <h3>value</h3>
+          <div id="value-vertical"></div>
+        </div>
+      </div>
+    </div>
   </div>
+</div>
+</div>
+
+
 
 
 
@@ -444,23 +459,23 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
   	                  '#FFEDA0';
   }
 
-  //create legend
-  var legend = L.control({position: 'bottomleft'});
-  //define what happens when legend is loaded
-
-  //create div to store legend in
-  legend.onAdd = function (map) {var div = L.DomUtil.create("div", "info legend"); return div;
-  this.update();
-  return this._div;
-  };
-
-  legend.update = function (items){
-    this._div.innerHTML = '<h2>Legend</h2>' + items ? '<b>' + items.name : getColor()
-  };
-
-  //add empty legend and info to map
-  legend.addTo(map);
-  info.addTo(map);
+  // //create legend
+  // var legend = L.control({position: 'bottomleft'});
+  // //define what happens when legend is loaded
+  //
+  // //create div to store legend in
+  // legend.onAdd = function (map) {var div = L.DomUtil.create("div", "info legend"); return div;
+  // this.update();
+  // return this._div;
+  // };
+  //
+  // legend.update = function (items){
+  //   this._div.innerHTML = '<h2>Legend</h2>' + items ? '<b>' + items.name : getColor()
+  // };
+  //
+  // //add empty legend and info to map
+  // legend.addTo(map);
+  // info.addTo(map);
   openstreetmap.addTo(map);
 
   var slider_data = [100000,200000,300000,400000,500000];
