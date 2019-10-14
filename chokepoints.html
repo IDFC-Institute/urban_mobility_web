@@ -71,63 +71,67 @@ console.log(o_d_pair);
 //grab every segment with that matching o_d_pair
 d3.json("segments_merged.geojson", function(data){
   console.log("successfully read in file");
+  svg.selectAll("path")
+               .data(json.features)
+               .enter()
+               .append("path")
+               .attr("d", path)
+               .attr("fill","#666666");
   // for(var i = 0; i < data.length; i++){
   //   if(data[i].all_segments_formatted_csv_commute_id == o_d_pair){
   //     console.log("matched a pair!");
   //     console.log(data[i].all_segments_formatted_csv_commute_id);
   //   }
   // }
-
-  let clickEnabled = false;
-
-  //  create a d3.geo.path to convert GeoJSON to SVG
-  var transform = d3.geo.transform({point: projectPoint}),
-            path = d3.geo.path().projection(transform);
-
-  // create path elements for each of the features
-  d3_features = g.selectAll("path")
-    .data(geoShape.features)
-    .enter().append("path");
-   map.on("viewreset", reset);
-   reset();
-
-  d3_features.on("mouseover", mouseOver)
-  .on("mouseout", mouseOut)
-  .on("click",onClick);
-
-  // Use Leaflet to implement a D3 geometric transformation.
-  function projectPoint(x, y) {
-    var point = map.latLngToLayerPoint(new L.LatLng(y, x));
-    this.stream.point(point.x, point.y);
-  }
-
-  // fit the SVG element to leaflet's map layer
-  function reset() {
-
-    bounds = path.bounds(geoShape);
-    var topLeft = bounds[0],
-      bottomRight = bounds[1];
-    svg .attr("width", bottomRight[0] - topLeft[0])
-      .attr("height", bottomRight[1] - topLeft[1])
-      .style("left", topLeft[0] + "px")
-      .style("top", topLeft[1] + "px");
-
-    g .attr("transform", "translate(" + -topLeft[0] + ","
-                                     + -topLeft[1] + ")");
-
-    // initialize the path data
-    d3_features.attr("d", path)
-      .style("fill-opacity", 0)
-      .attr('fill','blue');
-  }
-  
-
+  //
+  // let clickEnabled = false;
+  //
+  // //  create a d3.geo.path to convert GeoJSON to SVG
+  // var transform = d3.geo.transform({point: projectPoint}),
+  //           path = d3.geo.path().projection(transform);
+  //
+  // // create path elements for each of the features
+  // d3_features = g.selectAll("path")
+  //   .data(geoShape.features)
+  //   .enter().append("path");
+  //  map.on("viewreset", reset);
+  //  reset();
+  //
+  // d3_features.on("mouseover", mouseOver)
+  // .on("mouseout", mouseOut)
+  // .on("click",onClick);
+  //
+  // // Use Leaflet to implement a D3 geometric transformation.
+  // function projectPoint(x, y) {
+  //   var point = map.latLngToLayerPoint(new L.LatLng(y, x));
+  //   this.stream.point(point.x, point.y);
+  // }
+  //
+  // // fit the SVG element to leaflet's map layer
+  // function reset() {
+  //
+  //   bounds = path.bounds(geoShape);
+  //   var topLeft = bounds[0],
+  //     bottomRight = bounds[1];
+  //   svg .attr("width", bottomRight[0] - topLeft[0])
+  //     .attr("height", bottomRight[1] - topLeft[1])
+  //     .style("left", topLeft[0] + "px")
+  //     .style("top", topLeft[1] + "px");
+  //
+  //   g .attr("transform", "translate(" + -topLeft[0] + ","
+  //                                    + -topLeft[1] + ")");
+  //
+  //   // initialize the path data
+  //   d3_features.attr("d", path)
+  //     .style("fill-opacity", 0)
+  //     .attr('fill','blue');
+  // }
+  //
+  //
 
 });
 
   //color each segment according to the speed
-
-
 
 }
 
@@ -176,12 +180,6 @@ var openstreetmap = L.tileLayer(
 //https://leafletjs.com/examples/quick-start/
 
 L.svg().addTo(map);
-//
-// var origin_lat = 19.0605751; // Origin should always be a business district
-// var origin_lon = 72.8626837;
-// var dest_lat = 18.9347773; // Destination should always be residential
-// var dest_lon = 72.8217133;
-// DrawARoute(origin_lat, origin_lon, dest_lat, dest_lon);
 
 var g = d3.select("#mapid").select("svg"); // Condenses the SVG selection into g
 
@@ -189,76 +187,6 @@ g.attr('pointer-events', 'all'); //https://stackoverflow.com/a/17495417/7207315
 
 //var places = d3.csv("places.csv");
 var places = d3.csv("places.csv");
-var segments_am = "segments_merged_am.geojson";
-var segments_pm = "segments_merged_pm.geojson";
-
-
-//
-// svg.append("circle")
-//   .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
-//   .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y })
-//   .attr("r", "10px")
-//   .style("fill", function(d){ if(d.Type=="residential") { return "red"; } else { return "blue"; } })
-//
-//
-d3.json("segments_merged_am.geojson", function(geoShape) {
-
-let clickEnabled = false;
-
-//  create a d3.geo.path to convert GeoJSON to SVG
-var transform = d3.geo.transform({point: projectPoint}),
-          path = d3.geo.path().projection(transform);
-
-// create path elements for each of the features
-d3_features = g.selectAll("path")
-  .data(geoShape.features)
-  .enter().append("path");
-  map.on("viewreset", reset);
-  reset();
-
-
-  // Use Leaflet to implement a D3 geometric transformation.
-  function projectPoint(x, y) {
-    var point = map.latLngToLayerPoint(new L.LatLng(y, x));
-    this.stream.point(point.x, point.y);
-  }
-
-  // fit the SVG element to leaflet's map layer
-  function reset() {
-
-    bounds = path.bounds(geoShape);
-    var topLeft = bounds[0],
-      bottomRight = bounds[1];
-    svg .attr("width", bottomRight[0] - topLeft[0])
-      .attr("height", bottomRight[1] - topLeft[1])
-      .style("left", topLeft[0] + "px")
-      .style("top", topLeft[1] + "px");
-
-    g .attr("transform", "translate(" + -topLeft[0] + ","
-                                     + -topLeft[1] + ")");
-
-    // initialize the path data
-    d3_features.attr("d", path)
-      .style("fill-opacity", 0)
-      .attr('fill','blue');
-  }
-
-
-
-
-
-
-
-
-
-}
-)
-
-
-
-
-
-
 
 console.log(places);
 var a = 1;
@@ -349,20 +277,6 @@ Promise.all([places]).then(
                 }
               }
 
-              // if (d.Type=="business")
-              // {
-              //   //transition()
-              //   //.attr("fill","purple");
-              //   origin_lat = d.Lat;
-              //   origin_lon = d.Lon;
-              //
-              // }
-              // if (d.Type=="residential")
-              // {
-              //   dest_lat = d.Lat;
-              //   dest_lon = d.Lon;
-              // }
-
             if(o_type != d_type){ //draw the route if different types selected
               DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon);
               DrawSpeeds(o_id, d_id);
@@ -372,11 +286,6 @@ Promise.all([places]).then(
               console.log("you selected two of the same type.");
             }
           });
-            // .style("fill", function (d)
-            // {
-            //  // d.total = data.get(d.id) || 0;
-            //  return colorScale(d.Population)
-            // }),
 
         //displays Names for points
         // g.selectAll("text")
@@ -440,12 +349,6 @@ legend.update = function (items){
 //add empty legend and info to map
 legend.addTo(map);
 info.addTo(map);
+openstreetmap.addTo(map);
 
-
-
-
-
- openstreetmap.addTo(map);
-
-
-    </script>
+</script>
