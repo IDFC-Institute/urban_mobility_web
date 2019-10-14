@@ -60,16 +60,70 @@ var route = L.Routing.control({
     waypoints: []
   });
 
-function DrawSpeeds(OriginLat, OriginLon, DestLat, DestLon)
+function DrawSpeeds(o_id, d_id)
 {
   //draw the geoJSON route on the map
+console.log("i'm going to draw the speeds between o_id and d_id");
+//concatenate the id's
+o_d_pair = o_id.concat("-",d_id);
+console.log(o_d_pair);
 
-  //first get the unique ID based on on the o_id and d_id
-  var o_id;
-  var d_id;
+//grab every segment with that matching o_d_pair
+d3.json("segments_merged.geojson", function(data){
+  console.log("successfully read in file");
+  // for(var i = 0; i < data.length; i++){
+  //   if(data[i].all_segments_formatted_csv_commute_id == o_d_pair){
+  //     console.log("matched a pair!");
+  //     console.log(data[i].all_segments_formatted_csv_commute_id);
+  //   }
+  // }
 
-  //loop through file and get correct o_id and d_id pairing.
+  let clickEnabled = false;
 
+  //  create a d3.geo.path to convert GeoJSON to SVG
+  var transform = d3.geo.transform({point: projectPoint}),
+            path = d3.geo.path().projection(transform);
+
+  // create path elements for each of the features
+  d3_features = g.selectAll("path")
+    .data(geoShape.features)
+    .enter().append("path");
+   map.on("viewreset", reset);
+   reset();
+
+  d3_features.on("mouseover", mouseOver)
+  .on("mouseout", mouseOut)
+  .on("click",onClick);
+
+  // Use Leaflet to implement a D3 geometric transformation.
+  function projectPoint(x, y) {
+    var point = map.latLngToLayerPoint(new L.LatLng(y, x));
+    this.stream.point(point.x, point.y);
+  }
+
+  // fit the SVG element to leaflet's map layer
+  function reset() {
+
+    bounds = path.bounds(geoShape);
+    var topLeft = bounds[0],
+      bottomRight = bounds[1];
+    svg .attr("width", bottomRight[0] - topLeft[0])
+      .attr("height", bottomRight[1] - topLeft[1])
+      .style("left", topLeft[0] + "px")
+      .style("top", topLeft[1] + "px");
+
+    g .attr("transform", "translate(" + -topLeft[0] + ","
+                                     + -topLeft[1] + ")");
+
+    // initialize the path data
+    d3_features.attr("d", path)
+      .style("fill-opacity", 0)
+      .attr('fill','blue');
+  }
+  
+
+
+});
 
   //color each segment according to the speed
 
@@ -309,9 +363,15 @@ Promise.all([places]).then(
               //   dest_lon = d.Lon;
               // }
 
-            //DrawSpeeds(origin_lat, origin_lon, dest_lat, dest_lon);
+            if(o_type != d_type){ //draw the route if different types selected
+              DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon);
+              DrawSpeeds(o_id, d_id);
 
-            DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon); })
+            }
+            else{ //don't draw the route if they're the same type
+              console.log("you selected two of the same type.");
+            }
+          });
             // .style("fill", function (d)
             // {
             //  // d.total = data.get(d.id) || 0;
