@@ -68,7 +68,7 @@ function DrawSpeeds(OriginLat, OriginLon, DestLat, DestLon)
   var o_id;
   var d_id;
 
-
+  //loop through file and get correct o_id and d_id pairing.
 
 
   //color each segment according to the speed
@@ -210,6 +210,8 @@ console.log(places);
 var a = 1;
 var o_id;
 var d_id;
+var o_type;
+var d_type;
 
 Promise.all([places]).then(
     function(values)
@@ -235,21 +237,30 @@ Promise.all([places]).then(
                 origin_lon = d.Lon;
 
                 if(o_id == null){
-                  o_id = d.Taz; //get the o_id
-                  console.log("taz origin");
+                  o_id = d.Name; //get the o_id
+                  o_type = d.Type;
+                  console.log("case 1");
+                  console.log("type:");
+                  console.log(o_type);
+                  console.log("origin");
                   console.log(o_id);
-                  console.log("taz dest");
+                  console.log("dest");
                   console.log(d_id);
                   a = a - 1;
 
                 }
                 else {
+                  console.log("case 2");
                   o_id = d_id;
-                  d_id = d.Taz;
-                  console.log("taz origin");
+                  o_type = d_type;
+                  d_id = d.Name;
+                  d_type = d.Type;
+                  console.log("origin");
                   console.log(o_id);
-                  console.log("taz dest");
+                  console.log(o_type);
+                  console.log("dest");
                   console.log(d_id);
+                  console.log(d_type);
                   a = a - 1;
                 }
                     }
@@ -257,20 +268,29 @@ Promise.all([places]).then(
                 dest_lat = d.Lat;
                 dest_lon = d.Lon;
                 if(d_id == null){
-                  d_id = d.Taz;
-                  console.log("taz origin");
+                  console.log("case 3");
+                  d_id = d.Name;
+                  d_type = d.Type;
+                  console.log("origin");
                   console.log(o_id);
-                  console.log("taz dest");
+                  console.log(o_type);
+                  console.log("dest");
                   console.log(d_id);
+                  console.log(d_type);
                   a = a + 1;
                 }
                 else{
+                  console.log("case 4");
                   o_id = d_id;
-                  d_id = d.Taz;
-                  console.log("taz origin");
+                  o_type = d_type;
+                  d_id = d.Name;
+                  d_type = d.Type;
+                  console.log("origin");
                   console.log(o_id);
-                  console.log("taz dest");
+                  console.log(o_type);
+                  console.log("dest");
                   console.log(d_id);
+                  console.log(d_type);
                   a = a + 1;
                 }
               }
