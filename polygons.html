@@ -10,9 +10,15 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
   <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
   <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="https://unpkg.com/d3-simple-slider"></script>
 
   <style>
   @import url(http://cdn.leafletjs.com/leaflet-0.6.1/leaflet.css);
+
+  .navigation {
+    position: absolute;
+    right: 0px;
+  }
 
   .info {
       width: 200px;
@@ -44,16 +50,57 @@
     opacity: 0.7;
   }
 
+  .col {
+    width: 300px;
+    height: 800px;
+  }
+  .h3.b TextDistance{
+    fill:"red";
+  }
+
+
   </style>
 </head>
 <body>
-  <div id="map" style="width: 100vw; height: 50vw"></div>
-  <!-- <div id="info" style="width: 2000" -->
-  <script>
+  <div class="navigation">
+    <h2>The Costs of Commuting in Mumbai</h2>
+    <h3>Click your home area and your work area to </h3>
+    <h3> get your cost of commuting.</h3>
+    <br></br>
+    <div class="Metric">
+      <h3>Distance: <b id="TextDistance"></b></h3>
+      <h3>Opportunity Cost: <b id="TextOC"></b></h3>
+      <h3>Total Economic Cost: <b id="TextFuelCost"></b></h3>
+    </div>
+
+    <br></br>
+    <div class="col align-items-center">
+      <h3> i am the center </h3>
+
+      <div class="col-sm-4">
+        <h3>slider</h3>
+        <p id="slider-vertical"></p>
+      </div>
+
+      <div class="col-sm-8">
+        <h3>value</h3>
+        <div id="value-vertical"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="class_map">
+    <div id="map" style="width: 80vw; height: 95vh"></div>
+  </div>
+
+
+
+
+<script>
 var wage;
 var oc;
 var econ;
-
 
   var route = L.Routing.control({
       createMarker: function() { return null; },
@@ -149,57 +196,6 @@ Promise.all([places]).then(
   }
 );
 
-// Promise.all([places]).then(
-//     function(values)
-//     {
-//         g.selectAll("circle")
-//             .data(values[0])
-//             .enter()
-//             .append("circle")
-//             .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
-//             .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y })
-//             .attr("r", "10px")
-//             .style("fill", function(d){ if(d.Type=="residential") { return "red"; } else { return "blue"; } })
-//             .attr("id", function(d, i){ return "circle" + i; })
-//             .on("mouseover", function (d, i){ d3.select("#circle" + i).attr("r", "20px"); d3.select("#text" + i).attr("fill", "blue");})
-//             .on("mouseout", function (d, i){ d3.select("#circle" + i).attr("r", "10px"); d3.select("#text" + i).attr("fill", "red");})
-//             .on("click", function (d){
-//
-//               //dest_lat = d.Lat;
-//               //dest_Lon = d.Lon;
-//
-//
-//               if (d.Type=="business")
-//               {
-//                 //transition()
-//                 //.attr("fill","purple");
-//                 origin_lat = d.Lat;
-//                 origin_lon = d.Lon;
-//
-//               }
-//               if (d.Type=="residential")
-//               {
-//                 dest_lat = d.Lat;
-//                 dest_lon = d.Lon;
-//               }
-//
-//         //displays Names for points
-//         // g.selectAll("text")
-//         //     .data(values[0])
-//         //     .enter()
-//         //     .append("text")
-//         //     .text(function(d) { return d.Name; })
-//         //     .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
-//         //     .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 5; })
-//         //     .attr("fill", "red")
-//         //     .attr("id", function(d, i){ return "text" + i; })
-//         //     .on("mouseover", function (d, i){ d3.select("#circle" + i).attr("r", "20px"); d3.select("#text" + i).attr("fill", "blue");})
-//         //     .on("mouseout", function (d, i){ d3.select("#circle" + i).attr("r", "10px"); d3.select("#text" + i).attr("fill", "red");});
-//     }
-//   )
-// );
-
-
 //also display the centroid points which are within the Joined file
 d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
 
@@ -225,68 +221,68 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
     var point = map.latLngToLayerPoint(new L.LatLng(y, x));
     this.stream.point(point.x, point.y);
   }
-
-  var rectStartWidth = 600;
-  var rectStartHeight = 300;
-  var rectX = 500;
-  var rectY = 400;
-
-  svg.append("rect")
-    .attr("id", (d) => "InfoBox")
-    .attr("x", rectX)
-    .attr("y", rectY)
-    .attr("width", rectStartWidth)
-    .attr("height", rectStartHeight)
-    .attr("fill","white");
-
-  svg.append("text")
-    .attr("id", (d) => "Title")
-    .attr("x", rectX + 15)
-    .attr("y", rectY + 50)
-    //.transform=translate(x=900,y=10)
-    .style("font-family", "Georgia")
-    .style("font-weight", "bold")
-    .style("font-size", "30px");
-
-  svg.append("text")
-    .attr("id", (d) => "Description")
-    .attr("x", rectX + 15)
-    .attr("y", rectY + 80)
-    .style("font-family", "Georgia")
-    .style("font-weight", "bold")
-    .style("font-size", "20px");
-
-      svg.append("text")
-        .attr("id", (d) => "DescriptionLine2")
-        .attr("x", rectX + 15)
-        .attr("y", rectY + 110)
-        .style("font-family", "Georgia")
-        .style("font-weight", "bold")
-        .style("font-size", "20px");
-
-  svg.append("text")
-      .attr("id", (d) => "TextDistance" ) //name the box ResultsText
-      .attr("x", rectX + 15) //x location of the box
-      .attr("y", rectY + 150) //y location of the box
-      .style("font-family", "Georgia")
-      .style("font-weight", "bold")
-      .style("font-size", "20px");
-
-  svg.append("text")
-      .attr("id", (d) => "TextOC" ) //name the box ResultsText
-      .attr("x", rectX + 15) //x location of the box
-      .attr("y", rectY + 200) //y location of the box
-      .style("font-family", "Georgia")
-      .style("font-weight", "bold")
-      .style("font-size", "20px");
-
-  svg.append("text")
-    .attr("id", (d) => "TextFuelCost" ) //name the box ResultsText
-    .attr("x", rectX + 15) //x location of the box
-    .attr("y", rectY + 250) //y location of the box
-    .style("font-family", "Georgia")
-    .style("font-weight", "bold")
-    .style("font-size", "20px");
+  //
+  // var rectStartWidth = 600;
+  // var rectStartHeight = 300;
+  // var rectX = 500;
+  // var rectY = 400;
+  //
+  // svg.append("rect")
+  //   .attr("id", (d) => "InfoBox")
+  //   .attr("x", rectX)
+  //   .attr("y", rectY)
+  //   .attr("width", rectStartWidth)
+  //   .attr("height", rectStartHeight)
+  //   .attr("fill","white");
+  //
+  // svg.append("text")
+  //   .attr("id", (d) => "Title")
+  //   .attr("x", rectX + 15)
+  //   .attr("y", rectY + 50)
+  //   //.transform=translate(x=900,y=10)
+  //   .style("font-family", "Georgia")
+  //   .style("font-weight", "bold")
+  //   .style("font-size", "30px");
+  //
+  // svg.append("text")
+  //   .attr("id", (d) => "Description")
+  //   .attr("x", rectX + 15)
+  //   .attr("y", rectY + 80)
+  //   .style("font-family", "Georgia")
+  //   .style("font-weight", "bold")
+  //   .style("font-size", "20px");
+  //
+  //     svg.append("text")
+  //       .attr("id", (d) => "DescriptionLine2")
+  //       .attr("x", rectX + 15)
+  //       .attr("y", rectY + 110)
+  //       .style("font-family", "Georgia")
+  //       .style("font-weight", "bold")
+  //       .style("font-size", "20px");
+  //
+  // svg.append("text")
+  //     .attr("id", (d) => "TextDistance2" ) //name the box ResultsText
+  //     .attr("x", rectX + 15) //x location of the box
+  //     .attr("y", rectY + 150) //y location of the box
+  //     .style("font-family", "Georgia")
+  //     .style("font-weight", "bold")
+  //     .style("font-size", "20px");
+  //
+  // svg.append("text")
+  //     .attr("id", (d) => "TextOC" ) //name the box ResultsText
+  //     .attr("x", rectX + 15) //x location of the box
+  //     .attr("y", rectY + 200) //y location of the box
+  //     .style("font-family", "Georgia")
+  //     .style("font-weight", "bold")
+  //     .style("font-size", "20px");
+  //
+  // svg.append("text")
+  //   .attr("id", (d) => "TextFuelCost" ) //name the box ResultsText
+  //   .attr("x", rectX + 15) //x location of the box
+  //   .attr("y", rectY + 250) //y location of the box
+  //   .style("font-family", "Georgia")
+  //   .style("font-weight", "bold")
+  //   .style("font-size", "20px");
 
   // fit the SVG element to leaflet's map layer
   function reset() {
@@ -308,9 +304,9 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
       .attr('fill','blue');
   }
 
-  d3.select("#Title").text("The Costs of Commuting in Mumbai");
-  d3.select("#Description").text("Click your home area and your work area to get your");
-  d3.select("#DescriptionLine2").text("cost of commuting.");
+  // d3.select("#Title").text("The Costs of Commuting in Mumbai");
+  // d3.select("#Description").text("Click your home area and your work area to get your");
+  // d3.select("#DescriptionLine2").text("cost of commuting.");
 
   function mouseOver(d) {
       d3.select(this)
@@ -382,9 +378,9 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
             dist = data[i].distance;
             oc = data[i].additional_hours_commuting*((0.5*(wage/9/7/4))+(0.5*(wage/9/7/4)));
             econ = data[i].total_economic_costs;
-            d3.select("#TextDistance").text("Distance: "+ dist + " km");
-            d3.select("#TextOC").text("Opportunity Cost: "+ Math.round(oc) +" INR");
-            d3.select("#TextFuelCost").text("Total Economic Cost: " + Math.round(econ) + " INR");
+            d3.select("#TextDistance").text(dist + " km");
+            d3.select("#TextOC").text(Math.round(oc) +" INR");
+            d3.select("#TextFuelCost").text(Math.round(econ) + " INR");
             //make 2 points
             d3.select("#point_src");
             d3.select("#point_dest");
@@ -466,6 +462,36 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
   legend.addTo(map);
   info.addTo(map);
   openstreetmap.addTo(map);
+
+  var slider_data = [100000,200000,300000,400000,500000];
+
+  // Vertical
+  var sliderVertical = d3
+    .sliderLeft()
+    .min(d3.min(slider_data))
+    .max(d3.max(slider_data))
+    .height(500)
+    //.tickFormat(d3.format('.0'))
+    .ticks(5)
+    .default(0.015)
+    .on('onchange', val => {
+      d3.select('p#value-vertical').text(d3.format('0')(val));
+    });
+
+  var gVertical = d3
+    .select('div#slider-vertical')
+    .append('svg')
+    .attr('width', 100)
+    .attr('height', 400)
+    .append('g')
+    .attr('transform', 'translate(80,30)');
+
+  gVertical.call(sliderVertical);
+
+  d3.select('p#value-vertical').text("Your monthly wage: "+d3.format('0')(sliderVertical.value())+" INR");
+
+
+
 
 
 </script>
