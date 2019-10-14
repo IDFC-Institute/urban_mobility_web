@@ -7,53 +7,128 @@
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 <script src="https://d3js.org/d3.v5.min.js"></script>
 
-<div id="mapid" class='custom-popup' ></div>
+<!-- <div id="mapid" class='custom-popup' ></div> -->
 
 <style>
-#mapid { height: 100vh; width: 299vh; }
+@import url(http://cdn.leafletjs.com/leaflet-0.6.1/leaflet.css);
+
+.navigation {
+  float:right;
+  background:gray;
+  width:25vh;
+  height:100vh;
+}
+
+#map{
+  float:left;
+   display:flex;
+   flex:75%;
+   background:white;
+   height:100vh;
+  }
+
+#value-vertical{
+  float:left:
+  display:flex;
+  height:100vh;
+}
+#slider-vertical{
+  float:right
+  display:flex;
+  height:400px;
+}
+
+  .container{
+    width:100%;
+    height:100%;
+  }
+
+  .row{
+    display:flex;
+  }
+
+  .column {
+    flex:33%;
+    text-align:center;
+  }
+  .column-50{
+    flex:50%;
+    text-align:center;
+  }
+
+.info {
+    width: 200px;
+    height:200px;
+    padding: 8px 8px;
+    background: white;
+    background: rgba(255,255,255,1);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 2px;
+}
+
+.info h1 {
+    margin: 0 0 10px;
+    color: #000000;
+}
+
+.legend {
+  width:200px;
+  height:100px;
+  line-height: 18px;
+  color: #555;
+}
+
+.legend i {
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin-right: 8px;
+  opacity: 0.7;
+}
+
 </style>
 
-//add style elements for displaying the legend
-<style>
-  /* .legend {
-      text-align: left;
-      line-height: 18px;
-      color: #000000;
-  } */
 
-  .info {
-      width: 200px;
-      height:200px;
-      padding: 8px 8px;
-      background: white;
-      background: rgba(255,255,255,1);
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      border-radius: 2px;
+<body>
+  <div class="row">
+    <div id="map"></div>
 
-  }
+    <div id="navigation" style="text-align:center">
+        <h1>Traffic Chokepoints in Mumbai</h1>
+        <h3>Click a residential area and a CBD to discover traffic-choked segments.</h3>
 
-  .info h1 {
-      margin: 0 0 10px;
-      color: #000000;
-  }
+        <div class="row">
+          <div class="column">
+          <h2 id="TextDistance"></h2>
+          <h3>Distance</h3>
+          </div>
+          <div class="column">
+          <h2 id="TextOC"></h2>
+          <h3>Opportunity Cost</h3>
+          </div>
+          <div class="column">
+          <h2 id="TextFuelCost"></h2>
+          <h3>Total Economic Cost</h3>
+          </div>
+        </div>
 
-  .legend {
-    width:200px;
-    height:100px;
-  	line-height: 18px;
-  	color: #555;
-  }
+        <div class="row">
+          <div class="column-50">
+            <h3>slider</h3>
+            <p id="slider-vertical"></p>
+          </div>
 
-  .legend i {
-  	width: 18px;
-  	height: 18px;
-  	float: left;
-  	margin-right: 8px;
-  	opacity: 0.7;
-  }
-</style>
+          <div class="column-50">
+            <h3>value</h3>
+            <div id="value-vertical"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
 <script>
+
 
 var route = L.Routing.control({
     createMarker: function() { return null; },
@@ -164,7 +239,7 @@ function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
 }
 
 var map = L
-      .map('mapid', {closePopupOnClick: false})
+      .map('map', {closePopupOnClick: false})
       .setView([18.9990, 72.8411], 12);
 
       // var map = L.map('map', { closePopupOnClick: false}).setView([39.7392, -104.9903], 17);
@@ -177,11 +252,17 @@ var openstreetmap = L.tileLayer(
       maxZoom: 12
     })
 
-//https://leafletjs.com/examples/quick-start/
 
+</script>
+</body>
+</html>
+
+<script>
+
+//https://leafletjs.com/examples/quick-start/
 L.svg().addTo(map);
 
-var g = d3.select("#mapid").select("svg"); // Condenses the SVG selection into g
+var g = d3.select("#map").select("svg"); // Condenses the SVG selection into g
 
 g.attr('pointer-events', 'all'); //https://stackoverflow.com/a/17495417/7207315
 
@@ -350,5 +431,4 @@ legend.update = function (items){
 legend.addTo(map);
 info.addTo(map);
 openstreetmap.addTo(map);
-
 </script>
