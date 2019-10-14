@@ -98,33 +98,41 @@
         <h3>Click a residential area and a CBD to discover traffic-choked segments.</h3>
 
         <div class="row">
-          <div class="column">
-          <h2 id="TextDistance"></h2>
-          <h3>Distance</h3>
-          </div>
-          <div class="column">
-          <h2 id="TextOC"></h2>
-          <h3>Opportunity Cost</h3>
-          </div>
-          <div class="column">
-          <h2 id="TextFuelCost"></h2>
-          <h3>Total Economic Cost</h3>
-          </div>
+          <h3>AM or PM</h3>
+          <p><select name="period" onchange="showHint(this)">
+            <option value="AM">AM</option>
+            <option value="PM">PM</option>
+          </select></p>
+
         </div>
 
         <div class="row">
-          <div class="column-50">
-            <h3>slider</h3>
-            <p id="slider-vertical"></p>
-          </div>
+          <h3>Start Point</h3>
 
-          <div class="column-50">
-            <h3>value</h3>
-            <div id="value-vertical"></div>
-          </div>
+          <p><select name="startpoint" onchange="showHint(this)">
+            <option value="Borivali">Borivali</option>
+            <option value="Andheri West">Andheri West</option>
+            <option value="Chembur">Chembur</option>
+            <option value="Marine Drive">Marine Drive</option>
+          </select></p>
+
+        </div>
+
+        <div class="row">
+          <h3>End Point</h3>
+          <p><select name="endpoint" onchange="showHint(this)">
+            <option value="Andheri East">Andheri East</option>
+            <option value="Lower Parel">Lower Parel</option>
+            <option value="Nariman Point">Nariman Point</option>
+            <option value="Malad">Malad</option>
+          </select></p>
+        </div>
+
+        <div class="row">
+          <h3>Speeds Key</h3>
+        </div>
         </div>
       </div>
-    </div>
 
 
 <script>
@@ -240,7 +248,7 @@ function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
 
 var map = L
       .map('map', {closePopupOnClick: false})
-      .setView([18.9990, 72.8411], 12);
+      .setView([18.9990, 72.8411], 11);
 
       // var map = L.map('map', { closePopupOnClick: false}).setView([39.7392, -104.9903], 17);
 
@@ -248,7 +256,7 @@ var map = L
 var openstreetmap = L.tileLayer(
       'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'Map: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
-      minZoom: 12,
+      minZoom: 10,
       maxZoom: 12
     })
 
@@ -428,7 +436,7 @@ legend.update = function (items){
 };
 
 //add empty legend and info to map
-legend.addTo(map);
-info.addTo(map);
+// legend.addTo(map);
+// info.addTo(map);
 openstreetmap.addTo(map);
 </script>
