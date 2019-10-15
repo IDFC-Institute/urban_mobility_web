@@ -135,6 +135,9 @@
         </div>
       </div>
 
+<script>
+function showHint(str){$.post("signup.php",{country:str.value},function(data){$"#result").html(data);});}
+</script>
 
 <script>
 
@@ -151,8 +154,6 @@ console.log("i'm going to draw the speeds between o_id and d_id");
 //concatenate the id's
 o_d_pair = o_id.concat("-",d_id);
 console.log(o_d_pair);
-
-
 
 //grab every segment with that matching o_d_pair
 d3.json("segments_merged.geojson", function(geoShape){
@@ -182,46 +183,71 @@ d3.json("segments_merged.geojson", function(geoShape){
   d3_features = g.selectAll("path")
     .data(geoShape.features)
     .enter().append("path");
-   map.on("viewreset", reset);
-   reset();
+    map.on("viewreset", reset);
+    reset();
 
   d3_features.on("mouseover", mouseOver)
   .on("mouseout", mouseOut)
   .on("click",onClick);
 
-  // // Use Leaflet to implement a D3 geometric transformation.
-  // function projectPoint(x, y) {
-  //   var point = map.latLngToLayerPoint(new L.LatLng(y, x));
-  //   this.stream.point(point.x, point.y);
-  // }
-  //
-  // // fit the SVG element to leaflet's map layer
-  // function reset() {
-  //
-  //   bounds = path.bounds(geoShape);
-  //   var topLeft = bounds[0],
-  //     bottomRight = bounds[1];
-  //   svg .attr("width", bottomRight[0] - topLeft[0])
-  //     .attr("height", bottomRight[1] - topLeft[1])
-  //     .style("left", topLeft[0] + "px")
-  //     .style("top", topLeft[1] + "px");
-  //
-  //   g .attr("transform", "translate(" + -topLeft[0] + ","
-  //                                    + -topLeft[1] + ")");
-  //
-  //   // initialize the path data
-  //   d3_features.attr("d", path)
-  //     .style("fill-opacity", 0)
-  //     .attr('fill','blue');
-  // }
-  //
-  //
+  // Use Leaflet to implement a D3 geometric transformation.
+  function projectPoint(x, y) {
+    var point = map.latLngToLayerPoint(new L.LatLng(y, x));
+    this.stream.point(point.x, point.y);
+  }
 
-});
+  // fit the SVG element to leaflet's map layer
+  function reset() {
+
+    bounds = path.bounds(geoShape);
+    var topLeft = bounds[0],
+      bottomRight = bounds[1];
+    svg .attr("width", bottomRight[0] - topLeft[0])
+      .attr("height", bottomRight[1] - topLeft[1])
+      .style("left", topLeft[0] + "px")
+      .style("top", topLeft[1] + "px");
+
+    g .attr("transform", "translate(" + -topLeft[0] + ","
+                                     + -topLeft[1] + ")");
+
+    // initialize the path data
+    d3_features.attr("d", path)
+      .style("fill-opacity", 0)
+      .attr('fill','blue');
+  }
+
+  function mouseOver(d) {
+      d3.select(this)
+          .enter()
+          .transition()
+          .duration(100)
+          .style("stroke", "red")
+          .style("fill", "red")
+          .exit();
+        }
+  function mouseOut(d){
+    d3.select(this)
+    .enter()
+    .transition()
+    .style("fill-opacity",0)
+    .style("stroke-opacity",0)
+    .style("stroke","black")
+    .style("fill","black")
+    .exit();
+  }
+  function onClick(d){
+    d3.select(this)
+    .style("fill-opacity",0.5)
+    .style("fill","blue");
+}
+
+
+
+});//end json
 
   //color each segment according to the speed
 
-}
+} //end draw path
 
 
 function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
@@ -304,7 +330,10 @@ Promise.all([places]).then(
             .attr("id", function(d, i){ return "circle" + i; })
 
             // .on("mouseover", function (d, i){ d3.select("#circle" + i).attr("r", "20px"); d3.select("#text" + i).attr("fill", "green");})
-            .on("mouseout", function (d, i){ d3.select("#circle" + i).attr("r", "10px"); d3.select("#text" + i).attr("fill", "red");})
+            .on("mouseout", function (d, i){
+              d3.select("#circle" + i).attr("r", "10px");
+              // d3.select("#text" + i).attr("fill", "red");
+          })
 
             .on("click", function (d){
 
@@ -379,24 +408,37 @@ Promise.all([places]).then(
                   .enter()
                   .append("text")
                   .text(function(d) { return d.Name; })
-                  .attr("fill", "black")
                   .attr("font-weight",function(d,i) {return i*100+100;})
                   .attr("font-family","Georgia")
+                  .attr("fill", "black")
                   .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
                   .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 5; })
                   .attr("id", function(d, i){ return "text" + i; })
+
                   .on("mouseover", function (d, i){
                     d3.select("#circle" + i).attr("r", "20px");
+                    d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 30; })
+                    if(d.Type=="residential"){
+                      d3.select("#text" + i).attr("fill","red");
+                    }
+                    else{
+                      d3.select("#text" + i).attr("fill","blue");
+                    }
+
                   })
                   .on("mouseout", function (d, i){
                     d3.select("#circle" + i).attr("r", "10px");
+                    d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
+                    d3.select("#text" + i).attr("fill","black");
+
+
                 }
 
               );
 
 
             if(o_type != d_type){ //draw the route if different types selected
-              DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon);
+              //DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon);
               DrawSpeeds(o_id, d_id);
 
             }
