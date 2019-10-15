@@ -61,70 +61,70 @@
 		var svg = d3.select(map.getPanes().overlayPane).append("svg"),
 			g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
-		d3.json("segments_merged_2.json", function(geoShape) {
+d3.json("segments_merged_2.json", function(geoShape) {
 
 		//  create a d3.geo.path to convert GeoJSON to SVG
 		var transform = d3.geo.transform({point: projectPoint}),
             	path = d3.geo.path().projection(transform);
 
-//subset the entire JSON based on the origin and destination points
-var origin = "Andheri West";
-var dest = "Nariman Point";
-var origin_dest = origin.concat("-",dest);
-console.log(origin_dest);
+    //subset the entire JSON based on the origin and destination points
+    var origin = "Andheri West";
+    var dest = "Nariman Point";
+    var origin_dest = origin.concat("-",dest);
+    console.log(origin_dest);
 
-//match with the two elements clicked
-d3_subset = geoShape.features.filter(function(d){return d.properties.all_segments_formatted_csv_commute_id == origin_dest});
+    //match with the two elements clicked
+    d3_subset = geoShape.features.filter(function(d){return d.properties.all_segments_formatted_csv_commute_id == origin_dest});
 
-		// create path elements for each of the features
-		d3_features = g.selectAll("path")
-			.data(d3_subset)
-			.enter().append("path");
+    		// create path elements for each of the features
+    		d3_features = g.selectAll("path")
+    			.data(d3_subset)
+    			.enter().append("path");
 
-		map.on("viewreset", reset);
+    		map.on("viewreset", reset);
 
-		reset();
+    		reset();
 
-		// fit the SVG element to leaflet's map layer
-		function reset() {
+    		// fit the SVG element to leaflet's map layer
+    		function reset() {
 
-			bounds = path.bounds(geoShape);
+    			bounds = path.bounds(geoShape);
 
-			var topLeft = bounds[0],
-				bottomRight = bounds[1];
+    			var topLeft = bounds[0],
+    				bottomRight = bounds[1];
 
-			svg .attr("width", bottomRight[0] - topLeft[0])
-				.attr("height", bottomRight[1] - topLeft[1])
-				.style("left", topLeft[0] + "px")
-				.style("top", topLeft[1] + "px");
+    			svg .attr("width", bottomRight[0] - topLeft[0])
+    				.attr("height", bottomRight[1] - topLeft[1])
+    				.style("left", topLeft[0] + "px")
+    				.style("top", topLeft[1] + "px");
 
-			g .attr("transform", "translate(" + -topLeft[0] + ","
-			                                  + -topLeft[1] + ")");
+    			g .attr("transform", "translate(" + -topLeft[0] + ","
+    			                                  + -topLeft[1] + ")");
 
-			// initialize the path data
-      var minVal = 0;
-      var maxVal = 80;
-      var lowColor = '#00ff00'
-      var highColor = '#ff0000'
-      var ramp = d3.scale.linear().domain([0,35,80]).range(["red","white","green"]);
+    			// initialize the path data
+          var minVal = 0;
+          var maxVal = 80;
+          var lowColor = '#00ff00'
+          var highColor = '#ff0000'
+          var ramp = d3.scale.linear().domain([0,35,80]).range(["red","white","green"]);
 
-      //split up into segments by colour
-        d3_features.attr("d", path)
-  				.style("fill-opacity", 0)
-  				//.attr('fill','blue');
-          .attr('stroke-width',2)
-          //.attr("stroke","blue");
-          .attr("stroke", function(d) { return ramp(d.properties.all_segments_formatted_csv_avg_speed_kmh) });
+          //split up into segments by colour
+            d3_features.attr("d", path)
+      				.style("fill-opacity", 0)
+      				//.attr('fill','blue');
+              .attr('stroke-width',2)
+              //.attr("stroke","blue");
+              .attr("stroke", function(d) { return ramp(d.properties.all_segments_formatted_csv_avg_speed_kmh) });
 
-		}
+    		}
 
-		// Use Leaflet to implement a D3 geometric transformation.
-		function projectPoint(x, y) {
-			var point = map.latLngToLayerPoint(new L.LatLng(y, x));
-			this.stream.point(point.x, point.y);
-		}
+    		// Use Leaflet to implement a D3 geometric transformation.
+    		function projectPoint(x, y) {
+    			var point = map.latLngToLayerPoint(new L.LatLng(y, x));
+    			this.stream.point(point.x, point.y);
+    		}
 
-	})
+    	})
 
   var w = 140, h = 300;
 

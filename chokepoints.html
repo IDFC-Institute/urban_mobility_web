@@ -150,58 +150,73 @@ console.log("i'm going to draw the speeds between o_id and d_id");
 o_d_pair = o_id.concat("-",d_id);
 console.log(o_d_pair);
   //color each segment according to the speed
+  d3.json("segments_merged_2.json", function(geoShape) {
 
-  d3.json("segments_merged.json", function(geoShape) {
+  		//  create a d3.geo.path to convert GeoJSON to SVG
+  		var transform = d3.geo.transform({point: projectPoint}),
+              	path = d3.geo.path().projection(transform);
 
-  //  create a d3.geo.path to convert GeoJSON to SVG
-  var transform = d3.geo.transform({point: projectPoint}),
-            path = d3.geo.path().projection(transform);
+      //subset the entire JSON based on the origin and destination points
+      var origin = "Andheri West";
+      var dest = "Nariman Point";
+      var origin_dest = origin.concat("-",dest);
+      console.log(origin_dest);
 
-  // create path elements for each of the features
-  d3_features = g.selectAll("path")
-    .data(geoShape.features)
-    .enter().append("path");
+      //match with the two elements clicked
+      d3_subset = geoShape.features.filter(function(d){return d.properties.all_segments_formatted_csv_commute_id == origin_dest});
 
-  map.on("viewreset", reset);
+      		// create path elements for each of the features
+      		d3_features = g.selectAll("path")
+      			.data(d3_subset)
+      			.enter().append("path");
 
-  reset();
+      		map.on("viewreset", reset);
 
-  // fit the SVG element to leaflet's map layer
-  function reset() {
+      		reset();
 
-    bounds = path.bounds(geoShape);
+      		// fit the SVG element to leaflet's map layer
+      		function reset() {
 
-    var topLeft = bounds[0],
-      bottomRight = bounds[1];
+      			bounds = path.bounds(geoShape);
 
-    svg .attr("width", bottomRight[0] - topLeft[0])
-      .attr("height", bottomRight[1] - topLeft[1])
-      .style("left", topLeft[0] + "px")
-      .style("top", topLeft[1] + "px");
+      			var topLeft = bounds[0],
+      				bottomRight = bounds[1];
 
-    g .attr("transform", "translate(" + -topLeft[0] + ","
-                                      + -topLeft[1] + ")");
+      			svg .attr("width", bottomRight[0] - topLeft[0])
+      				.attr("height", bottomRight[1] - topLeft[1])
+      				.style("left", topLeft[0] + "px")
+      				.style("top", topLeft[1] + "px");
 
-    // initialize the path data
-    d3_features.attr("d", path)
-      .style("fill-opacity", 0)
-      //.attr('fill','blue');
-      .attr('stroke-width',2)
-      .attr('stroke','green');
+      			g .attr("transform", "translate(" + -topLeft[0] + ","
+      			                                  + -topLeft[1] + ")");
 
-  }
+      			// initialize the path data
+            var minVal = 0;
+            var maxVal = 80;
+            var lowColor = '#00ff00'
+            var highColor = '#ff0000'
+            var ramp = d3.scale.linear().domain([0,35,80]).range(["red","white","green"]);
 
-  // Use Leaflet to implement a D3 geometric transformation.
-  function projectPoint(x, y) {
-    var point = map.latLngToLayerPoint(new L.LatLng(y, x));
-    this.stream.point(point.x, point.y);
-  }
+            //split up into segments by colour
+              d3_features.attr("d", path)
+        				.style("fill-opacity", 0)
+        				//.attr('fill','blue');
+                .attr('stroke-width',2)
+                //.attr("stroke","blue");
+                .attr("stroke", function(d) { return ramp(d.properties.all_segments_formatted_csv_avg_speed_kmh) });
 
-  });
+      		}
+
+      		// Use Leaflet to implement a D3 geometric transformation.
+      		function projectPoint(x, y) {
+      			var point = map.latLngToLayerPoint(new L.LatLng(y, x));
+      			this.stream.point(point.x, point.y);
+      		}
+
+      	});
 
 
-
-} //end draw path
+} //end DrawSpeeds
 
 
 function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
@@ -233,17 +248,32 @@ function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
 
 var map = L
       .map('map', {closePopupOnClick: false})
-      .setView([18.9990, 72.8411], 11);
+      .setView([19.0879, 72.84136], 11);
 
       // var map = L.map('map', { closePopupOnClick: false}).setView([39.7392, -104.9903], 17);
 
 // Tile type: openstreetmap normal
+
+
+
+//openstreetmap tilelayer
+// var openstreetmap = L.tileLayer(
+//       'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+//       attribution: 'Map: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
+//       minZoom: 11,
+//       maxZoom: 11
+//     });
+
+    mapLink =
+        '<a href="https://www.carto.com/basemaps">Map tiles by Carto, under CC BY 3.0. Data by OpenStreetMap, under ODbL. </a>';
+
+//carto tilelayer
 var openstreetmap = L.tileLayer(
-      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: 'Map: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
-      minZoom: 10,
-      maxZoom: 12
-    });
+    'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',{
+    attribution: '&copy; ' + mapLink + ' Contributors',
+    minZoom: 11,
+    maxZoom: 12,
+    })
 
 </script>
 </body>
@@ -259,7 +289,6 @@ var g = d3.select("#map").select("svg"); // Condenses the SVG selection into g
 
 g.attr('pointer-events', 'all'); //https://stackoverflow.com/a/17495417/7207315
 
-//var places = d3.csv("places.csv");
 var places = d3.csv("places.csv");
 
 console.log(places);
