@@ -136,11 +136,6 @@
       </div>
 
 <script>
-function showHint(str){$.post("signup.php",{country:str.value},function(data){$"#result").html(data);});}
-</script>
-
-<script>
-
 
 var route = L.Routing.control({
     createMarker: function() { return null; },
@@ -154,26 +149,9 @@ console.log("i'm going to draw the speeds between o_id and d_id");
 //concatenate the id's
 o_d_pair = o_id.concat("-",d_id);
 console.log(o_d_pair);
+  //color each segment according to the speed
 
-//grab every segment with that matching o_d_pair
-d3.json("segments_merged.geojson", function(geoShape){
-  // svg.selectAll("path")
-  //               .data(data.features.filter(function(d) {
-  //                 return d.properties.all_segments_formatted_csv_commute_id == "Marine Drive-Andheri East"; });)
-  //               .enter()
-  //               .append("path")
-  //               .attr("d",path)
-  //               .style("fill", "teal");
-
-
-  // for(var i = 0; i < data.length; i++){
-  //   if(data[i].all_segments_formatted_csv_commute_id == o_d_pair){
-  //     console.log("matched a pair!");
-  //     console.log(data[i].all_segments_formatted_csv_commute_id);
-  //   }
-  // }
-  //
-  let clickEnabled = false;
+  d3.json("segments_merged.json", function(geoShape) {
 
   //  create a d3.geo.path to convert GeoJSON to SVG
   var transform = d3.geo.transform({point: projectPoint}),
@@ -183,12 +161,35 @@ d3.json("segments_merged.geojson", function(geoShape){
   d3_features = g.selectAll("path")
     .data(geoShape.features)
     .enter().append("path");
-    map.on("viewreset", reset);
-    reset();
 
-  d3_features.on("mouseover", mouseOver)
-  .on("mouseout", mouseOut)
-  .on("click",onClick);
+  map.on("viewreset", reset);
+
+  reset();
+
+  // fit the SVG element to leaflet's map layer
+  function reset() {
+
+    bounds = path.bounds(geoShape);
+
+    var topLeft = bounds[0],
+      bottomRight = bounds[1];
+
+    svg .attr("width", bottomRight[0] - topLeft[0])
+      .attr("height", bottomRight[1] - topLeft[1])
+      .style("left", topLeft[0] + "px")
+      .style("top", topLeft[1] + "px");
+
+    g .attr("transform", "translate(" + -topLeft[0] + ","
+                                      + -topLeft[1] + ")");
+
+    // initialize the path data
+    d3_features.attr("d", path)
+      .style("fill-opacity", 0)
+      //.attr('fill','blue');
+      .attr('stroke-width',2)
+      .attr('stroke','green');
+
+  }
 
   // Use Leaflet to implement a D3 geometric transformation.
   function projectPoint(x, y) {
@@ -196,56 +197,9 @@ d3.json("segments_merged.geojson", function(geoShape){
     this.stream.point(point.x, point.y);
   }
 
-  // fit the SVG element to leaflet's map layer
-  function reset() {
-
-    bounds = path.bounds(geoShape);
-    var topLeft = bounds[0],
-      bottomRight = bounds[1];
-    svg .attr("width", bottomRight[0] - topLeft[0])
-      .attr("height", bottomRight[1] - topLeft[1])
-      .style("left", topLeft[0] + "px")
-      .style("top", topLeft[1] + "px");
-
-    g .attr("transform", "translate(" + -topLeft[0] + ","
-                                     + -topLeft[1] + ")");
-
-    // initialize the path data
-    d3_features.attr("d", path)
-      .style("fill-opacity", 0)
-      .attr('fill','blue');
-  }
-
-  function mouseOver(d) {
-      d3.select(this)
-          .enter()
-          .transition()
-          .duration(100)
-          .style("stroke", "red")
-          .style("fill", "red")
-          .exit();
-        }
-  function mouseOut(d){
-    d3.select(this)
-    .enter()
-    .transition()
-    .style("fill-opacity",0)
-    .style("stroke-opacity",0)
-    .style("stroke","black")
-    .style("fill","black")
-    .exit();
-  }
-  function onClick(d){
-    d3.select(this)
-    .style("fill-opacity",0.5)
-    .style("fill","blue");
-}
+  });
 
 
-
-});//end json
-
-  //color each segment according to the speed
 
 } //end draw path
 
@@ -289,14 +243,14 @@ var openstreetmap = L.tileLayer(
       attribution: 'Map: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
       minZoom: 10,
       maxZoom: 12
-    })
-
+    });
 
 </script>
 </body>
 </html>
 
 <script>
+
 
 //https://leafletjs.com/examples/quick-start/
 L.svg().addTo(map);
@@ -314,6 +268,7 @@ var o_id;
 var d_id;
 var o_type;
 var d_type;
+
 
 Promise.all([places]).then(
     function(values)
@@ -438,7 +393,7 @@ Promise.all([places]).then(
 
 
             if(o_type != d_type){ //draw the route if different types selected
-              //DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon);
+              DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon);
               DrawSpeeds(o_id, d_id);
 
             }
@@ -465,4 +420,6 @@ function update()
 map.on("moveend", update)
 
 openstreetmap.addTo(map);
+
+
 </script>

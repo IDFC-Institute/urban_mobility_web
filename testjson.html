@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<!--color ramp code from https://bl.ocks.org/wboykinm/dbbe50d1023f90d4e241712395c27fb3 -->
+<html>
+<head>
+    <title>Leaflet and D3 Map</title>
+    <meta charset="utf-8" />
+    <link
+        rel="stylesheet"
+        href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css"
+    />
+
+<style>
+
+/* Legend Position Style */
+.legend {
+	position:absolute;
+	left:20px;
+	top:30px;
+}
+
+.axis text {
+	font: 10px sans-serif;
+}
+
+.axis line, .axis path {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
+}
+
+</style>
+
+<script src="colorbrewer.js"></script>
+
+
+</head>
+<body>
+
+    <div id="map" style="width: 600px; height: 400px"></div>
+
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+
+    <script
+        src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js">
+    </script>
+
+    <script>
+
+        var map = L.map('map').setView([19.0879, 72.84136], 10);
+        mapLink =
+            '<a href="https://www.carto.com/basemaps">Map tiles by Carto, under CC BY 3.0. Data by OpenStreetMap, under ODbL. </a>';
+        L.tileLayer(
+            'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',{
+            attribution: '&copy; ' + mapLink + ' Contributors',
+            maxZoom: 18,
+            }).addTo(map);
+
+            // 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+
+		// Add an SVG element to Leaflet’s overlay pane
+		var svg = d3.select(map.getPanes().overlayPane).append("svg"),
+			g = svg.append("g").attr("class", "leaflet-zoom-hide");
+
+		d3.json("segments_merged_2.json", function(geoShape) {
+
+		//  create a d3.geo.path to convert GeoJSON to SVG
+		var transform = d3.geo.transform({point: projectPoint}),
+            	path = d3.geo.path().projection(transform);
+
+//subset the entire JSON based on the origin and destination points
+var origin = "Andheri West";
+var dest = "Nariman Point";
+var origin_dest = origin.concat("-",dest);
+console.log(origin_dest);
+
+//match with the two elements clicked
+d3_subset = geoShape.features.filter(function(d){return d.properties.all_segments_formatted_csv_commute_id == origin_dest});
+
+		// create path elements for each of the features
+		d3_features = g.selectAll("path")
+			.data(d3_subset)
+			.enter().append("path");
+
+		map.on("viewreset", reset);
+
+		reset();
+
+		// fit the SVG element to leaflet's map layer
+		function reset() {
+
+			bounds = path.bounds(geoShape);
+
+			var topLeft = bounds[0],
+				bottomRight = bounds[1];
+
+			svg .attr("width", bottomRight[0] - topLeft[0])
+				.attr("height", bottomRight[1] - topLeft[1])
+				.style("left", topLeft[0] + "px")
+				.style("top", topLeft[1] + "px");
+
+			g .attr("transform", "translate(" + -topLeft[0] + ","
+			                                  + -topLeft[1] + ")");
+
+			// initialize the path data
+      var minVal = 0;
+      var maxVal = 80;
+      var lowColor = '#00ff00'
+      var highColor = '#ff0000'
+      var ramp = d3.scale.linear().domain([0,35,80]).range(["red","white","green"]);
+
+      //split up into segments by colour
+        d3_features.attr("d", path)
+  				.style("fill-opacity", 0)
+  				//.attr('fill','blue');
+          .attr('stroke-width',2)
+          //.attr("stroke","blue");
+          .attr("stroke", function(d) { return ramp(d.properties.all_segments_formatted_csv_avg_speed_kmh) });
+
+		}
+
+		// Use Leaflet to implement a D3 geometric transformation.
+		function projectPoint(x, y) {
+			var point = map.latLngToLayerPoint(new L.LatLng(y, x));
+			this.stream.point(point.x, point.y);
+		}
+
+	})
+
+  var w = 140, h = 300;
+
+  var key = d3.select("body")
+    .append("svg")
+    .attr("width", w)
+    .attr("height", h)
+    .attr("class", "legend");
+
+  var legend = key.append("defs")
+    .append("svg:linearGradient")
+    .attr("id", "gradient")
+    .attr("x1", "100%")
+    .attr("y1", "0%")
+    .attr("x2", "100%")
+    .attr("y2", "100%")
+    .attr("spreadMethod", "pad");
+
+  legend.append("stop")
+    .attr("offset", "0%")
+    .attr("stop-color", highColor)
+    .attr("stop-opacity", 1);
+
+  legend.append("stop")
+    .attr("offset", "100%")
+    .attr("stop-color", lowColor)
+    .attr("stop-opacity", 1);
+
+  key.append("rect")
+    .attr("width", w - 100)
+    .attr("height", h)
+    .style("fill", "url(#gradient)")
+    .attr("transform", "translate(0,10)");
+
+  var y = d3.scale.linear()
+    .range([h, 0])
+    .domain([minVal, maxVal]);
+
+  var yAxis = d3.axisRight(y);
+
+  key.append("g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(41,10)")
+    .call(yAxis)
+
+    </script>
+</body>
+</html>
