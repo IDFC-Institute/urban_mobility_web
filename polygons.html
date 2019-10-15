@@ -286,68 +286,6 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
     var point = map.latLngToLayerPoint(new L.LatLng(y, x));
     this.stream.point(point.x, point.y);
   }
-  //
-  // var rectStartWidth = 600;
-  // var rectStartHeight = 300;
-  // var rectX = 500;
-  // var rectY = 400;
-  //
-  // svg.append("rect")
-  //   .attr("id", (d) => "InfoBox")
-  //   .attr("x", rectX)
-  //   .attr("y", rectY)
-  //   .attr("width", rectStartWidth)
-  //   .attr("height", rectStartHeight)
-  //   .attr("fill","white");
-  //
-  // svg.append("text")
-  //   .attr("id", (d) => "Title")
-  //   .attr("x", rectX + 15)
-  //   .attr("y", rectY + 50)
-  //   //.transform=translate(x=900,y=10)
-  //   .style("font-family", "Georgia")
-  //   .style("font-weight", "bold")
-  //   .style("font-size", "30px");
-  //
-  // svg.append("text")
-  //   .attr("id", (d) => "Description")
-  //   .attr("x", rectX + 15)
-  //   .attr("y", rectY + 80)
-  //   .style("font-family", "Georgia")
-  //   .style("font-weight", "bold")
-  //   .style("font-size", "20px");
-  //
-  //     svg.append("text")
-  //       .attr("id", (d) => "DescriptionLine2")
-  //       .attr("x", rectX + 15)
-  //       .attr("y", rectY + 110)
-  //       .style("font-family", "Georgia")
-  //       .style("font-weight", "bold")
-  //       .style("font-size", "20px");
-  //
-  // svg.append("text")
-  //     .attr("id", (d) => "TextDistance2" ) //name the box ResultsText
-  //     .attr("x", rectX + 15) //x location of the box
-  //     .attr("y", rectY + 150) //y location of the box
-  //     .style("font-family", "Georgia")
-  //     .style("font-weight", "bold")
-  //     .style("font-size", "20px");
-  //
-  // svg.append("text")
-  //     .attr("id", (d) => "TextOC" ) //name the box ResultsText
-  //     .attr("x", rectX + 15) //x location of the box
-  //     .attr("y", rectY + 200) //y location of the box
-  //     .style("font-family", "Georgia")
-  //     .style("font-weight", "bold")
-  //     .style("font-size", "20px");
-  //
-  // svg.append("text")
-  //   .attr("id", (d) => "TextFuelCost" ) //name the box ResultsText
-  //   .attr("x", rectX + 15) //x location of the box
-  //   .attr("y", rectY + 250) //y location of the box
-  //   .style("font-family", "Georgia")
-  //   .style("font-weight", "bold")
-  //   .style("font-size", "20px");
 
   // fit the SVG element to leaflet's map layer
   function reset() {
@@ -368,10 +306,6 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
       .style("fill-opacity", 0)
       .attr('fill','blue');
   }
-
-  // d3.select("#Title").text("The Costs of Commuting in Mumbai");
-  // d3.select("#Description").text("Click your home area and your work area to get your");
-  // d3.select("#DescriptionLine2").text("cost of commuting.");
 
   function mouseOver(d) {
       d3.select(this)

@@ -155,14 +155,16 @@ console.log(o_d_pair);
 
 
 //grab every segment with that matching o_d_pair
-d3.json("segments_merged.geojson", function(data){
-  console.log("successfully read in file");
-  svg.selectAll("path")
-               .data(json.features)
-               .enter()
-               .append("path")
-               .attr("d", path)
-               .attr("fill","#666666");
+d3.json("segments_merged.geojson", function(geoShape){
+  // svg.selectAll("path")
+  //               .data(data.features.filter(function(d) {
+  //                 return d.properties.all_segments_formatted_csv_commute_id == "Marine Drive-Andheri East"; });)
+  //               .enter()
+  //               .append("path")
+  //               .attr("d",path)
+  //               .style("fill", "teal");
+
+
   // for(var i = 0; i < data.length; i++){
   //   if(data[i].all_segments_formatted_csv_commute_id == o_d_pair){
   //     console.log("matched a pair!");
@@ -170,23 +172,23 @@ d3.json("segments_merged.geojson", function(data){
   //   }
   // }
   //
-  // let clickEnabled = false;
-  //
-  // //  create a d3.geo.path to convert GeoJSON to SVG
-  // var transform = d3.geo.transform({point: projectPoint}),
-  //           path = d3.geo.path().projection(transform);
-  //
-  // // create path elements for each of the features
-  // d3_features = g.selectAll("path")
-  //   .data(geoShape.features)
-  //   .enter().append("path");
-  //  map.on("viewreset", reset);
-  //  reset();
-  //
-  // d3_features.on("mouseover", mouseOver)
-  // .on("mouseout", mouseOut)
-  // .on("click",onClick);
-  //
+  let clickEnabled = false;
+
+  //  create a d3.geo.path to convert GeoJSON to SVG
+  var transform = d3.geo.transform({point: projectPoint}),
+            path = d3.geo.path().projection(transform);
+
+  // create path elements for each of the features
+  d3_features = g.selectAll("path")
+    .data(geoShape.features)
+    .enter().append("path");
+   map.on("viewreset", reset);
+   reset();
+
+  d3_features.on("mouseover", mouseOver)
+  .on("mouseout", mouseOut)
+  .on("click",onClick);
+
   // // Use Leaflet to implement a D3 geometric transformation.
   // function projectPoint(x, y) {
   //   var point = map.latLngToLayerPoint(new L.LatLng(y, x));
@@ -301,7 +303,7 @@ Promise.all([places]).then(
             .style("fill", function(d){ if(d.Type=="residential") { return "red"; } else { return "blue"; } })
             .attr("id", function(d, i){ return "circle" + i; })
 
-            .on("mouseover", function (d, i){ d3.select("#circle" + i).attr("r", "20px"); d3.select("#text" + i).attr("fill", "green");})
+            // .on("mouseover", function (d, i){ d3.select("#circle" + i).attr("r", "20px"); d3.select("#text" + i).attr("fill", "green");})
             .on("mouseout", function (d, i){ d3.select("#circle" + i).attr("r", "10px"); d3.select("#text" + i).attr("fill", "red");})
 
             .on("click", function (d){
@@ -370,7 +372,7 @@ Promise.all([places]).then(
                   a = a + 1;
                 }
               }
-              
+
               //displays Names for points
               g.selectAll("text")
                   .data(values[0])
