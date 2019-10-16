@@ -16,9 +16,9 @@
   @import url(http://cdn.leafletjs.com/leaflet-0.6.1/leaflet.css);
   .navigation {
     float:right;
-    background:gray;
+    background:red;
     width:25vh;
-    height:100vh;
+    height:90vh;
   }
 
   #map{
@@ -32,12 +32,12 @@
   #value-vertical{
     float:left:
     display:flex;
-    height:100vh;
+    height:20vh;
   }
   #slider-vertical{
     float:right
     display:flex;
-    height:400px;
+    height:20vh;
   }
 
     .container{
@@ -49,7 +49,7 @@
       display:flex;
     }
 
-    .column {
+    .column-33 {
       flex:33%;
       text-align:center;
     }
@@ -81,6 +81,10 @@ h3{
   font-size:1.8rem;
 }
 
+h4{
+  font-size:1.6rem;
+}
+
   .info h1 {
       margin: 0 0 10px;
       color: #000000;
@@ -101,6 +105,12 @@ h3{
     opacity: 0.7;
   }
 
+  div.b {
+  line-height: 1.6;
+  text-align:left;
+}
+
+
   </style>
 </head>
 
@@ -113,17 +123,24 @@ h3{
         <h3>Click your home area and your work area to get your cost of commuting.</h3>
 
         <div class="row">
-          <div class="column">
+          <div class="column-50">
           <h2 id="TextDistance"></h2>
           <h3 style="color:#A9A9A9";>Distance</h3>
           </div>
-          <div class="column">
+          <div class="column-50">
           <h2 id="TextOC"></h2>
           <h3 style="color:#A9A9A9";>Opportunity Cost</h3>
           </div>
-          <div class="column">
+        </div>
+
+        <div class="row">
+          <div class="column-50">
           <h2 id="TextFuelCost"></h2>
           <h3 style="color:#A9A9A9";>Total Economic Cost</h3>
+          </div>
+          <div class="column-50">
+          <h2 id="TextEnvCost"></h2>
+          <h3 style="color:#A9A9A9";>Total Environmental Cost</h3>
           </div>
         </div>
 
@@ -138,18 +155,33 @@ h3{
             <div id="value-vertical"></div>
           </div>
         </div>
+
+        <div class="row">
+          <div class="b">
+            <h3 style="text-align:center">Definitions</h3>
+            <h4 style="padding-left:1rem">Distance: Total distance (km).<br>
+            Opportunity Cost: Cost of spending additional time commuting, which could have been used for work or leisure (INR). <br>Assumes equal probability of work and leisure and takes as inputs additional commuting hours and a user-supplied monthly wage using this page's slider.<br>
+            Total Economic Cost: Additional fuel and emissions cost for the selected route (INR).<br>
+            Total Environmental Cost: Total cost of additional petrol emissions for the selected route (INR).<br>
+            Note: Generalised exchange rate of USD 1 to INR 70.
+            </h4>
+          </div>
+        </div>
+        </div>
+
       </div>
-    </div>
 
 <script>
 var wage;
 var dist;
 var oc;
 var econ;
+var env;
 
 d3.select("#TextDistance").text(" - km");
 d3.select("#TextOC").text("- INR");
 d3.select("#TextFuelCost").text("- INR");
+d3.select("#TextEnvCost").text("- INR");
 
   var route = L.Routing.control({
       createMarker: function() { return null; },
@@ -390,9 +422,13 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
             dist = data[i].distance;
             oc = data[i].additional_hours_commuting*((0.5*(wage/9/7/4))+(0.5*(wage/9/7/4)));
             econ = data[i].total_economic_costs;
+            env = data[i].total_petrol_emissions;
+
             d3.select("#TextDistance").text(dist + " km");
             d3.select("#TextOC").text(Math.round(oc) +" INR");
             d3.select("#TextFuelCost").text(Math.round(econ) + " INR");
+            d3.select("#TextEnvCost").text(Math.round(env) + " INR");
+
             //make 2 points
             d3.select("#point_src");
             d3.select("#point_dest");

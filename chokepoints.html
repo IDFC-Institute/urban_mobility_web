@@ -47,7 +47,7 @@
     display:flex;
   }
 
-  .column {
+  .column-33 {
     flex:33%;
     text-align:center;
   }
@@ -149,6 +149,10 @@ console.log("i'm going to draw the speeds between o_id and d_id");
 //concatenate the id's
 o_d_pair = o_id.concat("-",d_id);
 console.log(o_d_pair);
+
+
+//////////////////////////////////////////////////////////////////
+
   //color each segment according to the speed
   d3.json("segments_merged_2.json", function(geoShape) {
 
@@ -176,17 +180,13 @@ console.log(o_d_pair);
 
       		// fit the SVG element to leaflet's map layer
       		function reset() {
-
       			bounds = path.bounds(geoShape);
-
       			var topLeft = bounds[0],
       				bottomRight = bounds[1];
-
       			svg .attr("width", bottomRight[0] - topLeft[0])
       				.attr("height", bottomRight[1] - topLeft[1])
       				.style("left", topLeft[0] + "px")
       				.style("top", topLeft[1] + "px");
-
       			g .attr("transform", "translate(" + -topLeft[0] + ","
       			                                  + -topLeft[1] + ")");
 
@@ -214,6 +214,7 @@ console.log(o_d_pair);
       		}
 
       	});
+//////////////////////////////////////////////////////////
 
 
 } //end DrawSpeeds
@@ -392,17 +393,20 @@ Promise.all([places]).then(
                   .enter()
                   .append("text")
                   .text(function(d) { return d.Name; })
-                  .attr("font-weight",function(d,i) {return i*100+100;})
+                  // .attr("font-weight",function(d,i) {return i*100+100;})
                   .attr("font-family","Georgia")
                   .attr("fill", "black")
                   .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
-                  .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 5; })
+                  .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; })
                   .attr("id", function(d, i){ return "text" + i; })
 
                   .on("mouseover", function (d, i){
                     d3.select("#circle" + i).attr("r", "20px");
                     d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 30; })
+                    d3.select("#text" + i).attr("y", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; })
+
                     if(d.Type=="residential"){
+
                       d3.select("#text" + i).attr("fill","red");
                     }
                     else{

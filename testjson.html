@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <!--color ramp code from https://bl.ocks.org/wboykinm/dbbe50d1023f90d4e241712395c27fb3 -->
+<!-- dropdown code from https://stackoverflow.com/questions/19728666/drop-down-box-dependent-on-the-option-selected-in-another-drop-down-box -->
 <html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
 <head>
     <title>Leaflet and D3 Map</title>
     <meta charset="utf-8" />
@@ -32,11 +35,133 @@
 
 <script src="colorbrewer.js"></script>
 
-
 </head>
 <body>
 
     <div id="map" style="width: 600px; height: 400px"></div>
+    <div id="textcontainer" style="text-align:left">
+      <h1>Chokepoints</h1>
+    </div>
+
+    <script>
+
+    var lowColor = '#00ff00'
+    var highColor = '#ff0000'
+    var minVal = 0;
+    var maxVal = 80;
+
+
+        function dynamicdropdown(listindex)
+        {
+            switch (listindex)
+            {
+            case "am" :
+                document.getElementById("startpoint").options[0]=new Option("Select startpoint","");
+                document.getElementById("startpoint").options[1]=new Option("Andheri West","Andheri West");
+                document.getElementById("startpoint").options[2]=new Option("Borivali","Borivali");
+                document.getElementById("startpoint").options[3]=new Option("Chembur","Chembur");
+                document.getElementById("startpoint").options[4]=new Option("Marine Drive","Marine Drive");
+                document.getElementById("endpoint").options[0]=new Option("Select endpoint","");
+                document.getElementById("endpoint").options[1]=new Option("Andheri East","Andheri East");
+                document.getElementById("endpoint").options[2]=new Option("BKC","BKC");
+                document.getElementById("endpoint").options[3]=new Option("Lower Parel","Lower Parel");
+                document.getElementById("endpoint").options[4]=new Option("Malad","Malad");
+                document.getElementById("endpoint").options[5]=new Option("Nariman Point","Nariman Point");
+                break;
+            case "pm" :
+                document.getElementById("startpoint").options[0]=new Option("Select startpoint","");
+                document.getElementById("startpoint").options[1]=new Option("Andheri East","Andheri East");
+                document.getElementById("startpoint").options[2]=new Option("BKC","BKC");
+                document.getElementById("startpoint").options[3]=new Option("Lower Parel","Lower Parel");
+                document.getElementById("startpoint").options[4]=new Option("Malad","Malad");
+                document.getElementById("startpoint").options[5]=new Option("Nariman Point","Nariman Point");
+                document.getElementById("endpoint").options[0]=new Option("Select endpoint","");
+                document.getElementById("endpoint").options[1]=new Option("Andheri West","Andheri West");
+                document.getElementById("endpoint").options[2]=new Option("Borivali","Borivali");
+                document.getElementById("endpoint").options[3]=new Option("Chembur","Chembur");
+                document.getElementById("endpoint").options[4]=new Option("Marine Drive","Marine Drive");
+                document.getElementById("endpoint").options[5]=new Option("","");
+
+                break;
+            }
+            return true;
+        }
+        </script>
+
+        <div class="category_div" id="category_div">Commute Period:
+            <select id="source" name="source" onchange="javascript: dynamicdropdown(this.options[this.selectedIndex].value);">
+            <option value="" selected >Select commute period</option>
+            <option value="am">AM</option>
+            <option value="pm">PM</option>
+            </select>
+        </div>
+        <div class="sub_category_div" id="startbox">Start Point:
+            <script type="text/javascript" language="JavaScript">
+            document.write('<select name="startpoint" id="startpoint"><option value="" selected>Select start point</option></select>')
+            </script>
+            <noscript>
+            <select id="startpoint" name="startpoint">
+              <option value="Andheri West">Andheri West</option>
+              <option value="Borivali">Borivali</option>
+              <option value="Chembur">Chembur</option>
+              <option value="Marine Drive">Marine Drive</option>
+              <option value="Andheri East">Andheri East</option>
+              <option value="BKC">BKC</option>
+              <option value="Lower Parel">Lower Parel</option>
+              <option value="Malad">Malad</option>
+              <option value="Nariman Point">Nariman Point</option>
+            </select>
+            </noscript>
+        </div>
+
+        <div class="sub_category_div" id="endbox">End Point:
+            <script type="text/javascript" language="JavaScript">
+            document.write('<select name="endpoint" id="endpoint"><option value="" selected>Select end point</option></select>')
+            </script>
+            <noscript>
+            <select id="endpoint" name="endpoint">
+              <option value="Andheri West">Andheri West</option>
+              <option value="Borivali">Borivali</option>
+              <option value="Chembur">Chembur</option>
+              <option value="Marine Drive">Marine Drive</option>
+              <option value="Andheri East">Andheri East</option>
+              <option value="BKC">BKC</option>
+              <option value="Lower Parel">Lower Parel</option>
+              <option value="Malad">Malad</option>
+              <option value="Nariman Point">Nariman Point</option>
+            </select>
+            </noscript>
+        </div>
+
+        <script>
+
+        function submitSegment(){
+          var selection_o = document.getElementById("startpoint");
+          var selection_d = document.getElementById("endpoint");
+
+          var yourSelectStart = document.getElementById("startpoint");
+          var yourSelectEnd = document.getElementById("endpoint");
+
+          // document.getElementById("startpoint").onclick = function(){
+          //   console.log(yourSelectStart.value);
+          //   console.log(yourSelectEnd.value);
+          // };
+          // document.getElementById("endpoint").onclick = function(){
+          // console.log(yourSelectStart.value);
+          // console.log(yourSelectEnd.value);
+          // };
+
+          var origin = yourSelectStart.value;
+          var dest = yourSelectEnd.value;
+          console.log(origin);
+          console.log(dest);
+        }
+
+
+        </script>
+
+<button><a type=button value="Segment_Value" onClick="submitSegment();" class="segment_button">Submit Segment</a></button>
+
 
 	<script src="http://d3js.org/d3.v3.min.js"></script>
 
@@ -68,9 +193,11 @@ d3.json("segments_merged_2.json", function(geoShape) {
             	path = d3.geo.path().projection(transform);
 
     //subset the entire JSON based on the origin and destination points
-    var origin = "Andheri West";
+    var origin = "Borivali";
     var dest = "Nariman Point";
+
     var origin_dest = origin.concat("-",dest);
+
     console.log(origin_dest);
 
     //match with the two elements clicked
@@ -102,10 +229,7 @@ d3.json("segments_merged_2.json", function(geoShape) {
     			                                  + -topLeft[1] + ")");
 
     			// initialize the path data
-          var minVal = 0;
-          var maxVal = 80;
-          var lowColor = '#00ff00'
-          var highColor = '#ff0000'
+
           var ramp = d3.scale.linear().domain([0,35,80]).range(["red","white","green"]);
 
           //split up into segments by colour
@@ -124,9 +248,9 @@ d3.json("segments_merged_2.json", function(geoShape) {
     			this.stream.point(point.x, point.y);
     		}
 
-    	})
+    	})//end json
 
-  var w = 140, h = 300;
+  var w = 140, h = 350;
 
   var key = d3.select("body")
     .append("svg")
@@ -157,17 +281,17 @@ d3.json("segments_merged_2.json", function(geoShape) {
     .attr("width", w - 100)
     .attr("height", h)
     .style("fill", "url(#gradient)")
-    .attr("transform", "translate(0,10)");
+    .attr("transform", "translate(0,100)");
 
   var y = d3.scale.linear()
     .range([h, 0])
     .domain([minVal, maxVal]);
 
-  var yAxis = d3.axisRight(y);
+  var yAxis = d3.svg.axis().orient("right");
 
   key.append("g")
     .attr("class", "y axis")
-    .attr("transform", "translate(41,10)")
+    .attr("transform", "translate(41,100)")
     .call(yAxis)
 
     </script>
