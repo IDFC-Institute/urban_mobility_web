@@ -67,6 +67,7 @@
 </style>
 </head>
 
+
 <body>
   <div class="row">
     <div id="map"></div>
@@ -389,7 +390,7 @@ L.tileLayer(
     g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
     //////////////// legend //////////////////////
-    var w = 140, h = 350;
+    var w = 140, h = 550;
 
     var key = d3.select("body")
       .append("svg")
@@ -408,17 +409,22 @@ L.tileLayer(
 
     legend.append("stop")
       .attr("offset", "0%")
-      .attr("stop-color", highColor)
+      .attr("stop-color", "green")
       .attr("stop-opacity", 1);
 
     legend.append("stop")
-      .attr("offset","50%")
-      .attr("stop-color", "#ffff00")
+      .attr("offset","33%")
+      .attr("stop-color", "yellow")
       .attr("stop-opacity", 1);
+
+    legend.append("stop")
+        .attr("offset","66%")
+        .attr("stop-color", "orange")
+        .attr("stop-opacity", 1);
 
     legend.append("stop")
       .attr("offset", "100%")
-      .attr("stop-color", lowColor)
+      .attr("stop-color", "red")
       .attr("stop-opacity", 1);
 
     key.append("rect")
@@ -428,15 +434,16 @@ L.tileLayer(
       .attr("transform", "translate(0,100)");
 
     var y = d3.scale.linear()
-      .range([h, 0])
-      .domain([minVal, maxVal]);
+      .range([h,1])
+      .domain([0,80]);
 
-    var yAxis = d3.svg.axis().orient("right");
+    var yAxis = d3.svg.axis().orient("right").scale(y);
 
     key.append("g")
       .attr("class", "y axis")
       .attr("transform", "translate(41,100)")
-      .call(yAxis)
+      .call(yAxis);
+
     ////////////// legend ////////////////////
 
 </script>
