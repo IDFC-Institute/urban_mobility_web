@@ -36,15 +36,13 @@
 
   .row{
     display:flex;
+    padding:10px;
   }
 
-  .column-33 {
-    flex:33%;
-    text-align:center;
-  }
   .column-50{
     flex:50%;
     text-align:center;
+    padding:10px;
   }
 
 /* Legend Position Style */
@@ -86,6 +84,27 @@ h3{
   padding: 10px;
 }
 
+.text_input {
+/*        border: 0;*/
+        padding: 5px;
+        box-shadow: none;
+        font-size:20px;
+        background-color: #<?php echo $background; ?>;
+        font-family: Futura, Arial, "sans-serif";
+        color: #<?php echo $text; ?>;
+        outline: 0;
+        border-style: solid;
+        border-width: 0 0 2px;
+/*        border-bottom: 2px #<?php echo $text; ?>;*/
+        border-color: #<?php echo $text; ?>;
+        border-radius: 0px;
+/*    https://stackoverflow.com/questions/37465458/input-text-field-with-only-bottom-border/37465540*/
+}
+
+.text_input:focus {
+  border-color: #<?php echo $highlight; ?>;
+}
+
 </style>
 </head>
 
@@ -99,19 +118,19 @@ h3{
         <h3>Select a time, a residential area and business district to show traffic-choked segments.</h3>
 
         <div class="row" id="category_div">
-        <select id="source" name="source" onchange="javascript: dynamicdropdown(this.options[this.selectedIndex].value);">
+        <select id="source" name="source" class="text_input form-control" onchange="javascript: dynamicdropdown(this.options[this.selectedIndex].value);">
             <option value="" selected >Select commute period</option>
-            <option value="am">AM</option>
-            <option value="pm">PM</option>
+            <option value="am">Morning</option>
+            <option value="pm">Afternoon</option>
           </select>
         </div>
 
         <div class="row" id="startbox">
             <script type="text/javascript" language="JavaScript">
-            document.write('<select name="startpoint" id="startpoint"><option value="" selected>Start point</option></select>')
+            document.write('<select name="startpoint" id="startpoint" class="text_input form-control"><option value="" selected>Start point</option></select>')
             </script>
             <noscript>
-            <select id="startpoint" name="startpoint">
+            <select id="startpoint" class="text_input form-control" name="startpoint">
               <option value="Andheri West">Andheri West</option>
               <option value="Borivali">Borivali</option>
               <option value="Chembur">Chembur</option>
@@ -127,10 +146,10 @@ h3{
 
         <div class="row" id="endbox">
             <script type="text/javascript" language="JavaScript">
-            document.write('<select name="endpoint" id="endpoint"><option value="" selected>End point</option></select>')
+            document.write('<select name="endpoint" class="text_input form-control" id="endpoint"><option value="" selected>End point</option></select>')
             </script>
             <noscript>
-            <select id="endpoint" name="endpoint">
+            <select id="endpoint" name="endpoint" class="text_input form-control">
               <option value="Andheri West">Andheri West</option>
               <option value="Borivali">Borivali</option>
               <option value="Chembur">Chembur</option>
@@ -145,7 +164,7 @@ h3{
         </div>
 
         <div class="row">
-        <button><a type=button value="Segment_Value" onClick="submitSegment();" class="segment_button">Show Chokepoints</a>
+        <button><a type=button class="text_input form-control" value="Segment_Value" onClick="submitSegment();" class="segment_button">Show Chokepoints</a>
         </div>
 
         <br></br>
