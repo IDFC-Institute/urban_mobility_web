@@ -64,19 +64,41 @@
 	shape-rendering: crispEdges;
 }
 
+h1{
+  color:#ea5153;
+  font-size:3rem;
+  font-family: Futura, Arial, "sans-serif";
+  padding: 10px;
+}
+
+h2{
+  font-size:2rem;
+  font-family: Futura, Arial, "sans-serif";
+  padding: 10px;
+  color:#ea5153;
+}
+
+h3{
+  font-size:1.8rem;
+  color:#FFFFFF;
+  font-family: Futura, Arial, "sans-serif";
+  margin: 0 auto;
+  padding: 10px;
+}
+
 </style>
 </head>
 
 
-<body>
+<body style="background-color:#000000"></body>
   <div class="row">
     <div id="map"></div>
 
     <div id="navigation" style="text-align:center">
         <h1>Traffic Chokepoints in Mumbai</h1>
-        <h3>Select a residential area and a Central Business District (CBD) to discover traffic-choked segments.</h3>
+        <h3>Select a time, a residential area and business district to show traffic-choked segments.</h3>
 
-        <div class="row" id="category_div">Commute Period:
+        <div class="row" id="category_div">
         <select id="source" name="source" onchange="javascript: dynamicdropdown(this.options[this.selectedIndex].value);">
             <option value="" selected >Select commute period</option>
             <option value="am">AM</option>
@@ -84,9 +106,9 @@
           </select>
         </div>
 
-        <div class="row" id="startbox">Start Point:
+        <div class="row" id="startbox">
             <script type="text/javascript" language="JavaScript">
-            document.write('<select name="startpoint" id="startpoint"><option value="" selected>Select start point</option></select>')
+            document.write('<select name="startpoint" id="startpoint"><option value="" selected>Start point</option></select>')
             </script>
             <noscript>
             <select id="startpoint" name="startpoint">
@@ -103,9 +125,9 @@
             </noscript>
         </div>
 
-        <div class="row" id="endbox">End Point:
+        <div class="row" id="endbox">
             <script type="text/javascript" language="JavaScript">
-            document.write('<select name="endpoint" id="endpoint"><option value="" selected>Select end point</option></select>')
+            document.write('<select name="endpoint" id="endpoint"><option value="" selected>End point</option></select>')
             </script>
             <noscript>
             <select id="endpoint" name="endpoint">
@@ -123,7 +145,7 @@
         </div>
 
         <div class="row">
-        <button><a type=button value="Segment_Value" onClick="submitSegment();" class="segment_button">Submit Segment</a></button>
+        <button><a type=button value="Segment_Value" onClick="submitSegment();" class="segment_button">Show Chokepoints</a>
         </div>
 
         <br></br>
@@ -143,12 +165,12 @@
         <div class="row">
           <div class="column-50">
           <h2 id="TextFuelCost"></h2>
-          <h3 style="color:#A9A9A9";>Total Economic Cost</h3>
+          <h3 style="color:#A9A9A9";>Economic Cost</h3>
           </div>
 
           <div class="column-50">
           <h2 id="TextEnvCost"></h2>
-          <h3 style="color:#A9A9A9";>Total Environmental Cost</h3>
+          <h3 style="color:#A9A9A9";>Environmental Cost</h3>
           </div>
         </div>
 
