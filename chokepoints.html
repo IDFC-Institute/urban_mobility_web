@@ -4,11 +4,13 @@
 <meta charset="utf-8">
 <!-- https://www.d3-graph-gallery.com/graph/backgroundmap_leaflet_buttonLayer.html -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
-<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin=""></script>
+<script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
+
+<!-- <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin=""></script> -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
-<script src="https://d3js.org/d3.v5.min.js"></script>
 
+<script src="http://d3js.org/d3.v3.min.js"></script>
 <style>
 @import url(http://cdn.leafletjs.com/leaflet-0.6.1/leaflet.css);
 
@@ -26,17 +28,6 @@
    background:white;
    height:100vh;
   }
-
-#value-vertical{
-  float:left:
-  display:flex;
-  height:100vh;
-}
-#slider-vertical{
-  float:right
-  display:flex;
-  height:400px;
-}
 
   .container{
     width:100%;
@@ -56,39 +47,25 @@
     text-align:center;
   }
 
-.info {
-    width: 200px;
-    height:200px;
-    padding: 8px 8px;
-    background: white;
-    background: rgba(255,255,255,1);
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 2px;
-}
-
-.info h1 {
-    margin: 0 0 10px;
-    color: #000000;
-}
-
+/* Legend Position Style */
 .legend {
-  width:200px;
-  height:100px;
-  line-height: 18px;
-  color: #555;
+	position:absolute;
+	left:20px;
+	top:30px;
 }
 
-.legend i {
-  width: 18px;
-  height: 18px;
-  float: left;
-  margin-right: 8px;
-  opacity: 0.7;
+.axis text {
+	font: 10px sans-serif;
+}
+
+.axis line, .axis path {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
 }
 
 </style>
 </head>
-
 
 <body>
   <div class="row">
@@ -98,44 +75,175 @@
         <h1>Traffic Chokepoints in Mumbai</h1>
         <h3>Click a residential area and a CBD to discover traffic-choked segments.</h3>
 
-        <div class="row">
-          <h3>AM or PM</h3>
-          <p><select name="period" onchange="showHint(this)">
-            <option value="AM">AM</option>
-            <option value="PM">PM</option>
-          </select></p>
-
+        <div class="row" id="category_div">Commute Period:
+        <select id="source" name="source" onchange="javascript: dynamicdropdown(this.options[this.selectedIndex].value);">
+            <option value="" selected >Select commute period</option>
+            <option value="am">AM</option>
+            <option value="pm">PM</option>
+          </select>
         </div>
 
-        <div class="row">
-          <h3>Start Point</h3>
-
-          <p><select name="startpoint" onchange="showHint(this)">
-            <option value="Borivali">Borivali</option>
-            <option value="Andheri West">Andheri West</option>
-            <option value="Chembur">Chembur</option>
-            <option value="Marine Drive">Marine Drive</option>
-          </select></p>
-
+        <div class="row" id="startbox">Start Point:
+            <script type="text/javascript" language="JavaScript">
+            document.write('<select name="startpoint" id="startpoint"><option value="" selected>Select start point</option></select>')
+            </script>
+            <noscript>
+            <select id="startpoint" name="startpoint">
+              <option value="Andheri West">Andheri West</option>
+              <option value="Borivali">Borivali</option>
+              <option value="Chembur">Chembur</option>
+              <option value="Marine Drive">Marine Drive</option>
+              <option value="Andheri East">Andheri East</option>
+              <option value="BKC">BKC</option>
+              <option value="Lower Parel">Lower Parel</option>
+              <option value="Malad">Malad</option>
+              <option value="Nariman Point">Nariman Point</option>
+            </select>
+            </noscript>
         </div>
 
-        <div class="row">
-          <h3>End Point</h3>
-          <p><select name="endpoint" onchange="showHint(this)">
-            <option value="Andheri East">Andheri East</option>
-            <option value="Lower Parel">Lower Parel</option>
-            <option value="Nariman Point">Nariman Point</option>
-            <option value="Malad">Malad</option>
-          </select></p>
+        <div class="row" id="endbox">End Point:
+            <script type="text/javascript" language="JavaScript">
+            document.write('<select name="endpoint" id="endpoint"><option value="" selected>Select end point</option></select>')
+            </script>
+            <noscript>
+            <select id="endpoint" name="endpoint">
+              <option value="Andheri West">Andheri West</option>
+              <option value="Borivali">Borivali</option>
+              <option value="Chembur">Chembur</option>
+              <option value="Marine Drive">Marine Drive</option>
+              <option value="Andheri East">Andheri East</option>
+              <option value="BKC">BKC</option>
+              <option value="Lower Parel">Lower Parel</option>
+              <option value="Malad">Malad</option>
+              <option value="Nariman Point">Nariman Point</option>
+            </select>
+            </noscript>
         </div>
 
-        <div class="row">
-          <h3>Speeds Key</h3>
-        </div>
-        </div>
-      </div>
+  <button><a type=button value="Segment_Value" onClick="submitSegment();" class="segment_button">Submit Segment</a></button>
+</div>
 
-<script>
+
+<script> //initialize global values
+var lowColor = '#00ff00'
+var highColor = '#ff0000'
+var minVal = 0;
+var maxVal = 80;
+var origin_dest;
+</script>
+
+<script> //dropdown function
+function dynamicdropdown(listindex)
+{
+    switch (listindex)
+    {
+    case "am" :
+        document.getElementById("startpoint").options[0]=new Option("Select startpoint","");
+        document.getElementById("startpoint").options[1]=new Option("Andheri West","Andheri West");
+        document.getElementById("startpoint").options[2]=new Option("Borivali","Borivali");
+        document.getElementById("startpoint").options[3]=new Option("Chembur","Chembur");
+        document.getElementById("startpoint").options[4]=new Option("Marine Drive","Marine Drive");
+        document.getElementById("endpoint").options[0]=new Option("Select endpoint","");
+        document.getElementById("endpoint").options[1]=new Option("Andheri East","Andheri East");
+        document.getElementById("endpoint").options[2]=new Option("BKC","BKC");
+        document.getElementById("endpoint").options[3]=new Option("Lower Parel","Lower Parel");
+        document.getElementById("endpoint").options[4]=new Option("Malad","Malad");
+        document.getElementById("endpoint").options[5]=new Option("Nariman Point","Nariman Point");
+        break;
+    case "pm" :
+        document.getElementById("startpoint").options[0]=new Option("Select startpoint","");
+        document.getElementById("startpoint").options[1]=new Option("Andheri East","Andheri East");
+        document.getElementById("startpoint").options[2]=new Option("BKC","BKC");
+        document.getElementById("startpoint").options[3]=new Option("Lower Parel","Lower Parel");
+        document.getElementById("startpoint").options[4]=new Option("Malad","Malad");
+        document.getElementById("startpoint").options[5]=new Option("Nariman Point","Nariman Point");
+        document.getElementById("endpoint").options[0]=new Option("Select endpoint","");
+        document.getElementById("endpoint").options[1]=new Option("Andheri West","Andheri West");
+        document.getElementById("endpoint").options[2]=new Option("Borivali","Borivali");
+        document.getElementById("endpoint").options[3]=new Option("Chembur","Chembur");
+        document.getElementById("endpoint").options[4]=new Option("Marine Drive","Marine Drive");
+        document.getElementById("endpoint").options[5]=new Option("","");
+
+        break;
+    }
+    return true;
+}
+</script>
+
+<script>//map functions
+function clearSegment(){
+  origin_dest = "";
+  d3.selectAll("path").remove();
+}
+
+function submitSegment(){
+  clearSegment();
+
+  //get start point and end point values
+  var yourSelectStart = document.getElementById("startpoint");
+  var yourSelectEnd = document.getElementById("endpoint");
+  var origin = yourSelectStart.value;
+  var dest = yourSelectEnd.value;
+  origin_dest = origin.concat("-",dest);
+
+  d3.json("segments_merged_2.json", function(geoShape) {
+
+       //  create a d3.geo.path to convert GeoJSON to SVG
+      var transform = d3.geo.transform({point: projectPoint}),
+                path = d3.geo.path().projection(transform);
+
+      //subset the entire JSON based on the origin and destination points
+      console.log("i am within json comparing");
+      console.log(origin_dest);
+
+      //match with the two elements clicked
+      d3_subset = geoShape.features.filter(function(d){return d.properties.all_segments_formatted_csv_commute_id == origin_dest});
+
+          // create path elements for each of the features
+          d3_features = g.selectAll("path")
+            .data(d3_subset)
+            .enter().append("path");
+
+          map.on("viewreset", reset);
+
+          reset();
+
+          // fit the SVG element to leaflet's map layer
+          function reset() {
+
+            bounds = path.bounds(geoShape);
+
+            var topLeft = bounds[0],
+              bottomRight = bounds[1];
+
+            svg .attr("width", bottomRight[0] - topLeft[0])
+              .attr("height", bottomRight[1] - topLeft[1])
+              .style("left", topLeft[0] + "px")
+              .style("top", topLeft[1] + "px");
+
+            g .attr("transform", "translate(" + -topLeft[0] + ","
+                                              + -topLeft[1] + ")");
+
+            var ramp = d3.scale.linear().domain([0,20,40,60,80]).range(["red","orange","yellow","green"]);
+
+            //split up into segments by colour
+              d3_features.attr("d", path)
+                .style("fill-opacity", 0)
+                //.attr('fill','blue');
+                .attr('stroke-width',2)
+                //.attr("stroke","blue");
+                .attr("stroke", function(d) { return ramp(d.properties.all_segments_formatted_csv_avg_speed_kmh) });
+
+          }
+
+          // Use Leaflet to implement a D3 geometric transformation.
+          function projectPoint(x, y) {
+            var point = map.latLngToLayerPoint(new L.LatLng(y, x));
+            this.stream.point(point.x, point.y);
+          }
+        })//end json
+}
 
 var route = L.Routing.control({
     createMarker: function() { return null; },
@@ -149,74 +257,6 @@ console.log("i'm going to draw the speeds between o_id and d_id");
 //concatenate the id's
 o_d_pair = o_id.concat("-",d_id);
 console.log(o_d_pair);
-
-
-//////////////////////////////////////////////////////////////////
-
-  //color each segment according to the speed
-  d3.json("segments_merged_2.json", function(geoShape) {
-
-  		//  create a d3.geo.path to convert GeoJSON to SVG
-  		var transform = d3.geo.transform({point: projectPoint}),
-              	path = d3.geo.path().projection(transform);
-
-      //subset the entire JSON based on the origin and destination points
-      var origin = "Andheri West";
-      var dest = "Nariman Point";
-      var origin_dest = origin.concat("-",dest);
-      console.log(origin_dest);
-
-      //match with the two elements clicked
-      d3_subset = geoShape.features.filter(function(d){return d.properties.all_segments_formatted_csv_commute_id == origin_dest});
-
-      		// create path elements for each of the features
-      		d3_features = g.selectAll("path")
-      			.data(d3_subset)
-      			.enter().append("path");
-
-      		map.on("viewreset", reset);
-
-      		reset();
-
-      		// fit the SVG element to leaflet's map layer
-      		function reset() {
-      			bounds = path.bounds(geoShape);
-      			var topLeft = bounds[0],
-      				bottomRight = bounds[1];
-      			svg .attr("width", bottomRight[0] - topLeft[0])
-      				.attr("height", bottomRight[1] - topLeft[1])
-      				.style("left", topLeft[0] + "px")
-      				.style("top", topLeft[1] + "px");
-      			g .attr("transform", "translate(" + -topLeft[0] + ","
-      			                                  + -topLeft[1] + ")");
-
-      			// initialize the path data
-            var minVal = 0;
-            var maxVal = 80;
-            var lowColor = '#00ff00'
-            var highColor = '#ff0000'
-            var ramp = d3.scale.linear().domain([0,35,80]).range(["red","white","green"]);
-
-            //split up into segments by colour
-              d3_features.attr("d", path)
-        				.style("fill-opacity", 0)
-        				//.attr('fill','blue');
-                .attr('stroke-width',2)
-                //.attr("stroke","blue");
-                .attr("stroke", function(d) { return ramp(d.properties.all_segments_formatted_csv_avg_speed_kmh) });
-
-      		}
-
-      		// Use Leaflet to implement a D3 geometric transformation.
-      		function projectPoint(x, y) {
-      			var point = map.latLngToLayerPoint(new L.LatLng(y, x));
-      			this.stream.point(point.x, point.y);
-      		}
-
-      	});
-//////////////////////////////////////////////////////////
-
-
 } //end DrawSpeeds
 
 
@@ -247,15 +287,9 @@ function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
   }).addTo(map);
 }
 
-var map = L
-      .map('map', {closePopupOnClick: false})
-      .setView([19.0879, 72.84136], 11);
-
-      // var map = L.map('map', { closePopupOnClick: false}).setView([39.7392, -104.9903], 17);
+var map = L.map('map').setView([19.0879, 72.84136], 11);
 
 // Tile type: openstreetmap normal
-
-
 
 //openstreetmap tilelayer
 // var openstreetmap = L.tileLayer(
@@ -269,190 +303,245 @@ var map = L
         '<a href="https://www.carto.com/basemaps">Map tiles by Carto, under CC BY 3.0. Data by OpenStreetMap, under ODbL. </a>';
 
 //carto tilelayer
-var openstreetmap = L.tileLayer(
+L.tileLayer(
     'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',{
     attribution: '&copy; ' + mapLink + ' Contributors',
     minZoom: 11,
-    maxZoom: 12,
-    })
+    maxZoom: 14,
+  }).addTo(map);
+
+  var svg = d3.select(map.getPanes().overlayPane).append("svg"),
+    g = svg.append("g").attr("class", "leaflet-zoom-hide");
+
+    //////////////// legend //////////////////////
+    var w = 140, h = 350;
+
+    var key = d3.select("body")
+      .append("svg")
+      .attr("width", w)
+      .attr("height", h)
+      .attr("class", "legend");
+
+    var legend = key.append("defs")
+      .append("svg:linearGradient")
+      .attr("id", "gradient")
+      .attr("x1", "100%")
+      .attr("y1", "0%")
+      .attr("x2", "100%")
+      .attr("y2", "100%")
+      .attr("spreadMethod", "pad");
+
+    legend.append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", highColor)
+      .attr("stop-opacity", 1);
+
+    legend.append("stop")
+      .attr("offset","50%")
+      .attr("stop-color", "#ffff00")
+      .attr("stop-opacity", 1);
+
+    legend.append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", lowColor)
+      .attr("stop-opacity", 1);
+
+    key.append("rect")
+      .attr("width", w - 100)
+      .attr("height", h)
+      .style("fill", "url(#gradient)")
+      .attr("transform", "translate(0,100)");
+
+    var y = d3.scale.linear()
+      .range([h, 0])
+      .domain([minVal, maxVal]);
+
+    var yAxis = d3.svg.axis().orient("right");
+
+    key.append("g")
+      .attr("class", "y axis")
+      .attr("transform", "translate(41,100)")
+      .call(yAxis)
+    ////////////// legend ////////////////////
 
 </script>
 </body>
 </html>
 
-<script>
+<script> ///////////previous code /////////////////
 
-
-//https://leafletjs.com/examples/quick-start/
-L.svg().addTo(map);
-
-var g = d3.select("#map").select("svg"); // Condenses the SVG selection into g
-
-g.attr('pointer-events', 'all'); //https://stackoverflow.com/a/17495417/7207315
-
-var places = d3.csv("places.csv");
-
-console.log(places);
-var a = 1;
-var o_id;
-var d_id;
-var o_type;
-var d_type;
-
-
-Promise.all([places]).then(
-    function(values)
-    {
-
-        g.selectAll("circle")
-            .data(values[0])
-            .enter()
-            .append("circle")
-            .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
-            .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y })
-            .attr("r", "10px")
-            .style("fill", function(d){ if(d.Type=="residential") { return "red"; } else { return "blue"; } })
-            .attr("id", function(d, i){ return "circle" + i; })
-
-            // .on("mouseover", function (d, i){ d3.select("#circle" + i).attr("r", "20px"); d3.select("#text" + i).attr("fill", "green");})
-            .on("mouseout", function (d, i){
-              d3.select("#circle" + i).attr("r", "10px");
-              // d3.select("#text" + i).attr("fill", "red");
-          })
-
-            .on("click", function (d){
-
-              //allow for two clicks anywhere on the map
-              //1 means first click, 0 means second click; pattern alternates between 1 and 0
-              if(a == 1){
-                origin_lat = d.Lat;
-                origin_lon = d.Lon;
-
-                if(o_id == null){
-                  o_id = d.Name; //get the o_id
-                  o_type = d.Type;
-                  console.log("case 1");
-                  console.log("type:");
-                  console.log(o_type);
-                  console.log("origin");
-                  console.log(o_id);
-                  console.log("dest");
-                  console.log(d_id);
-                  a = a - 1;
-
-                }
-                else {
-                  console.log("case 2");
-                  o_id = d_id;
-                  o_type = d_type;
-                  d_id = d.Name;
-                  d_type = d.Type;
-                  console.log("origin");
-                  console.log(o_id);
-                  console.log(o_type);
-                  console.log("dest");
-                  console.log(d_id);
-                  console.log(d_type);
-                  a = a - 1;
-                }
-                    }
-              else if(a == 0){
-                dest_lat = d.Lat;
-                dest_lon = d.Lon;
-                if(d_id == null){
-                  console.log("case 3");
-                  d_id = d.Name;
-                  d_type = d.Type;
-                  console.log("origin");
-                  console.log(o_id);
-                  console.log(o_type);
-                  console.log("dest");
-                  console.log(d_id);
-                  console.log(d_type);
-                  a = a + 1;
-                }
-                else{
-                  console.log("case 4");
-                  o_id = d_id;
-                  o_type = d_type;
-                  d_id = d.Name;
-                  d_type = d.Type;
-                  console.log("origin");
-                  console.log(o_id);
-                  console.log(o_type);
-                  console.log("dest");
-                  console.log(d_id);
-                  console.log(d_type);
-                  a = a + 1;
-                }
-              }
-
-              //displays Names for points
-              g.selectAll("text")
-                  .data(values[0])
-                  .enter()
-                  .append("text")
-                  .text(function(d) { return d.Name; })
-                  // .attr("font-weight",function(d,i) {return i*100+100;})
-                  .attr("font-family","Georgia")
-                  .attr("fill", "black")
-                  .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
-                  .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; })
-                  .attr("id", function(d, i){ return "text" + i; })
-
-                  .on("mouseover", function (d, i){
-                    d3.select("#circle" + i).attr("r", "20px");
-                    d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 30; })
-                    d3.select("#text" + i).attr("y", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; })
-
-                    if(d.Type=="residential"){
-
-                      d3.select("#text" + i).attr("fill","red");
-                    }
-                    else{
-                      d3.select("#text" + i).attr("fill","blue");
-                    }
-
-                  })
-                  .on("mouseout", function (d, i){
-                    d3.select("#circle" + i).attr("r", "10px");
-                    d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
-                    d3.select("#text" + i).attr("fill","black");
-
-
-                }
-
-              );
-
-
-            if(o_type != d_type){ //draw the route if different types selected
-              DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon);
-              DrawSpeeds(o_id, d_id);
-
-            }
-            else{ //don't draw the route if they're the same type
-              console.log("you selected two of the same type.");
-            }
-          });
-
-            }
-  );
-
+//
+// ///////////trying commenting all this out /////////////////
+// //https://leafletjs.com/examples/quick-start/
+// L.svg().addTo(map);
+//
+// var g = d3.select("#map").select("svg"); // Condenses the SVG selection into g
+//
+// g.attr('pointer-events', 'all'); //https://stackoverflow.com/a/17495417/7207315
+//
+// //var places = d3.csv("places.csv");
+//
+// console.log(places);
+// var a = 1;
+// var o_id;
+// var d_id;
+// var o_type;
+// var d_type;
+//
+//
+// Promise.all([places]).then(
+//     function(values)
+//     {
+//         g.selectAll("circle")
+//             .data(values[0])
+//             .enter()
+//             .append("circle")
+//             .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
+//             .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y })
+//             .attr("r", "10px")
+//             .style("fill", function(d){ if(d.Type=="residential") { return "red"; } else { return "blue"; } })
+//             .attr("id", function(d, i){ return "circle" + i; })
+//
+//             // .on("mouseover", function (d, i){ d3.select("#circle" + i).attr("r", "20px"); d3.select("#text" + i).attr("fill", "green");})
+//             .on("mouseout", function (d, i){
+//               d3.select("#circle" + i).attr("r", "10px");
+//               // d3.select("#text" + i).attr("fill", "red");
+//           })
+//
+//             .on("click", function (d){
+//
+//               //allow for two clicks anywhere on the map
+//               //1 means first click, 0 means second click; pattern alternates between 1 and 0
+//               if(a == 1){
+//                 origin_lat = d.Lat;
+//                 origin_lon = d.Lon;
+//
+//                 if(o_id == null){
+//                   o_id = d.Name; //get the o_id
+//                   o_type = d.Type;
+//                   console.log("case 1");
+//                   console.log("type:");
+//                   console.log(o_type);
+//                   console.log("origin");
+//                   console.log(o_id);
+//                   console.log("dest");
+//                   console.log(d_id);
+//                   a = a - 1;
+//
+//                 }
+//                 else {
+//                   console.log("case 2");
+//                   o_id = d_id;
+//                   o_type = d_type;
+//                   d_id = d.Name;
+//                   d_type = d.Type;
+//                   console.log("origin");
+//                   console.log(o_id);
+//                   console.log(o_type);
+//                   console.log("dest");
+//                   console.log(d_id);
+//                   console.log(d_type);
+//                   a = a - 1;
+//                 }
+//                     }
+//               else if(a == 0){
+//                 dest_lat = d.Lat;
+//                 dest_lon = d.Lon;
+//                 if(d_id == null){
+//                   console.log("case 3");
+//                   d_id = d.Name;
+//                   d_type = d.Type;
+//                   console.log("origin");
+//                   console.log(o_id);
+//                   console.log(o_type);
+//                   console.log("dest");
+//                   console.log(d_id);
+//                   console.log(d_type);
+//                   a = a + 1;
+//                 }
+//                 else{
+//                   console.log("case 4");
+//                   o_id = d_id;
+//                   o_type = d_type;
+//                   d_id = d.Name;
+//                   d_type = d.Type;
+//                   console.log("origin");
+//                   console.log(o_id);
+//                   console.log(o_type);
+//                   console.log("dest");
+//                   console.log(d_id);
+//                   console.log(d_type);
+//                   a = a + 1;
+//                 }
+//               }
+//
+//               //displays Names for points
+//               g.selectAll("text")
+//                   .data(values[0])
+//                   .enter()
+//                   .append("text")
+//                   .text(function(d) { return d.Name; })
+//                   // .attr("font-weight",function(d,i) {return i*100+100;})
+//                   .attr("font-family","Georgia")
+//                   .attr("fill", "black")
+//                   .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
+//                   .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; })
+//                   .attr("id", function(d, i){ return "text" + i; })
+//
+//                   .on("mouseover", function (d, i){
+//                     d3.select("#circle" + i).attr("r", "20px");
+//                     d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 30; })
+//                     d3.select("#text" + i).attr("y", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; })
+//
+//                     if(d.Type=="residential"){
+//
+//                       d3.select("#text" + i).attr("fill","red");
+//                     }
+//                     else{
+//                       d3.select("#text" + i).attr("fill","blue");
+//                     }
+//
+//                   })
+//                   .on("mouseout", function (d, i){
+//                     d3.select("#circle" + i).attr("r", "10px");
+//                     d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
+//                     d3.select("#text" + i).attr("fill","black");
+//
+//
+//                 }
+//
+//               );
+//
+//
+//             if(o_type != d_type){ //draw the route if different types selected
+//               DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon);
+//               DrawSpeeds(o_id, d_id);
+//
+//             }
+//             else{ //don't draw the route if they're the same type
+//               console.log("you selected two of the same type.");
+//             }
+//           });
+//
+//             }
+//   );
+//
 //https://www.d3-graph-gallery.com/graph/bubblemap_leaflet_basic.html
-function update()
-{
-    d3.selectAll("circle")
-      .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
-      .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y });
+// function update()
+// {
+//     d3.selectAll("circle")
+//       .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
+//       .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y });
+//
+//     d3.selectAll("text")
+//       .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
+//       .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 5; })
+// }
 
-    d3.selectAll("text")
-      .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
-      .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 5; })
-}
+//map.on("moveend", update)
+////////////end done commenting/////////////
 
-map.on("moveend", update)
 
-openstreetmap.addTo(map);
 
 
 </script>
