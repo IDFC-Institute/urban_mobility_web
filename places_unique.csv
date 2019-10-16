@@ -1,0 +1,41 @@
+﻿od,origin,dest,unique_id
+Borivali-Andheri East,Borivali,Andheri East,265-357
+Borivali-BKC,Borivali,BKC,265-182
+Borivali-Lower Parel,Borivali,Lower Parel,265-239
+Borivali-Malad,Borivali,Malad,265-350
+Borivali-Nariman Point,Borivali,Nariman Point,265-382
+Andheri West-Andheri East,Andheri West,Andheri East,403-357
+Andheri West-BKC,Andheri West,BKC,403-182
+Andheri West-Lower Parel,Andheri West,Lower Parel,403-239
+Andheri West-Malad,Andheri West,Malad,403-350
+Andheri West-Nariman Point,Andheri West,Nariman Point,403-382
+Chembur-Andheri East,Chembur,Andheri East,598-357
+Chembur-BKC,Chembur,BKC,598-182
+Chembur-Lower Parel,Chembur,Lower Parel,598-239
+Chembur-Malad,Chembur,Malad,598-350
+Chembur-Nariman Point,Chembur,Nariman Point,598-382
+Marine Drive-Andheri East,Marine Drive,Andheri East,577-357
+Marine Drive-BKC,Marine Drive,BKC,577-182
+Marine Drive-Lower Parel,Marine Drive,Lower Parel,577-239
+Marine Drive-Malad,Marine Drive,Malad,577-350
+Marine Drive-Nariman Point,Marine Drive,Nariman Point,577-382
+Malad-Borivali,Malad,Borivali,350-265
+Malad-Andheri West,Malad,Andheri West,350-403
+Malad-Chembur,Malad,Chembur,350-598
+Malad-Marine Drive,Malad,Marine Drive,350-577
+Andheri East-Borivali,Andheri East,Borivali,357-265
+Andheri East-Andheri West,Andheri East,Andheri West,357-403
+Andheri East-Chembur,Andheri East,Chembur,357-598
+Andheri East-Marine Drive,Andheri East,Marine Drive,357-577
+BKC-Borivali,BKC,Borivali,182-265
+BKC-Andheri West,BKC,Andheri West,182-403
+BKC-Chembur,BKC,Chembur,182-598
+BKC-Marine Drive,BKC,Marine Drive,182-577
+Lower Parel-Borivali,Lower Parel,Borivali,239-265
+Lower Parel-Andheri West,Lower Parel,Andheri West,239-403
+Lower Parel-Chembur,Lower Parel,Chembur,239-598
+Lower Parel-Marine Drive,Lower Parel,Marine Drive,239-577
+Nariman Point-Borivali,Nariman Point,Borivali,382-265
+Nariman Point-Andheri West,Nariman Point,Andheri West,382-403
+Nariman Point-Chembur,Nariman Point,Chembur,382-598
+Nariman Point-Marine Drive,Nariman Point,Marine Drive,382-577

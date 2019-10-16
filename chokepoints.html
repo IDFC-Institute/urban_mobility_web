@@ -151,8 +151,6 @@
           </div>
         </div>
 
-
-
 </div>
 
 
@@ -162,6 +160,11 @@ var highColor = '#ff0000'
 var minVal = 0;
 var maxVal = 80;
 var origin_dest;
+
+d3.select("#TextDistance").text(" - km");
+d3.select("#TextOC").text("- INR");
+d3.select("#TextFuelCost").text("- INR");
+d3.select("#TextEnvCost").text("- INR");
 </script>
 
 <script> //dropdown function
@@ -218,6 +221,42 @@ function submitSegment(){
   var dest = yourSelectEnd.value;
   origin_dest = origin.concat("-",dest);
 
+  //lookup the value in places.csv
+  d3.csv("places_unique.csv",function(data){
+    var lookup_unique_id;
+
+    console.log(origin_dest);
+    console.log("i opened the csv");
+    for(var i = 0; i < data.length; i++){
+      if(data[i].od == origin_dest){
+        lookup_unique_id = data[i].unique_id;
+        console.log(lookup_unique_id);
+      }
+    }
+
+  //match the path's unique_id with the TAZ lookup table, and find the cost values
+    d3.csv("mumbai_all_tazs.csv",function(data){
+      console.log("i opened the second csv");
+      for(var i = 0; i < data.length; i++){
+        if(data[i].unique_id == lookup_unique_id){
+          console.log("calculating for TAZs: ");
+          console.log(data[i].unique_id);
+
+          wage = 12600;
+          dist = data[i].distance;
+          oc = data[i].additional_hours_commuting*((0.5*(wage/9/7/4))+(0.5*(wage/9/7/4)));
+          econ = data[i].total_economic_costs;
+          env = data[i].total_petrol_emissions;
+
+          d3.select("#TextDistance").text(dist + " km");
+          d3.select("#TextOC").text(Math.round(oc) +" INR");
+          d3.select("#TextFuelCost").text(Math.round(econ) + " INR");
+          d3.select("#TextEnvCost").text(Math.round(env) + " INR");
+    }
+  }
+})
+})
+
   d3.json("segments_merged_2.json", function(geoShape) {
 
        //  create a d3.geo.path to convert GeoJSON to SVG
@@ -227,6 +266,7 @@ function submitSegment(){
       //subset the entire JSON based on the origin and destination points
       console.log("i am within json comparing");
       console.log(origin_dest);
+
 
       //match with the two elements clicked
       d3_subset = geoShape.features.filter(function(d){return d.properties.all_segments_formatted_csv_commute_id == origin_dest});
@@ -264,6 +304,11 @@ function submitSegment(){
                 //.attr('fill','blue');
                 .attr('stroke-width',3)
                 .attr("stroke", function(d) { return ramp(d.properties.all_segments_formatted_csv_avg_speed_kmh) });
+
+            //search mumbai_all_tazs for the unique_id of the d
+            //get the unique id and find the four values
+            //print the values
+
 
           }
 
@@ -400,175 +445,175 @@ L.tileLayer(
 
 <script> ///////////previous code /////////////////
 
-//
-// ///////////trying commenting all this out /////////////////
-// //https://leafletjs.com/examples/quick-start/
-// L.svg().addTo(map);
-//
-// var g = d3.select("#map").select("svg"); // Condenses the SVG selection into g
-//
-// g.attr('pointer-events', 'all'); //https://stackoverflow.com/a/17495417/7207315
-//
-// //var places = d3.csv("places.csv");
-//
-// console.log(places);
-// var a = 1;
-// var o_id;
-// var d_id;
-// var o_type;
-// var d_type;
-//
-//
-// Promise.all([places]).then(
-//     function(values)
-//     {
-//         g.selectAll("circle")
-//             .data(values[0])
-//             .enter()
-//             .append("circle")
-//             .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
-//             .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y })
-//             .attr("r", "10px")
-//             .style("fill", function(d){ if(d.Type=="residential") { return "red"; } else { return "blue"; } })
-//             .attr("id", function(d, i){ return "circle" + i; })
-//
-//             // .on("mouseover", function (d, i){ d3.select("#circle" + i).attr("r", "20px"); d3.select("#text" + i).attr("fill", "green");})
-//             .on("mouseout", function (d, i){
-//               d3.select("#circle" + i).attr("r", "10px");
-//               // d3.select("#text" + i).attr("fill", "red");
-//           })
-//
-//             .on("click", function (d){
-//
-//               //allow for two clicks anywhere on the map
-//               //1 means first click, 0 means second click; pattern alternates between 1 and 0
-//               if(a == 1){
-//                 origin_lat = d.Lat;
-//                 origin_lon = d.Lon;
-//
-//                 if(o_id == null){
-//                   o_id = d.Name; //get the o_id
-//                   o_type = d.Type;
-//                   console.log("case 1");
-//                   console.log("type:");
-//                   console.log(o_type);
-//                   console.log("origin");
-//                   console.log(o_id);
-//                   console.log("dest");
-//                   console.log(d_id);
-//                   a = a - 1;
-//
-//                 }
-//                 else {
-//                   console.log("case 2");
-//                   o_id = d_id;
-//                   o_type = d_type;
-//                   d_id = d.Name;
-//                   d_type = d.Type;
-//                   console.log("origin");
-//                   console.log(o_id);
-//                   console.log(o_type);
-//                   console.log("dest");
-//                   console.log(d_id);
-//                   console.log(d_type);
-//                   a = a - 1;
-//                 }
-//                     }
-//               else if(a == 0){
-//                 dest_lat = d.Lat;
-//                 dest_lon = d.Lon;
-//                 if(d_id == null){
-//                   console.log("case 3");
-//                   d_id = d.Name;
-//                   d_type = d.Type;
-//                   console.log("origin");
-//                   console.log(o_id);
-//                   console.log(o_type);
-//                   console.log("dest");
-//                   console.log(d_id);
-//                   console.log(d_type);
-//                   a = a + 1;
-//                 }
-//                 else{
-//                   console.log("case 4");
-//                   o_id = d_id;
-//                   o_type = d_type;
-//                   d_id = d.Name;
-//                   d_type = d.Type;
-//                   console.log("origin");
-//                   console.log(o_id);
-//                   console.log(o_type);
-//                   console.log("dest");
-//                   console.log(d_id);
-//                   console.log(d_type);
-//                   a = a + 1;
-//                 }
-//               }
-//
-//               //displays Names for points
-//               g.selectAll("text")
-//                   .data(values[0])
-//                   .enter()
-//                   .append("text")
-//                   .text(function(d) { return d.Name; })
-//                   // .attr("font-weight",function(d,i) {return i*100+100;})
-//                   .attr("font-family","Georgia")
-//                   .attr("fill", "black")
-//                   .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
-//                   .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; })
-//                   .attr("id", function(d, i){ return "text" + i; })
-//
-//                   .on("mouseover", function (d, i){
-//                     d3.select("#circle" + i).attr("r", "20px");
-//                     d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 30; })
-//                     d3.select("#text" + i).attr("y", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; })
-//
-//                     if(d.Type=="residential"){
-//
-//                       d3.select("#text" + i).attr("fill","red");
-//                     }
-//                     else{
-//                       d3.select("#text" + i).attr("fill","blue");
-//                     }
-//
-//                   })
-//                   .on("mouseout", function (d, i){
-//                     d3.select("#circle" + i).attr("r", "10px");
-//                     d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
-//                     d3.select("#text" + i).attr("fill","black");
-//
-//
-//                 }
-//
-//               );
-//
-//
-//             if(o_type != d_type){ //draw the route if different types selected
-//               DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon);
-//               DrawSpeeds(o_id, d_id);
-//
-//             }
-//             else{ //don't draw the route if they're the same type
-//               console.log("you selected two of the same type.");
-//             }
-//           });
-//
-//             }
-//   );
-//
-//https://www.d3-graph-gallery.com/graph/bubblemap_leaflet_basic.html
-// function update()
-// {
-//     d3.selectAll("circle")
-//       .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
-//       .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y });
-//
-//     d3.selectAll("text")
-//       .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
-//       .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 5; })
-// }
 
-//map.on("moveend", update)
+///////////trying commenting all this out /////////////////
+//https://leafletjs.com/examples/quick-start/
+L.svg().addTo(map);
+
+var g = d3.select("#map").select("svg"); // Condenses the SVG selection into g
+
+g.attr('pointer-events', 'all'); //https://stackoverflow.com/a/17495417/7207315
+
+//var places = d3.csv("places.csv");
+
+console.log(places);
+var a = 1;
+var o_id;
+var d_id;
+var o_type;
+var d_type;
+
+
+Promise.all([places]).then(
+    function(values)
+    {
+        g.selectAll("circle")
+            .data(values[0])
+            .enter()
+            .append("circle")
+            .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
+            .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y })
+            .attr("r", "10px")
+            .style("fill", function(d){ if(d.Type=="residential") { return "red"; } else { return "blue"; } })
+            .attr("id", function(d, i){ return "circle" + i; })
+
+            // .on("mouseover", function (d, i){ d3.select("#circle" + i).attr("r", "20px"); d3.select("#text" + i).attr("fill", "green");})
+            .on("mouseout", function (d, i){
+              d3.select("#circle" + i).attr("r", "10px");
+              // d3.select("#text" + i).attr("fill", "red");
+          })
+
+            .on("click", function (d){
+
+              //allow for two clicks anywhere on the map
+              //1 means first click, 0 means second click; pattern alternates between 1 and 0
+              if(a == 1){
+                origin_lat = d.Lat;
+                origin_lon = d.Lon;
+
+                if(o_id == null){
+                  o_id = d.Name; //get the o_id
+                  o_type = d.Type;
+                  console.log("case 1");
+                  console.log("type:");
+                  console.log(o_type);
+                  console.log("origin");
+                  console.log(o_id);
+                  console.log("dest");
+                  console.log(d_id);
+                  a = a - 1;
+
+                }
+                else {
+                  console.log("case 2");
+                  o_id = d_id;
+                  o_type = d_type;
+                  d_id = d.Name;
+                  d_type = d.Type;
+                  console.log("origin");
+                  console.log(o_id);
+                  console.log(o_type);
+                  console.log("dest");
+                  console.log(d_id);
+                  console.log(d_type);
+                  a = a - 1;
+                }
+                    }
+              else if(a == 0){
+                dest_lat = d.Lat;
+                dest_lon = d.Lon;
+                if(d_id == null){
+                  console.log("case 3");
+                  d_id = d.Name;
+                  d_type = d.Type;
+                  console.log("origin");
+                  console.log(o_id);
+                  console.log(o_type);
+                  console.log("dest");
+                  console.log(d_id);
+                  console.log(d_type);
+                  a = a + 1;
+                }
+                else{
+                  console.log("case 4");
+                  o_id = d_id;
+                  o_type = d_type;
+                  d_id = d.Name;
+                  d_type = d.Type;
+                  console.log("origin");
+                  console.log(o_id);
+                  console.log(o_type);
+                  console.log("dest");
+                  console.log(d_id);
+                  console.log(d_type);
+                  a = a + 1;
+                }
+              }
+
+              //displays Names for points
+              g.selectAll("text")
+                  .data(values[0])
+                  .enter()
+                  .append("text")
+                  .text(function(d) { return d.Name; })
+                  // .attr("font-weight",function(d,i) {return i*100+100;})
+                  .attr("font-family","Georgia")
+                  .attr("fill", "black")
+                  .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
+                  .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; })
+                  .attr("id", function(d, i){ return "text" + i; })
+
+                  .on("mouseover", function (d, i){
+                    d3.select("#circle" + i).attr("r", "20px");
+                    d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 30; })
+                    d3.select("#text" + i).attr("y", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; })
+
+                    if(d.Type=="residential"){
+
+                      d3.select("#text" + i).attr("fill","red");
+                    }
+                    else{
+                      d3.select("#text" + i).attr("fill","blue");
+                    }
+
+                  })
+                  .on("mouseout", function (d, i){
+                    d3.select("#circle" + i).attr("r", "10px");
+                    d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
+                    d3.select("#text" + i).attr("fill","black");
+
+
+                }
+
+              );
+
+
+            if(o_type != d_type){ //draw the route if different types selected
+              DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon);
+              DrawSpeeds(o_id, d_id);
+
+            }
+            else{ //don't draw the route if they're the same type
+              console.log("you selected two of the same type.");
+            }
+          });
+
+            }
+  );
+
+https://www.d3-graph-gallery.com/graph/bubblemap_leaflet_basic.html
+function update()
+{
+    d3.selectAll("circle")
+      .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
+      .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y });
+
+    d3.selectAll("text")
+      .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
+      .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 5; })
+}
+
+map.on("moveend", update)
 ////////////end done commenting/////////////
 
 
