@@ -60,8 +60,8 @@
   }
 
 h1{
-  color:#FFFFFF;
-  font-size:4rem;
+  color:#ea5153;
+  font-size:3rem;
   font-family: Futura, Arial, "sans-serif";
   padding: 10px;
 }
@@ -70,7 +70,7 @@ h2{
   font-size:2rem;
   font-family: Futura, Arial, "sans-serif";
   padding: 10px;
-  color:#FFFFFF;
+  color:#ea5153;
 }
 
 h3{
@@ -78,6 +78,7 @@ h3{
   color:#FFFFFF;
   font-family: Futura, Arial, "sans-serif";
   margin: 0 auto;
+  padding: 10px;
 }
 
   .info h1 {
@@ -118,8 +119,8 @@ h3{
     <div id="map"></div>
 
     <div id="navigation" style="text-align:center">
-        <h1>Mumbai: The Costs of Commuting</h1>
-        <h3>Click your home and work to find the cost of your commute.</h3>
+        <h1>Mumbai:<br>Costs of Commuting</h1>
+        <h3>Select your home and work to find the cost of your commute.</h3>
 
         <div class="row">
           <div class="column">
@@ -136,12 +137,12 @@ h3{
         <div class="row">
           <div class="column">
           <h2 id="TextFuelCost"></h2>
-          <h3>Total Economic Cost</h3>
+          <h3>Economic Cost</h3>
           </div>
 
           <div class="column">
           <h2 id="TextEnvCost"></h2>
-          <h3>Total Environmental Cost</h3>
+          <h3>Environmental Cost</h3>
           </div>
         </div>
 
@@ -435,7 +436,7 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
   info.update = function (props) {
   	this._div.innerHTML = '<h1>The Costs of Commuting in Mumbai</h1>'
     + (props ? '<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
-  		: 'Click your home area and your work area to get your cost of commuting.');
+  		: 'Click your home area and your work area to get your cost of commuting.'); // What's this all about? Doesn't esem to get used?
   };
 
   //color ramp for distances
