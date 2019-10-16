@@ -34,11 +34,6 @@
     display:flex;
     height:20vh;
   }
-  #slider-vertical{
-    float:right
-    display:flex;
-    height:20vh;
-  }
 
     .container{
       width:100%;
@@ -79,6 +74,7 @@ h2{
 
 h3{
   font-size:1.8rem;
+  color:#A9A9A9;
 }
 
 h4{
@@ -125,32 +121,26 @@ h4{
         <div class="row">
           <div class="column-50">
           <h2 id="TextDistance"></h2>
-          <h3 style="color:#A9A9A9";>Distance</h3>
+          <h3>Distance</h3>
           </div>
 
           <div class="column-50">
           <h2 id="TextOC"></h2>
-          <h3 style="color:#A9A9A9";>Opportunity Cost</h3>
+          <h3>Opportunity Cost</h3>
           </div>
         </div>
 
         <div class="row">
           <div class="column-50">
           <h2 id="TextFuelCost"></h2>
-          <h3 style="color:#A9A9A9";>Total Economic Cost</h3>
+          <h3>Total Economic Cost</h3>
           </div>
 
           <div class="column-50">
           <h2 id="TextEnvCost"></h2>
-          <h3 style="color:#A9A9A9";>Total Environmental Cost</h3>
+          <h3>Total Environmental Cost</h3>
           </div>
         </div>
-
-        <div class="row">
-          <div class="column-50">
-            <h3>slider</h3>
-            <p id="slider-vertical"></p>
-          </div>
 
           <div class="column-50">
             <h3>value</h3>
@@ -241,39 +231,6 @@ var layer1 = L.geoJson(joined_centroidshexclusters.geojson, {
 map.addLayer(layer1);
   L.control.layers(baseLayers, overlays).addTo(map);
   map.addOverlay(layer1);
-
-</script>
-
- </body>
-</html>
-
-<script>
-var scales = [100000,200000,300000,400000,500000];
-
-// Vertical
-var sliderVertical = d3
-  .sliderLeft()
-  .min(d3.min(scales))
-  .max(d3.max(scales))
-  .height(300)
-  //.tickFormat(d3.format('.0'))
-  .ticks(5)
-  .default(0.015)
-  .on('onchange', val => {
-    d3.select('p#value-vertical').text(d3.format('0')(val));
-  });
-
-var gVertical = d3
-  .select('div#slider-vertical')
-  .append('svg')
-  .attr('width', 100)
-  .attr('height', 400)
-  .append('g')
-  .attr('transform', 'translate(80,30)');
-
-gVertical.call(sliderVertical);
-
-d3.select('p#value-vertical').text("Your monthly wage: "+d3.format('0')(sliderVertical.value())+" INR");
 
 </script>
 
@@ -517,3 +474,5 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
 
 
 </script>
+
+</body></html>
