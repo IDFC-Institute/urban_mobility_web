@@ -73,7 +73,7 @@
 
     <div id="navigation" style="text-align:center">
         <h1>Traffic Chokepoints in Mumbai</h1>
-        <h3>Click a residential area and a CBD to discover traffic-choked segments.</h3>
+        <h3>Select a residential area and a Central Business District (CBD) to discover traffic-choked segments.</h3>
 
         <div class="row" id="category_div">Commute Period:
         <select id="source" name="source" onchange="javascript: dynamicdropdown(this.options[this.selectedIndex].value);">
@@ -121,7 +121,38 @@
             </noscript>
         </div>
 
-  <button><a type=button value="Segment_Value" onClick="submitSegment();" class="segment_button">Submit Segment</a></button>
+        <div class="row">
+        <button><a type=button value="Segment_Value" onClick="submitSegment();" class="segment_button">Submit Segment</a></button>
+        </div>
+
+        <br></br>
+
+        <div class="row">
+          <div class="column-50">
+          <h2 id="TextDistance"></h2>
+          <h3 style="color:#A9A9A9";>Distance</h3>
+          </div>
+
+          <div class="column-50">
+          <h2 id="TextOC"></h2>
+          <h3 style="color:#A9A9A9";>Opportunity Cost</h3>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="column-50">
+          <h2 id="TextFuelCost"></h2>
+          <h3 style="color:#A9A9A9";>Total Economic Cost</h3>
+          </div>
+
+          <div class="column-50">
+          <h2 id="TextEnvCost"></h2>
+          <h3 style="color:#A9A9A9";>Total Environmental Cost</h3>
+          </div>
+        </div>
+
+
+
 </div>
 
 
@@ -231,8 +262,7 @@ function submitSegment(){
               d3_features.attr("d", path)
                 .style("fill-opacity", 0)
                 //.attr('fill','blue');
-                .attr('stroke-width',2)
-                //.attr("stroke","blue");
+                .attr('stroke-width',3)
                 .attr("stroke", function(d) { return ramp(d.properties.all_segments_formatted_csv_avg_speed_kmh) });
 
           }
