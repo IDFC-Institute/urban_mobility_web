@@ -19,7 +19,7 @@
   float:right;
   background:gray;
   width:25vh;
-  height:100vh;
+  height:90vh;
 }
 
 #map{
@@ -40,7 +40,7 @@
     padding:10px;
   }
 
-  .column-50{
+  .column{
     flex:50%;
     text-align:center;
     padding:10px;
@@ -54,7 +54,7 @@
 }
 
 .axis text {
-	font: 10px sans-serif;
+	font: 1rem sans-serif;
 }
 
 .axis line, .axis path {
@@ -65,31 +65,31 @@
 
 h1{
   color:#ea5153;
-  font-size:3rem;
+  font-size:2rem;
   font-family: Futura, Arial, "sans-serif";
-  padding: 10px;
+  padding: 0.1rem;
 }
 
 h2{
-  font-size:2rem;
+  font-size:1.5rem;
   font-family: Futura, Arial, "sans-serif";
-  padding: 10px;
+  padding: 0.1rem;
   color:#ea5153;
 }
 
 h3{
-  font-size:1.8rem;
+  font-size:1rem;
   color:#FFFFFF;
   font-family: Futura, Arial, "sans-serif";
   margin: 0 auto;
-  padding: 10px;
+  padding: 0.1rem;
 }
 
 .text_input {
 /*        border: 0;*/
-        padding: 5px;
+        padding: 0.1rem;
         box-shadow: none;
-        font-size:20px;
+        font-size:1rem;
         background-color: #<?php echo $background; ?>;
         font-family: Futura, Arial, "sans-serif";
         color: #<?php echo $text; ?>;
@@ -168,27 +168,25 @@ h3{
         <button><a type=button class="text_input form-control" value="Segment_Value" onClick="submitSegment();" class="segment_button">Show Chokepoints</a>
         </div>
 
-        <br></br>
-
         <div class="row">
-          <div class="column-50">
+          <div class="column">
           <h2 id="TextDistance"></h2>
           <h3 style="color:#A9A9A9";>Distance</h3>
           </div>
 
-          <div class="column-50">
+          <div class="column">
           <h2 id="TextOC"></h2>
           <h3 style="color:#A9A9A9";>Opportunity Cost</h3>
           </div>
         </div>
 
         <div class="row">
-          <div class="column-50">
+          <div class="column">
           <h2 id="TextFuelCost"></h2>
           <h3 style="color:#A9A9A9";>Economic Cost</h3>
           </div>
 
-          <div class="column-50">
+          <div class="column">
           <h2 id="TextEnvCost"></h2>
           <h3 style="color:#A9A9A9";>Environmental Cost</h3>
           </div>

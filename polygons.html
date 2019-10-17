@@ -283,12 +283,13 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
   d3_features = g.selectAll("path")
     .data(geoShape.features)
     .enter()
-    .append("path");
+    .append("path")
+    .on("click", onClick)
 
    map.on("viewreset", reset);
    reset();
 
-  d3_features.on("click", onClick)
+  //d3_features.on("click", onClick)
   //.on("mouseover", mouseOver)
   //.on("click", onClick)
   //.on("mouseout", mouseOut)
@@ -340,17 +341,16 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
 var highlightedRect = d3.select(null);
 
   function onClick(d){
-    d3.select(this)
-    .style("fill-opacity",1);
     console.log("click number");
     console.log(click);
     console.log("a");
     console.log(a);
     if(click % 3 == 0){
       console.log("i'm divisible by 3");
-      d3.selectAll("d", path)
+      d3.selectAll("g.path")
         .style("stroke-opacity", 0.5)
         .style("fill-opacity",0.1)
+        .attr("fill","black")
         .attr('stroke','lightgray')
     }
 
@@ -362,7 +362,7 @@ var highlightedRect = d3.select(null);
         o_id = d.properties.MOVEMENT_ID; //get the o_id
         highlightedRect = d3.select(this)
         .style("fill-opacity",1)
-        .style("fill","orange");
+        .style("fill","white");
       }
       else if(a != 0){ //a = 2, 4, 6, 8, 10
         o_id = d_id;
@@ -379,18 +379,17 @@ var highlightedRect = d3.select(null);
 
         if(d_id == null){
           d_id = d.properties.MOVEMENT_ID;
-          highlightedRect.attr("fill","yellow");
           highlightedRect = d3.select(this)
           .style("fill-opacity",1)
-          .style("fill","red");
+          .style("fill","white");
 
         }
         else{ //fourth click
           o_id = d_id;
           d_id = d.properties.MOVEMENT_ID;
-          d3.select(this)
+          highlightedRect = d3.select(this)
           .style("fill-opacity",1)
-          .style("fill","red");
+          .style("fill","blue");
         }
       }
 
