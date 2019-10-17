@@ -30,6 +30,10 @@
      height:100vh;
     }
 
+    .active {
+      fill: orange;
+    }
+
   #value-vertical{
     float:left:
     display:flex;
@@ -170,6 +174,7 @@ var dist;
 var oc;
 var econ;
 var env;
+var active;
 
 d3.select("#TextDistance").text(" - km");
 d3.select("#TextOC").text("- INR");
@@ -216,20 +221,21 @@ d3.select("#TextEnvCost").text("- INR");
   //map.dragging.disable();
 
   var tiles_osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: 'Map: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>', minZoom: zoomlevel, maxZoom:zoomlevel}).addTo(map);
-  mapLinkCarto = '<a href="https://www.carto.com/basemaps">Map tiles by Carto, under CC BY 3.0. Data by OpenStreetMap, under ODbL. </a>';
+  // mapLinkCarto = '<a href="https://www.carto.com/basemaps">Map tiles by Carto, under CC BY 3.0. Data by OpenStreetMap, under ODbL. </a>';
 
-  var tiles_carto = L.tileLayer(
-      'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',{
-      attribution: '&copy; ' + mapLinkCarto + ' Contributors',minZoom: zoomlevel,maxZoom: zoomlevel,}).addTo(map);
-
-  var baseLayers = {"OpenStreetMap": tiles_osm, "Carto":tiles_carto};
+  // var tiles_carto = L.tileLayer(
+  //     'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',{
+  //     attribution: '&copy; ' + mapLinkCarto + ' Contributors',minZoom: zoomlevel,maxZoom: zoomlevel,}).addTo(map);
+ // "Carto":tiles_carto
+  var baseLayers = {"OpenStreetMap": tiles_osm};
 
   L.control.layers(baseLayers).addTo(map);
 
 </script>
 
 <script>
-var a = 1;
+var a = 0;
+var click = a + 1;
 var o_id;
 var d_id;
 var origin_lat;
@@ -265,6 +271,7 @@ Promise.all([places]).then(
 
 //also display the centroid points which are within the Joined file
 d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
+//code from http://bl.ocks.org/phil-pedruco/7381401
 
   let clickEnabled = false;
 
@@ -275,13 +282,17 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
   // create path elements for each of the features
   d3_features = g.selectAll("path")
     .data(geoShape.features)
-    .enter().append("path");
+    .enter()
+    .append("path");
+
    map.on("viewreset", reset);
    reset();
 
-  d3_features.on("mouseover", mouseOver)
-  .on("mouseout", mouseOut)
-  .on("click",onClick);
+  d3_features.on("click", onClick)
+  //.on("mouseover", mouseOver)
+  //.on("click", onClick)
+  //.on("mouseout", mouseOut)
+
 
   // Use Leaflet to implement a D3 geometric transformation.
   function projectPoint(x, y) {
@@ -305,72 +316,86 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
 
     // initialize the path data
     d3_features.attr("d", path)
-      .style("stroke-opacity", 0)
-      .style("fill-opacity",0)
-      .attr('stroke','lightgray');
+      .style("stroke-opacity", 0.5)
+      .style("fill-opacity",0.1)
+      .attr('stroke','lightgray')
   }
 
   function mouseOver(d) {
       d3.select(this)
-          .style("fill", "#ea5153")
-          .style("stroke-opacity",1)
-          .style("stroke-width",5)
-          .style("stroke", "#ea5153");
+      .style("fill-opacity",0)
+      .style("stroke-opacity",1)
+      .style("stroke-width",5)
+      .style("stroke", "#ea5153");
         }
 
   function mouseOut(d){
-    d3.select(this)
-    .style("fill-opacity",0)
-    .style("stroke-opacity",0)
-    .style("stroke-width",1)
-    .style('stroke','lightgray');
+      d3.select(this)
+      .style("fill-opacity",0)
+      .style("fill","#F0F0F0")
+      .style("stroke-opacity",0)
+      .style('stroke','lightgray');
   }
+
+var highlightedRect = d3.select(null);
+
   function onClick(d){
+    d3.select(this)
+    .style("fill-opacity",1);
+    console.log("click number");
+    console.log(click);
+    console.log("a");
     console.log(a);
-    if(a == 1){
-      d3.select(this)
-      .style("fill-opacity",0.5)
-      .style("fill","blue");
-    }
-    if(a == 0){
-      d3.select(this)
-      .style("fill-opacity",0.5)
-      .style("fill","purple")
-    }
-    else{
-      d3.select(this)
-      .style("fill-opacity",0.5)
-      .style("fill","red")
+    if(click % 3 == 0){
+      console.log("i'm divisible by 3");
+      d3.selectAll("d", path)
+        .style("stroke-opacity", 0.5)
+        .style("fill-opacity",0.1)
+        .attr('stroke','lightgray')
     }
 
-    if(a == 1){
+    if(a % 2 == 0) {
       origin_lat = d.properties.mumbai_centroids_Lat;
       origin_lon = d.properties.mumbai_centroids_Lon;
 
-      if(o_id == null){
+      if(a == 0){ //click 1
         o_id = d.properties.MOVEMENT_ID; //get the o_id
-        a = a - 1;
+        highlightedRect = d3.select(this)
+        .style("fill-opacity",1)
+        .style("fill","orange");
+      }
+      else if(a != 0){ //a = 2, 4, 6, 8, 10
+        o_id = d_id;
+        d_id = d.properties.MOVEMENT_ID;
+        highlightedRect = d3.select(this)
+        .style("fill-opacity",1)
+        .style("fill","red");
+      }
+    }
 
+      else if(a % 2 != 0){ //second click
+        dest_lat = d.properties.mumbai_centroids_Lat;
+        dest_lon = d.properties.mumbai_centroids_Lon;
+
+        if(d_id == null){
+          d_id = d.properties.MOVEMENT_ID;
+          highlightedRect.attr("fill","yellow");
+          highlightedRect = d3.select(this)
+          .style("fill-opacity",1)
+          .style("fill","red");
+
+        }
+        else{ //fourth click
+          o_id = d_id;
+          d_id = d.properties.MOVEMENT_ID;
+          d3.select(this)
+          .style("fill-opacity",1)
+          .style("fill","red");
+        }
       }
-      else {
-        o_id = d_id;
-        d_id = d.properties.MOVEMENT_ID;
-        a = a - 1;
-      }
-          }
-    else if(a == 0){
-      dest_lat = d.properties.mumbai_centroids_Lat;
-      dest_lon = d.properties.mumbai_centroids_Lon;
-      if(d_id == null){
-        d_id = d.properties.MOVEMENT_ID;
-        a = a + 1;
-      }
-      else{
-        o_id = d_id;
-        d_id = d.properties.MOVEMENT_ID;
-        a = a + 1;
-      }
-          }
+
+    a = a + 1; //advance the counter
+    click = click + 1; //advance the click
 
     //make a unique O-D pair variable to filter the CSV data
     o_d_pair = o_id.concat("-",d_id)
