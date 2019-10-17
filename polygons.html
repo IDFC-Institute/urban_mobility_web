@@ -309,26 +309,24 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
 
     // initialize the path data
     d3_features.attr("d", path)
-      .style("fill-opacity", 0)
-      .attr('fill','blue');
+      .style("stroke-opacity", 0)
+      .style("fill-opacity",0)
+      .attr('stroke','lightgray');
   }
 
   function mouseOver(d) {
       d3.select(this)
-          .enter()
-          .transition()
-          .duration(100)
-          .style("stroke", "red")
           .style("fill", "red")
-          .exit();
+          .style("stroke-opacity",1)
+          .style("stroke-width",5)
+          .style("stroke", "red");
         }
   function mouseOut(d){
     d3.select(this)
-    .enter()
-    .transition()
     .style("fill-opacity",0)
     .style("stroke-opacity",0)
-    .exit();
+    .style("stroke-width",1)
+    .style('stroke','lightgray');
   }
   function onClick(d){
     d3.select(this)
