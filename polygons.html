@@ -97,43 +97,36 @@ h3{
   width: 100%; /* Width of the outside container */
 }
 
-/* The slider itself */
-.slider {
-  /* -webkit-appearance: none;  /* Override default CSS styles */
-  appearance: none;
-  width: 80%; /* Full-width */
-  height: 25px; /* Specified height */
-  border-radius: 5px;
-  background: #ffffff; /* Grey background */
-  outline: none; /* Remove outline */
-  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
-  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
-  transition: opacity .2s;
+
+.rangeslider{
+  width: 75%;
+  font-family: Futura, Arial, "sans-serif";
+  color:#ea5153;
+  font-size:1.5rem;
 }
 
-/* Mouse-over effects */
-.slider:hover {
-  opacity: 1; /* Fully shown on mouse-over */
+.myslider {
+  -webkit-appearance: none;
+  background: #FCF3CF ;
+  width: 50%;
+  height: 20px;
+  opacity: 2;
 }
 
-/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
-.slider::-webkit-slider-thumb {
-  /* -webkit-appearance: none; /* Override default look */
-  appearance: none;
-  width: 5rem; /* Set a specific slider handle width */
-  height: 25px; /* Slider handle height */
-  border-radius: 50%;
-  background: #4CAF50; /* Green background */
-  cursor: pointer; /* Cursor on hover */
+
+.myslider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  cursor: pointer;
+  background: #34495E ;
+  width: 5%;
+  height: 20px;
 }
 
-.slider::-moz-range-thumb {
-  width: 25px; /* Set a specific slider handle width */
-  height: 25px; /* Slider handle height */
-  border-radius: 50%;
-  background: #4CAF50; /* Green background */
-  cursor: pointer; /* Cursor on hover */
+
+.myslider:hover {
+  opacity: 1;
 }
+
 
   </style>
 </head>
@@ -171,20 +164,19 @@ h3{
         </div>
         <br></br>
         <br></br>
-        <div class="row">
-        <div class="slidecontainer">
-          <input type="range" min="1" max="100" value="75" class="slider" id="myRange">
-        </div>
+
         <br></br>
         <br></br>
-        <div class="row">
-          <p>Value:</p>
-          <!-- <span id="f" style="font-weight:bold; color:red">VALUE</span> -->
+        <div class="rangeslider">
+        <input type="range" min="1" max="100" value="50"
+                class="myslider" id="sliderRange">
+        <p>Your Monthly Wage (INR): <span id="demo"></span></p>
         </div>
       </div>
 
         </div>
       </div>
+
 
 
 
@@ -203,21 +195,19 @@ h3{
 
       </div>
 <script>
-var slider = document.getElementById("myRange");
+var rangeslider = document.getElementById("sliderRange");
 var output = document.getElementById("demo");
-output = 55;
-output.innerHTML = slider.value; // Display the default slider value
+output.innerHTML = rangeslider.value;
 
-// Update the current slider value (each time you drag the slider handle)
-slider.oninput = function() {
-  output.innerHTML = this.value;
+rangeslider.oninput = function() {
+output.innerHTML = this.value;
 }
 
 </script>
 
 
 <script>
-var wage;
+var wage = output;
 var dist;
 var oc;
 var econ;
@@ -467,7 +457,7 @@ var highlightedRect = d3.select(null);
             //Opportunity cost of congestion = Additional hours in commute *
             //((probability of working * wage cost) + (probability of leisure * (wage cost/2)))
             //9 hour workday, 7 day workweek. what's weekly equation, then convert to hourly
-            wage = 12600;
+            // wage = 12600;
             dist = data[i].distance;
             oc = data[i].additional_hours_commuting*((0.5*(wage/9/7/4))+(0.5*(wage/9/7/4)));
             econ = data[i].total_economic_costs;
