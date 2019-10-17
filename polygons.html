@@ -214,25 +214,17 @@ d3.select("#TextEnvCost").text("- INR");
   var map = L.map('map', { zoomControl: false }).setView([19.0760,72.8777], zoomlevel);
   //map.scrollWheelZoom.disable();
   //map.dragging.disable();
-  var toolserver = L.tileLayer('https://{s}.www.toolserver.org/tiles/bw-mapnik/{z}/{x}/{y}.png');
-  var tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: 'Map: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>', minZoom: zoomlevel, maxZoom:zoomlevel}).addTo(map);
 
-  var baseLayers = {"tiles": tiles, "toolserver-mapnik":toolserver};
-  var overlays = {
-    "layer 1": layer1,
-    "layer 2": layer2
-  }
+  var tiles_osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: 'Map: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>', minZoom: zoomlevel, maxZoom:zoomlevel}).addTo(map);
+  mapLinkCarto = '<a href="https://www.carto.com/basemaps">Map tiles by Carto, under CC BY 3.0. Data by OpenStreetMap, under ODbL. </a>';
 
-var layer1 = L.geoJson(joined_centroidshexclusters.geojson, {
-        style: drawStyle,
-        onEachFeature: function (feature, layer) {
-            layer.bindPopup(joined_centroidshexclusters.unique_id);
-        }
-    });
+  var tiles_carto = L.tileLayer(
+      'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',{
+      attribution: '&copy; ' + mapLinkCarto + ' Contributors',minZoom: zoomlevel,maxZoom: zoomlevel,}).addTo(map);
 
-map.addLayer(layer1);
-  L.control.layers(baseLayers, overlays).addTo(map);
-  map.addOverlay(layer1);
+  var baseLayers = {"OpenStreetMap": tiles_osm, "Carto":tiles_carto};
+
+  L.control.layers(baseLayers).addTo(map);
 
 </script>
 
@@ -240,6 +232,10 @@ map.addLayer(layer1);
 var a = 1;
 var o_id;
 var d_id;
+var origin_lat;
+var origin_lon;
+var dest_lat;
+var dest_lon;
 
 //https://gist.github.com/d3noob/9211665
 var svg = d3.select(map.getPanes().overlayPane).append("svg"),
@@ -262,7 +258,7 @@ Promise.all([places]).then(
       .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
       .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y })
       .attr("r", "10px")
-      .style("fill", function(d){ if(d.Type=="residential") { return "red"; } else { return "blue"; } })
+      .style("fill", function(d){ if(d.Type=="residential") { return "#ea5153"; } else { return "blue"; } })
       .attr("id", function(d, i){ return "circle" + i; });
   }
 );
@@ -316,11 +312,12 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
 
   function mouseOver(d) {
       d3.select(this)
-          .style("fill", "red")
+          .style("fill", "#ea5153")
           .style("stroke-opacity",1)
           .style("stroke-width",5)
-          .style("stroke", "red");
+          .style("stroke", "#ea5153");
         }
+
   function mouseOut(d){
     d3.select(this)
     .style("fill-opacity",0)
@@ -329,9 +326,22 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
     .style('stroke','lightgray');
   }
   function onClick(d){
-    d3.select(this)
-    .style("fill-opacity",0.5)
-    .style("fill","blue");
+    console.log(a);
+    if(a == 1){
+      d3.select(this)
+      .style("fill-opacity",0.5)
+      .style("fill","blue");
+    }
+    if(a == 0){
+      d3.select(this)
+      .style("fill-opacity",0.5)
+      .style("fill","purple")
+    }
+    else{
+      d3.select(this)
+      .style("fill-opacity",0.5)
+      .style("fill","red")
+    }
 
     if(a == 1){
       origin_lat = d.properties.mumbai_centroids_Lat;
@@ -373,7 +383,6 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
           if(data[i].unique_id == o_d_pair){
             console.log("calculating for TAZs: ");
             console.log(data[i].unique_id);
-            console.log("opportunity cost: ");
             //Opportunity cost of congestion = Additional hours in commute *
             //((probability of working * wage cost) + (probability of leisure * (wage cost/2)))
             //9 hour workday, 7 day workweek. what's weekly equation, then convert to hourly
@@ -391,8 +400,6 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
             //make 2 points
             d3.select("#point_src");
             d3.select("#point_dest");
-
-
           }
         }
       })
@@ -421,57 +428,6 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
 
 }
   map.on("moveend", update)
-
-
-  //info from https://leafletjs.com/examples/choropleth/
-  var info = L.control({position: 'topleft'});
-
-  info.onAdd = function (map) {
-  	this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-  	this.update();
-  	return this._div;
-  };
-
-  // method that we will use to update the control based on feature properties passed
-  info.update = function (props) {
-  	this._div.innerHTML = '<h1>The Costs of Commuting in Mumbai</h1>'
-    + (props ? '<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
-  		: 'Click your home area and your work area to get your cost of commuting.'); // What's this all about? Doesn't esem to get used?
-  };
-
-  //color ramp for distances
-  function getColor(d) {
-  	return d > 1000 ? '#800026' :
-  	       d > 500  ? '#BD0026' :
-  	       d > 200  ? '#E31A1C' :
-  	       d > 100  ? '#FC4E2A' :
-  	       d > 50   ? '#FD8D3C' :
-  	       d > 20   ? '#FEB24C' :
-  	       d > 10   ? '#FED976' :
-  	                  '#FFEDA0';
-  }
-
-  // //create legend
-  // var legend = L.control({position: 'bottomleft'});
-  // //define what happens when legend is loaded
-  //
-  // //create div to store legend in
-  // legend.onAdd = function (map) {var div = L.DomUtil.create("div", "info legend"); return div;
-  // this.update();
-  // return this._div;
-  // };
-  //
-  // legend.update = function (items){
-  //   this._div.innerHTML = '<h2>Legend</h2>' + items ? '<b>' + items.name : getColor()
-  // };
-  //
-  // //add empty legend and info to map
-  // legend.addTo(map);
-  // info.addTo(map);
-  openstreetmap.addTo(map);
-
-
-
 
 </script>
 
