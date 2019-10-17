@@ -283,16 +283,18 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
   d3_features = g.selectAll("path")
     .data(geoShape.features)
     .enter()
-    .append("path")
-    .on("click", onClick)
+    .append("path");
 
-   map.on("viewreset", reset);
-   reset();
+    map.on("viewreset", reset);
+    reset();
 
-  //d3_features.on("click", onClick)
-  //.on("mouseover", mouseOver)
-  //.on("click", onClick)
-  //.on("mouseout", mouseOut)
+
+
+  d3_features.on("mouseover", mouseOver)
+  .on("mouseout", mouseOut)
+  .on("click", onClick)
+
+
 
 
   // Use Leaflet to implement a D3 geometric transformation.
@@ -316,42 +318,50 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
                                      + -topLeft[1] + ")");
 
     // initialize the path data
-    d3_features.attr("d", path)
-      .style("stroke-opacity", 0.5)
-      .style("fill-opacity",0.1)
-      .attr('stroke','lightgray')
+    d3_features.attr("d",path)
+    .style("fill-opacity",0)
+    .attr("fill","blue");
+
   }
 
   function mouseOver(d) {
       d3.select(this)
-      .style("fill-opacity",0)
-      .style("stroke-opacity",1)
-      .style("stroke-width",5)
-      .style("stroke", "#ea5153");
+      .transition()
+      .style("stroke","#ea5153");
+      // .style("fill-opacity",0)
+      // .style("stroke-opacity",1)
+      // .style("stroke-width",5)
+      // .style("stroke", "#ea5153");
         }
 
   function mouseOut(d){
       d3.select(this)
+      .transition()
       .style("fill-opacity",0)
-      .style("fill","#F0F0F0")
-      .style("stroke-opacity",0)
-      .style('stroke','lightgray');
+      // .style("fill","#F0F0F0")
+      .style("stroke-opacity",0);
+      // .style('stroke','lightgray');
   }
 
 var highlightedRect = d3.select(null);
 
   function onClick(d){
+    d3.select(this)
+    .style("fill-opacity",0.5)
+    .style("fill","blue")
+    .style("stroke-width",5);
+
     console.log("click number");
     console.log(click);
     console.log("a");
     console.log(a);
     if(click % 3 == 0){
       console.log("i'm divisible by 3");
-      d3.selectAll("g.path")
-        .style("stroke-opacity", 0.5)
-        .style("fill-opacity",0.1)
-        .attr("fill","black")
-        .attr('stroke','lightgray')
+      // d3.selectAll("g.path")
+        // .style("stroke-opacity", 0.5)
+        // .style("fill-opacity",0.1)
+        // .attr("fill","black")
+        // .attr('stroke','lightgray')
     }
 
     if(a % 2 == 0) {
@@ -360,16 +370,16 @@ var highlightedRect = d3.select(null);
 
       if(a == 0){ //click 1
         o_id = d.properties.MOVEMENT_ID; //get the o_id
-        highlightedRect = d3.select(this)
-        .style("fill-opacity",1)
-        .style("fill","white");
+        // highlightedRect = d3.select(this)
+        // .style("fill-opacity",1)
+        // .style("fill","white");
       }
       else if(a != 0){ //a = 2, 4, 6, 8, 10
         o_id = d_id;
         d_id = d.properties.MOVEMENT_ID;
-        highlightedRect = d3.select(this)
-        .style("fill-opacity",1)
-        .style("fill","red");
+        // highlightedRect = d3.select(this)
+        // .style("fill-opacity",1)
+        // .style("fill","red");
       }
     }
 
@@ -379,17 +389,17 @@ var highlightedRect = d3.select(null);
 
         if(d_id == null){
           d_id = d.properties.MOVEMENT_ID;
-          highlightedRect = d3.select(this)
-          .style("fill-opacity",1)
-          .style("fill","white");
+          // highlightedRect = d3.select(this)
+          // .style("fill-opacity",1)
+          // .style("fill","white");
 
         }
         else{ //fourth click
           o_id = d_id;
           d_id = d.properties.MOVEMENT_ID;
-          highlightedRect = d3.select(this)
-          .style("fill-opacity",1)
-          .style("fill","blue");
+          // highlightedRect = d3.select(this)
+          // .style("fill-opacity",1)
+          // .style("fill","blue");
         }
       }
 
