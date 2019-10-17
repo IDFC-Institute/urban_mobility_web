@@ -107,26 +107,23 @@ h3{
 
 .myslider {
   -webkit-appearance: none;
-  background: #FCF3CF ;
+  background: #FFFFFF ;
   width: 50%;
-  height: 20px;
+  height: 3rem;
   opacity: 2;
 }
-
 
 .myslider::-webkit-slider-thumb {
   -webkit-appearance: none;
   cursor: pointer;
-  background: #34495E ;
-  width: 5%;
-  height: 20px;
+  background: #ea5153 ;
+  width: 50%;
+  height: 3rem;
 }
-
 
 .myslider:hover {
   opacity: 1;
 }
-
 
   </style>
 </head>
@@ -203,11 +200,17 @@ rangeslider.oninput = function() {
 output.innerHTML = this.value;
 }
 
+document.getElementById("demo").addEventListener("click", updateWage);
+function updateWage() {
+  wage = output.innerHTML;
+  console.log(wage);
+}
+
 </script>
 
 
 <script>
-var wage = output;
+var wage;
 var dist;
 var oc;
 var econ;
