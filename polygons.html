@@ -204,7 +204,7 @@ d3.select("#TextEnvCost").text("- INR");
        router: new L.Routing.OSRMv1({
           serviceUrl: 'http://15.206.6.188:5000/route/v1'
         }),
-
+      fitSelectedRoutes: false,
       lineOptions: { styles: [{color: 'navy', opacity: 1, weight: 5}]},
       routeWhileDragging: false,
       geometryOnly: true,
@@ -288,14 +288,9 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
     map.on("viewreset", reset);
     reset();
 
-
-
   d3_features.on("mouseover", mouseOver)
   .on("mouseout", mouseOut)
   .on("click", onClick)
-
-
-
 
   // Use Leaflet to implement a D3 geometric transformation.
   function projectPoint(x, y) {
@@ -320,14 +315,15 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
     // initialize the path data
     d3_features.attr("d",path)
     .style("fill-opacity",0)
-    .attr("fill","blue");
+    .attr("fill","#ea5153");
 
   }
 
   function mouseOver(d) {
       d3.select(this)
       .transition()
-      .style("stroke","#ea5153");
+      .style("stroke","#ea5153")
+      .style("fill-opacity",1);
       // .style("fill-opacity",0)
       // .style("stroke-opacity",1)
       // .style("stroke-width",5)
@@ -348,8 +344,9 @@ var highlightedRect = d3.select(null);
   function onClick(d){
     d3.select(this)
     .style("fill-opacity",0.5)
-    .style("fill","blue")
-    .style("stroke-width",5);
+    .style("fill","#ea5153")
+    .style("stroke-width",5)
+    .style("stroke","black");
 
     console.log("click number");
     console.log(click);
