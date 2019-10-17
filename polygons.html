@@ -6,14 +6,14 @@
   <!-- https://www.d3-graph-gallery.com/graph/backgroundmap_leaflet_buttonLayer.html -->
   <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin=""></script>
 
-  <!-- <script src="https://cdn.leafletjs.com/leaflet-0.6.1/leaflet.js"></script> -->
+  <!-- <script src="http://cdn.leafletjs.com/leaflet-0.6.1/leaflet.js"></script> -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
   <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
-  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
   <script src="https://unpkg.com/d3-simple-slider"></script>
 
   <style>
-  @import url(https://cdn.leafletjs.com/leaflet-0.6.1/leaflet.css);
+  @import url(http://cdn.leafletjs.com/leaflet-0.6.1/leaflet.css);
   .navigation {
     float:right;
     background:red;
@@ -184,7 +184,7 @@ d3.select("#TextEnvCost").text("- INR");
   {
     map.removeControl(route);
 
-    var full_url = "https://15.206.6.188:9966/route/v1/driving/"+OriginLat+","+OriginLon+";"+DestLat+","+DestLon+"?overview=false&alternatives=true&steps=true"
+    var full_url = "http://15.206.6.188:9966/route/v1/driving/"+OriginLat+","+OriginLon+";"+DestLat+","+DestLon+"?overview=false&alternatives=true&steps=true"
     console.log(full_url)
 
     //https://www.liedman.net/leaflet-routing-machine/tutorials/basic-usage/
@@ -196,7 +196,7 @@ d3.select("#TextEnvCost").text("- INR");
       ],
 
        router: new L.Routing.OSRMv1({
-          serviceUrl: 'https://15.206.6.188:5000/route/v1'
+          serviceUrl: 'http://15.206.6.188:5000/route/v1'
         }),
 
       lineOptions: { styles: [{color: 'navy', opacity: 1, weight: 5}]},
@@ -213,7 +213,7 @@ d3.select("#TextEnvCost").text("- INR");
   var map = L.map('map', { zoomControl: false }).setView([19.0760,72.8777], zoomlevel);
   //map.scrollWheelZoom.disable();
   //map.dragging.disable();
-  var toolserver = L.tileLayer('https://{s}.www.toolserver.org/tiles/bw-mapnik/{z}/{x}/{y}.png');
+  var toolserver = L.tileLayer('http://{s}.www.toolserver.org/tiles/bw-mapnik/{z}/{x}/{y}.png');
   var tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: 'Map: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>', minZoom: zoomlevel, maxZoom:zoomlevel}).addTo(map);
 
   var baseLayers = {"tiles": tiles, "toolserver-mapnik":toolserver};
