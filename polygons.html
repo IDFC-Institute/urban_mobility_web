@@ -166,7 +166,7 @@ p{
         <div class="row">
           <div class="column">
           <h2 id="TextFuelCost"></h2>
-          <h3>Fuel Cost</h3>
+          <h3>Economic Cost</h3>
           </div>
 
           <div class="column">
@@ -189,8 +189,7 @@ p{
             <h3 style="text-align:center">Definitions</h3>
             <h4 style="padding-left:1rem">Distance (km): Total distance.<br>
             Opportunity Cost (INR): Cost of spending additional time commuting, which could have been used for work or leisure. Assumes equal probability of work and leisure and takes as inputs additional commuting hours and an assumed monthly wage of 2.5 lakh INR.<br>
-            Fuel Cost (INR): Additional fuel costs (petrol) for the selected route. <br>
-            <!-- Opportunity cost plus additional fuel cost for the selected route.<br> -->
+            Total Economic Cost (INR): Opportunity cost plus additional fuel cost for the selected route.<br>
             Total Environmental Cost (INR): Total cost of additional CO<sub>2</sub> emissions for the selected route.<br>
             Note: Generalised exchange rate of USD 1 to INR 70.
           </h4>
@@ -478,7 +477,7 @@ var highlightedRect = d3.select(null);
 
             dist = data[i].distance;
             oc = data[i].additional_hours_commuting*((0.5*(wage/9/7/4))+(0.5*(wage/9/7/4)));
-            econ = data[i].add_petrol_costs;
+            econ = data[i].total_economic_costs;
             env = data[i].total_petrol_emissions;
 
             d3.select("#TextDistance").text(dist + " km");
