@@ -427,6 +427,7 @@ g.attr('pointer-events','all');
 
                 var all_clicked = d3.selectAll(".clicked");
 
+                //selection inspiration from https://bl.ocks.org/austinczarnecki/fe80afa64724c9630930
                 //make new origin
                 if(all_clicked.classed("dest")){ //make all points where dest=true --> becomes new origin
                   all_clicked.classed("clicked",true);
