@@ -183,7 +183,7 @@ h3{
         <div class="row">
           <div class="column">
           <h2 id="TextFuelCost"></h2>
-          <h3 style="color:#A9A9A9";>Economic Cost</h3>
+          <h3 style="color:#A9A9A9";>Fuel Cost</h3>
           </div>
 
           <div class="column">
@@ -244,9 +244,8 @@ function dynamicdropdown(listindex)
     }
     return true;
 }
-</script>
 
-<script>//map functions
+//map functions
 function clearSegment(){
   origin_dest = "";
   d3.selectAll("path").remove();
@@ -286,7 +285,7 @@ function submitSegment(){
           wage = 12600;
           dist = data[i].distance;
           oc = data[i].additional_hours_commuting*((0.5*(wage/9/7/4))+(0.5*(wage/9/7/4)));
-          econ = data[i].total_economic_costs;
+          econ = data[i].add_petrol_costs;
           env = data[i].total_petrol_emissions;
 
           d3.select("#TextDistance").text(dist + " km");
@@ -346,11 +345,6 @@ function submitSegment(){
                 .attr('stroke-width',3)
                 .attr("stroke", function(d) { return ramp(d.properties.all_segments_formatted_csv_avg_speed_kmh) });
 
-            //search mumbai_all_tazs for the unique_id of the d
-            //get the unique id and find the four values
-            //print the values
-
-
           }
 
           // Use Leaflet to implement a D3 geometric transformation.
@@ -363,7 +357,10 @@ function submitSegment(){
 
 var route = L.Routing.control({
     createMarker: function() { return null; },
-    waypoints: []
+    waypoints: [],
+    router: new L.Routing.OSRMv1({
+       serviceUrl: 'http://15.206.6.188:5000/route/v1'
+     })
   });
 
 function DrawSpeeds(o_id, d_id)
@@ -498,7 +495,6 @@ L.tileLayer(
     var places = d3.csv("places.csv");
     console.log(places);
 
-    console.log(places);
     var a = 1;
     var o_id;
     var d_id;
@@ -658,13 +654,3 @@ L.tileLayer(
 </script>
 </body>
 </html>
-
-<script> ///////////previous code /////////////////
-
-
-
-
-
-
-
-</script>
