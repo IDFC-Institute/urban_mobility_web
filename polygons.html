@@ -424,25 +424,29 @@ var all_clicked2;
 
               //on third click, hide all non-active strokes
 
+              //reset all unique values
               all_clicked = d3.selectAll(".clicked"); //select everything
-              all_clicked.classed("non-od",true);
-              all_clicked.classed("origin",false); //everything origin = false
+              all_clicked.classed("non-od",true); //make all points non-od
+              // var all_others = d3.selectAll(".non-od");
+              // all_others.style("stroke-opacity",0);
+              all_clicked.classed("origin",false); //make all points origin = false
 
+              //make new origin
+              if(all_clicked.classed("dest")){ //make all points where dest=true --> becomes new origin
+                all_clicked.classed("clicked",true);
+                all_clicked.classed("non-od",false);
+                all_clicked.classed("origin",true);
+                all_clicked.classed("dest",false);
+                all_clicked.attr("stroke",colors.dest); //origin = blue
+              }
+
+              //make new destination
               d3.select(this)
               .classed("clicked",true)
-              .classed("dest",true)
               .classed("non-od",false)
-              .attr("stroke",colors.dest);
-
-                  //for everything not active, make opacity 0
-                    //if clicked AND destination, attr origin
-                        // if(all_clicked.classed("dest")){ //for everything with dest=true --> make this new origin
-                        //   all_clicked.classed("origin",true);
-                        //   all_clicked.classed("non-od",false);
-                        //   all_clicked.attr("stroke",colors.origin);
-                        //   all_clicked.classed("dest",false);
-                        //
-                        // }
+              .classed("origin",false)
+              .classed("dest",true)
+              .attr("stroke",colors.dest); //destination = red
               }
       }
 
