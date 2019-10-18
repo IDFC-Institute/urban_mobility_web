@@ -203,6 +203,10 @@
         </div>
       </div>
 
+      <div class="row">
+      <button><a type=button class="text_input form-control" value="Segment_Value" onClick="clearMap();" class="segment_button">Clear Map</a>
+      </div>
+
     </div>
   </div>
 </div>
@@ -231,6 +235,16 @@ var zoomlevel = 12; //set initial zoom level of map
 
 var colors = { clickable: 'black', origin: 'blue', dest: "red", clickhover: "lightgreen", none:"white" };
 
+function clearMap(){
+  d3.selectAll("path").remove();
+  //sets blank values initially
+  d3.select("#TextDistance").text(" - km");
+  d3.select("#TextOC").text("- INR");
+  d3.select("#TextFuelCost").text("- INR");
+  d3.select("#TextEnvCost").text("- INR");
+  console.log("map cleared");
+  showJSON();
+}
 //sets blank values initially
 d3.select("#TextDistance").text(" - km");
 d3.select("#TextOC").text("- INR");
@@ -282,7 +296,8 @@ L.control.layers(tiles_osm).addTo(map);
 
 </script>
 
-<script> //initialize items for D3 selections
+<script>
+function showJSON(){//initialize items for D3 selections
 var a = 0;
 var click = a + 1;
 var o_id;
@@ -297,239 +312,211 @@ var dest_lon;
 var svg = d3.select(map.getPanes().overlayPane).append("svg"),
   g = svg.append("g")
   .attr("class", "leaflet-zoom-hide");
-  // .on("click",resetRect);
-
-function resetRect(){
-  g.selectAll(".active").classed("active", active = false);
-}
 
 g.attr('pointer-events','all');
 
-//import and display TAZ tiles
-d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
-//code from http://bl.ocks.org/phil-pedruco/7381401
 
-  let clickEnabled = false;
+  //import and display TAZ tiles
+  d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
+  //code from http://bl.ocks.org/phil-pedruco/7381401
 
-  //  create a d3.geo.path to convert GeoJSON to SVG
-  var transform = d3.geo.transform({point: projectPoint}),
-            path = d3.geo.path().projection(transform);
+    let clickEnabled = false;
 
-  // create path elements for each of the features
-  d3_features = g.selectAll("path")
-    .data(geoShape.features)
-    .enter()
-    .append("path")
-    .classed("clicked",false)
-    .classed("origin",false)
-    .classed("dest",false)
-    .classed("non-od",true)
-    .style("stroke-opacity",1)
-    .style("stroke-width",3)
-    .style("fill-opacity",0);
+    //  create a d3.geo.path to convert GeoJSON to SVG
+    var transform = d3.geo.transform({point: projectPoint}),
+              path = d3.geo.path().projection(transform);
 
-    map.on("viewreset", reset);
-    reset();
+    // create path elements for each of the features
+    d3_features = g.selectAll("path")
+      .data(geoShape.features)
+      .enter()
+      .append("path")
+      .classed("clicked",false)
+      .classed("origin",false)
+      .classed("dest",false)
+      .classed("non-od",true)
+      .style("stroke-opacity",1)
+      .style("stroke-width",3)
+      .style("fill-opacity",0);
 
-  //assign features to mouseover, mouseout, onclick
-  d3_features.on("mouseover", mouseOver)
-  .on("mouseout", mouseOut)
-  .on("click", onClick)
+      map.on("viewreset", reset);
+      reset();
 
-  //use Leaflet to implement a D3 geometric transformation
-  function projectPoint(x, y) {
-    var point = map.latLngToLayerPoint(new L.LatLng(y, x));
-    this.stream.point(point.x, point.y);
-  }
+    //assign features to mouseover, mouseout, onclick
+    d3_features.on("mouseover", mouseOver)
+    .on("mouseout", mouseOut)
+    .on("click", onClick)
 
-  //fit the SVG element to leaflet's map layer
-  function reset() {
-    bounds = path.bounds(geoShape);
-    var topLeft = bounds[0],
-      bottomRight = bounds[1];
-    svg .attr("width", bottomRight[0] - topLeft[0])
-      .attr("height", bottomRight[1] - topLeft[1])
-      .style("left", topLeft[0] + "px")
-      .style("top", topLeft[1] + "px");
-    g .attr("transform", "translate(" + -topLeft[0] + ","
-                                     + -topLeft[1] + ")");
-    // initialize the path data
-    d3_features.attr("d",path);
-  }
-
-
-  //mouseover function
-  function mouseOver(d) {
-    c = d3.select(this);
-    // if(c.classed("clicked")){
-    //   c.attr("stroke",colors.hover);
-    //   c.attr("fill",colors.clicked);
-    // }
-    // else{
-    //   c.attr("stroke",colors.hover);
-    // }
+    //use Leaflet to implement a D3 geometric transformation
+    function projectPoint(x, y) {
+      var point = map.latLngToLayerPoint(new L.LatLng(y, x));
+      this.stream.point(point.x, point.y);
     }
 
-  //mouseout function
-  function mouseOut(d){
-    // c = d3.select(this);
-    // if(c.classed("clicked")){
-    //   c.attr("stroke-opacity",1)
-    //   c.attr("fill",colors.clicked);
-    // }
-    // c.attr("stroke-opacity",0);
+    //fit the SVG element to leaflet's map layer
+    function reset() {
+      bounds = path.bounds(geoShape);
+      var topLeft = bounds[0],
+        bottomRight = bounds[1];
+      svg .attr("width", bottomRight[0] - topLeft[0])
+        .attr("height", bottomRight[1] - topLeft[1])
+        .style("left", topLeft[0] + "px")
+        .style("top", topLeft[1] + "px");
+      g .attr("transform", "translate(" + -topLeft[0] + ","
+                                       + -topLeft[1] + ")");
+      // initialize the path data
+      d3_features.attr("d",path);
     }
 
-  //onclick function
-  function onClick(d){
-    // d3.selectAll(".clicked") //make everything before unclicked
-    // .classed("clicked", true)
-    // .attr("stroke", colors.clickable); //make the non-active click gray
-    //
 
-    // d3.select(this)
-    // .classed("clicked",true)
-    // .attr("stroke",colors.clicked); //most recent one is RED, the destination
-
-    //second-most recent one is BLUE, the origin
-
-var all_clicked;
-var all_clicked2;
-
-    console.log("click number");
-    console.log(click);
-    console.log("a");
-    console.log(a);
-    if(click % 3 == 0){
-       console.log("i'm divisible by 3");
-     }
-
-    if(a % 2 == 0) { //if first click on the map
-      origin_lat = d.properties.mumbai_centroids_Lat;
-      origin_lon = d.properties.mumbai_centroids_Lon;
-
-            if(a == 0){ //if click 1
-              o_id = d.properties.MOVEMENT_ID; //get the o_id
-              //origin = true
-              d3.select(this)
-              .classed("clicked",true)
-              .classed("origin",true)
-              .classed("non-od",false)
-              .attr("stroke",colors.dest);
-            }
-
-            else if(a != 0){ //if click 3, 5, 7
-              o_id = d_id;
-              d_id = d.properties.MOVEMENT_ID;
-
-              //on third click, hide all non-active strokes
-
-              //reset all unique values
-              all_clicked = d3.selectAll(".clicked"); //select everything
-              all_clicked.classed("non-od",true); //make all points non-od
-              // var all_others = d3.selectAll(".non-od");
-              // all_others.style("stroke-opacity",0);
-              all_clicked.classed("origin",false); //make all points origin = false
-
-              //make new origin
-              if(all_clicked.classed("dest")){ //make all points where dest=true --> becomes new origin
-                all_clicked.classed("clicked",true);
-                all_clicked.classed("non-od",false);
-                all_clicked.classed("origin",true);
-                all_clicked.classed("dest",false);
-                all_clicked.attr("stroke",colors.dest); //origin = blue
-              }
-
-              //make new destination
-              d3.select(this)
-              .classed("clicked",true)
-              .classed("non-od",false)
-              .classed("origin",false)
-              .classed("dest",true)
-              .attr("stroke",colors.dest); //destination = red
-              }
+    //mouseover function
+    function mouseOver(d) {
+      c = d3.select(this);
+      // if(c.classed("clicked")){
+      //   c.attr("stroke",colors.hover);
+      //   c.attr("fill",colors.clicked);
+      // }
+      // else{
+      //   c.attr("stroke",colors.hover);
+      // }
       }
 
-      else if(a % 2 != 0){ //if click 2
-        dest_lat = d.properties.mumbai_centroids_Lat;
-        dest_lon = d.properties.mumbai_centroids_Lon;
+    //mouseout function
+    function mouseOut(d){
+      // c = d3.select(this);
+      // if(c.classed("clicked")){
+      //   c.attr("stroke-opacity",1)
+      //   c.attr("fill",colors.clicked);
+      // }
+      // c.attr("stroke-opacity",0);
+      }
 
-        if(d_id == null){
-          d_id = d.properties.MOVEMENT_ID;
-          d3.select(this)
-          .classed("clicked",true)
-          .classed("non-od",false)
-          .classed("dest",true)
-          .attr("stroke",colors.dest);
+    //onclick function
+    function onClick(d){
+
+      console.log("click number");
+      console.log(click);
+      console.log("a");
+      console.log(a);
+      if(click % 3 == 0){
+         console.log("i'm divisible by 3");
+       }
+
+      if(a % 2 == 0) { //if click not divisible by 2 (1, 3, 5, 7)
+        origin_lat = d.properties.mumbai_centroids_Lat;
+        origin_lon = d.properties.mumbai_centroids_Lon;
+
+              if(a == 0){ //if click 1
+                o_id = d.properties.MOVEMENT_ID; //get the o_id
+                //origin = true
+                d3.select(this)
+                .classed("clicked",true)
+                .classed("origin",true)
+                .classed("non-od",false)
+                .attr("stroke",colors.origin);
+              }
+
+              else if(a != 0){ //if click 3, 5, 7
+                o_id = d_id;
+                d_id = d.properties.MOVEMENT_ID;
+
+                var all_clicked = d3.selectAll(".clicked");
+
+                //make new origin
+                if(all_clicked.classed("dest")){ //make all points where dest=true --> becomes new origin
+                  all_clicked.classed("clicked",true);
+                  all_clicked.classed("non-od",false);
+                  all_clicked.classed("origin",true);
+                  all_clicked.classed("dest",false);
+                  all_clicked.attr("stroke",colors.origin); //origin = blue
+                }
+
+                //make new destination
+                d3.select(this)
+                .classed("clicked",true)
+                .classed("non-od",false)
+                .classed("origin",false)
+                .classed("dest",true)
+                .attr("stroke",colors.dest); //destination = red
+                }
         }
-        else{ //if click 4, 6, 8
-          o_id = d_id;
-          d_id = d.properties.MOVEMENT_ID;
-          console.log("i'm even #4");
 
-          d3.select(this)
-          .classed("clicked",true)
-          .classed("non-od",false)
-          .classed("dest",true)
-          .attr("stroke",colors.dest);
-          // all_clicked2 = d3.selectAll(".clicked"); //select everything
-          // all_clicked2.classed("origin",false); //everything origin = false
-          // //for everything not active, make opacity 0
-          //   if(all_clicked2.classed("active")){
-          //   //if clicked AND destination, attr origin
-          //     if(all_clicked2.classed("dest")){ //for everything with dest=true --> make this new origin
-          //       console.log("i'm reading dest value and resetting it to origin");
-          //       all_clicked2.classed("origin",true);
-          //       all_clicked2.attr("stroke",colors.origin);
-          //       all_clicked2.classed("dest",false);
-                //
-                // d3.select(this)
-                // .classed("clicked",true)
-                // .classed("dest",true)
-                // .attr("stroke",colors.dest);
-              // }
-            // }
+        else if(a % 2 != 0){ //if click not divisible by 2
+          dest_lat = d.properties.mumbai_centroids_Lat;
+          dest_lon = d.properties.mumbai_centroids_Lon;
+
+          if(d_id == null){ //if click 2
+            d_id = d.properties.MOVEMENT_ID;
+            d3.select(this)
+            .classed("clicked",true)
+            .classed("non-od",false)
+            .classed("dest",true)
+            .attr("stroke",colors.dest);
           }
-        }
+          else{ //if click 4, 6, 8
+            o_id = d_id;
+            d_id = d.properties.MOVEMENT_ID;
 
-    a = a + 1; //advance the counter
-    click = click + 1; //advance the click
+            var all_clicked = d3.selectAll(".clicked");
 
-    //make a unique O-D pair variable to filter the CSV data
-    o_d_pair = o_id.concat("-",d_id)
-    console.log(o_d_pair);
+            //make new origin
+            if(all_clicked.classed("dest")){ //make all points where dest=true --> becomes new origin
+              all_clicked.classed("clicked",true);
+              all_clicked.classed("non-od",false);
+              all_clicked.classed("origin",true);
+              all_clicked.classed("dest",false);
+              all_clicked.attr("stroke",colors.origin); //origin = blue
+            }
 
-    //call DrawARoute function between Origin and Destination TAZs
-    DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon);
-
-    //read the CSV and get all the values needed for the user
-      d3.csv("mumbai_all_tazs.csv", function(data){
-        for(var i = 0; i < data.length; i++){
-          if(data[i].unique_id == o_d_pair){
-            console.log("calculating for TAZs: ");
-            console.log(data[i].unique_id);
-            //Opportunity cost of congestion = Additional hours in commute *
-            //((probability of working * wage cost) + (probability of leisure * (wage cost/2)))
-            //9 hour workday, 7 day workweek. what's weekly equation, then convert to hourly
-            // wage = 12600;
-
-            dist = data[i].distance;
-            oc = data[i].additional_hours_commuting*((0.5*(wage/9/7/4))+(0.5*(wage/9/7/4)));
-            econ = data[i].add_petrol_costs;
-            env = data[i].total_petrol_emissions;
-
-            d3.select("#TextDistance").text(dist + " km");
-            d3.select("#TextOC").text(Math.round(oc) +" INR");
-            d3.select("#TextFuelCost").text(Math.round(econ) + " INR");
-            d3.select("#TextEnvCost").text(Math.round(env) + " INR");
-
+            d3.select(this)
+            .classed("clicked",true)
+            .classed("non-od",false)
+            .classed("dest",true)
+            .attr("stroke",colors.dest);
+            }
           }
-        }
-      }) //end CSV
-    reset();
-  }// end onClick
-}); //end geoJSON
 
+      a = a + 1; //advance the counter
+      click = click + 1; //advance the click
+
+      //make a unique O-D pair variable to filter the CSV data
+      o_d_pair = o_id.concat("-",d_id)
+      console.log(o_d_pair);
+
+      //call DrawARoute function between Origin and Destination TAZs
+      DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon);
+
+      //read the CSV and get all the values needed for the user
+        d3.csv("mumbai_all_tazs.csv", function(data){
+          for(var i = 0; i < data.length; i++){
+            if(data[i].unique_id == o_d_pair){
+              console.log("calculating for TAZs: ");
+              console.log(data[i].unique_id);
+              //Opportunity cost of congestion = Additional hours in commute *
+              //((probability of working * wage cost) + (probability of leisure * (wage cost/2)))
+              //9 hour workday, 7 day workweek. what's weekly equation, then convert to hourly
+              // wage = 12600;
+
+              dist = data[i].distance;
+              oc = data[i].additional_hours_commuting*((0.5*(wage/9/7/4))+(0.5*(wage/9/7/4)));
+              econ = data[i].add_petrol_costs;
+              env = data[i].total_petrol_emissions;
+
+              d3.select("#TextDistance").text(dist + " km");
+              d3.select("#TextOC").text(Math.round(oc) +" INR");
+              d3.select("#TextFuelCost").text(Math.round(econ) + " INR");
+              d3.select("#TextEnvCost").text(Math.round(env) + " INR");
+
+            }
+          }
+        }) //end CSV
+      reset();
+    }// end onClick
+  }); //end geoJSON
+
+}//end function
+
+showJSON();
 
   //https://www.d3-graph-gallery.com/graph/bubblemap_leaflet_basic.html
   function update()
