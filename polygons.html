@@ -11,130 +11,114 @@
 <script src="https://d3js.org/d3.v3.min.js"></script>
 
 <style>
-@import url(https://d19vzq90twjlae.cloudfront.net/leaflet-0.6.1/leaflet.css);
-/* old url http://cdn.leafletjs.com/leaflet-0.6.1/leaflet.css); */
+  @import url(https://d19vzq90twjlae.cloudfront.net/leaflet-0.6.1/leaflet.css);
+  /* old url http://cdn.leafletjs.com/leaflet-0.6.1/leaflet.css); */
 
-/* #map{ THIS SEEMS CLEANER BUT NOT SURE WHY NOT WORKING; NOT WORTH WORKING OUT RIGHT NOW
-  float:left;
-  display:flex;
-  flex:75%;
-  background:#000000;
-  height:100vh;
-}
+  /* #map{ THIS SEEMS CLEANER BUT NOT SURE WHY NOT WORKING; NOT WORTH WORKING OUT RIGHT NOW
+    float:left;
+    display:flex;
+    flex:75%;
+    background:#000000;
+    height:100vh;
+  }
 
-.navigation{
-  float:right;
-  background:red;
-  width:25vh;
-  height:90vh;
-}
-
-.row{
-  display: flex;
-}
-
-.column{
-  flex: 50%;
-  padding: 10px;
-}
-
-h1{
-  color:#ea5153;
-  font-size:3rem;
-  font-family: Futura, Arial, "sans-serif";
-  padding: 5px;
-  text-align: center;
-}
-
-h2{
-  font-size:2rem;
-  font-family: Futura, Arial, "sans-serif";
-  padding: 5px;
-  color:#ea5153;
-  text-align: center;
-}
-
-h3{
-  font-size:1.8rem;
-  color:#FFFFFF;
-  font-family: Futura, Arial, "sans-serif";
-  margin: 0 auto;
-  padding: 10px;
-  text-align: center;
-}
-
-p{
-  color:#FFFFFF;
-  font-size:0.8rem;
-  font-family: Futura, Arial, "sans-serif";
-  padding: 10px;
-  width: 50%;
-  text-align: center;
-} */
-
-
-
-
-
-
-.navigation {
+  .navigation{
     float:right;
     background:red;
     width:25vh;
     height:90vh;
   }
+
+  .row{
+    display: flex;
+  }
+
+  .column{
+    flex: 50%;
+    padding: 10px;
+  }
+
+  h1{
+    color:#ea5153;
+    font-size:3rem;
+    font-family: Futura, Arial, "sans-serif";
+    padding: 5px;
+    text-align: center;
+  }
+
+  h2{
+    font-size:2rem;
+    font-family: Futura, Arial, "sans-serif";
+    padding: 5px;
+    color:#ea5153;
+    text-align: center;
+  }
+
+  h3{
+    font-size:1.8rem;
+    color:#FFFFFF;
+    font-family: Futura, Arial, "sans-serif";
+    margin: 0 auto;
+    padding: 10px;
+    text-align: center;
+  }
+
+  p{
+    color:#FFFFFF;
+    font-size:0.8rem;
+    font-family: Futura, Arial, "sans-serif";
+    padding: 10px;
+    width: 50%;
+    text-align: center;
+  } */
+
+
+  .navigation {
+      float:right;
+      background:red;
+      width:25vh;
+      height:90vh;
+    }
   #map{
-    float:left;
+    /* float:left; */
      display:flex;
      flex:100%;
      background:white;
      height:100vh;
     }
-    .container{
-      width:100%;
-      height:100%;
-    }
-    .row{
-      display:flex;
-    }
-    .column{
-      flex:50%;
-      text-align:center;
-    }
-h1{
-  color:#ea5153;
-  font-size:3rem;
-  font-family: Futura, Arial, "sans-serif";
-  padding: 10px;
-}
-h2{
-  font-size:2rem;
-  font-family: Futura, Arial, "sans-serif";
-  padding: 10px;
-  color:#ea5153;
-}
-h3{
-  font-size:1.8rem;
-  color:#FFFFFF;
-  font-family: Futura, Arial, "sans-serif";
-  margin: 0 auto;
-  padding: 10px;
-}
-
-/* Only thing added by Girish*/
-h4{
-  color:#FFFFFF;
-  font-size:1rem;
-  font-family: Futura, Arial, "sans-serif";
-  padding: 10px;
-  width: 50%;
-}
-/* p{ REMOVED BY GIRISH
-  color:#FFFFFF;
-  font-size:0.5rem;
-  font-family: Futura, Arial, "sans-serif";
-  padding: 10px;
-} */
+  .row{
+    display:flex;
+  }
+  .column{
+    flex:50%;
+    text-align:center;
+  }
+  h1{
+    color:#ea5153;
+    font-size:3rem;
+    font-family: Futura, Arial, "sans-serif";
+    padding: 10px;
+  }
+  h2{
+    font-size:2rem;
+    font-family: Futura, Arial, "sans-serif";
+    padding: 10px;
+    color:#ea5153;
+  }
+  h3{
+    font-size:1.8rem;
+    color:#FFFFFF;
+    font-family: Futura, Arial, "sans-serif";
+    margin: 0 auto;
+    padding: 10px;
+  }
+  h4{
+    color:#FFFFFF;
+    font-size:1rem;
+    font-family: Futura, Arial, "sans-serif";
+    padding: 10px;
+    width: 50%;
+  }
 
 </style>
 </head>
@@ -146,91 +130,68 @@ h4{
       <div id="map"></div>
   </div>
   <div class="column">
-      
+
       <h1>Mumbai:<br>Costs of Commuting</h1>
       <p>Ease of mobility is crucial for cities’ productivity. Better mobility allows better access to jobs and allows firms access to a larger pool of workers. As cities grow, congestion can rapidly erode productivity as well as impose heavy environmental costs. We used publicly-available Uber Movement data to measure congestion in the three years up to and including 2018.</p>
       <h3>Select your home and work.</h3>
-    
+
       <div class="row">
         <div class="column">
         <h2 id="TextDistance"></h2>
         <h3>Distance</h3>
       </div>
-    
+
       <div class="column">
         <h2 id="TextOC"></h2>
         <h3>Opportunity Cost</h3>
         </div>
       </div>
-      
+
       <div class="row">
         <div class="column">
         <h2 id="TextFuelCost"></h2>
         <h3>Fuel Cost</h3>
       </div>
-    
+
       <div class="column">
         <h2 id="TextEnvCost"></h2>
         <h3>CO₂ Cost</h3>
         </div>
       </div>
-          
+
   </div>
 </div> -->
 
-
-
-
-
-
 <div class="row">
-    <div id="map"></div>
+  <div id="map"></div>
+  <div id="navigation" style="text-align:center">
+    <h1>Mumbai:<br>Costs of Commuting</h1>
+    <CENTER><h4>Ease of mobility is crucial for cities’ productivity. Better mobility allows better access to jobs and allows firms access to a larger pool of workers. As cities grow, congestion can rapidly erode productivity as well as impose heavy environmental costs. We used publicly-available Uber Movement data to measure congestion in the three years up to and including 2018.</h4></CENTER>
+    <h3>Select your home and work.</h3>
 
-    <div id="navigation" style="text-align:center">
-        <h1>Mumbai:<br>Costs of Commuting</h1>
-        <CENTER><h4>Ease of mobility is crucial for cities’ productivity. Better mobility allows better access to jobs and allows firms access to a larger pool of workers. As cities grow, congestion can rapidly erode productivity as well as impose heavy environmental costs. We used publicly-available Uber Movement data to measure congestion in the three years up to and including 2018.</h4></CENTER>
-        <h3>Select your home and work.</h3>
-
-        <div class="row">
-          <div class="column">
-          <h2 id="TextDistance"></h2>
-          <h3>Distance</h3>
-          </div>
-
-          <div class="column">
-          <h2 id="TextOC"></h2>
-          <h3>Opportunity Cost</h3>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="column">
-          <h2 id="TextFuelCost"></h2>
-          <h3>Economic Cost</h3>
-          </div>
-
-          <div class="column">
-          <h2 id="TextEnvCost"></h2>
-          <h3>Environmental Cost</h3>
-          </div>
-        </div>
-        <br></br>
-        <br></br>
-
-        <!-- <br></br>
-        <br></br>
-        <div class="rangeslider">
-        <input type="range" min="12000" max="100000" value="50000"
-                class="myslider" id="sliderRange">
-        <p>Your Monthly Wage (INR): <span id="demo"></span></p>
-        </div>
-      </div> -->
-
-        </div>
+    <div class="row">
+      <div class="column">
+      <h2 id="TextDistance"></h2>
+      <h3>Distance</h3>
       </div>
+      <div class="column">
+      <h2 id="TextOC"></h2>
+      <h3>Opportunity Cost</h3>
+      </div>
+    </div>
 
-
-
+    <div class="row">
+      <div class="column">
+      <h2 id="TextFuelCost"></h2>
+      <h3>Economic Cost</h3>
+      </div>
+      <div class="column">
+      <h2 id="TextEnvCost"></h2>
+      <h3>Environmental Cost</h3>
+      </div>
+    </div>
+  </div>
+</div>
 
         <!-- <div class="row">
           <div class="b">
@@ -243,84 +204,69 @@ h4{
             </h4>
           </div>
         </div> -->
-        </div>
 
-      </div>
-
-
-
-
-
-
-
-
-<script>
+<script> //sets initial variables
 var hourly_wage = 50; // THIS NEEDS CHANGING IF WE DECIDE TO CHANGE THE HOURLY WAGE
-var wage = hourly_wage*7*9*4;
+var wage = hourly_wage*7*9*4; //Users should be able to input their monthly wage, which we divide to find hourly wage
 var dist;
 var oc;
 var econ;
 var env;
 var active;
+var zoomlevel = 12; //set initial zoom level of map
 
+//sets blank values initially
 d3.select("#TextDistance").text(" - km");
 d3.select("#TextOC").text("- INR");
 d3.select("#TextFuelCost").text("- INR");
 d3.select("#TextEnvCost").text("- INR");
 
-  var route = L.Routing.control({
-      createMarker: function() { return null; },
-      waypoints: []
-    });
+//makes routing variable
+var route = L.Routing.control({
+    createMarker: function() { return null; },
+    waypoints: []
+  });
 
-  function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
-  {
-    map.removeControl(route);
+//routing function to draw route
+function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
+{
+  map.removeControl(route);
 
-    var full_url = "https://15.206.6.188:9966/route/v1/driving/"+OriginLat+","+OriginLon+";"+DestLat+","+DestLon+"?overview=false&alternatives=true&steps=true"
-    console.log(full_url)
+  var full_url = "https://15.206.6.188:9966/route/v1/driving/"+OriginLat+","+OriginLon+";"+DestLat+","+DestLon+"?overview=false&alternatives=true&steps=true"
+  console.log(full_url)
 
-    //https://www.liedman.net/leaflet-routing-machine/tutorials/basic-usage/
-    route = L.Routing.control({
-      createMarker: function() { return null; },
-      waypoints: [
-        L.latLng(OriginLat, OriginLon),
-        L.latLng(DestLat, DestLon)
-      ],
+  //https://www.liedman.net/leaflet-routing-machine/tutorials/basic-usage/
+  route = L.Routing.control({
+    createMarker: function() { return null; },
+    waypoints: [
+      L.latLng(OriginLat, OriginLon),
+      L.latLng(DestLat, DestLon)
+    ],
 
-       router: new L.Routing.OSRMv1({
-          serviceUrl: 'http://15.206.6.188:5000/route/v1'
-        }),
-      fitSelectedRoutes: false,
-      lineOptions: { styles: [{color: 'black', opacity: 1, weight: 5}]},
-      routeWhileDragging: true,
-      geometryOnly: true,
-      show: false,
-      addWaypoints: false
-    }).addTo(map);
+     router: new L.Routing.OSRMv1({
+        serviceUrl: 'http://15.206.6.188:5000/route/v1'
+      }),
+    fitSelectedRoutes: false,
+    lineOptions: { styles: [{color: 'black', opacity: 1, weight: 5}]},
+    routeWhileDragging: true,
+    geometryOnly: true,
+    show: false,
+    addWaypoints: false
+  }).addTo(map);
+}
 
-  }
+//initialize map and set center point
+var map = L.map('map', { zoomControl: true }).setView([19.0760,72.8777], zoomlevel);
+//map.scrollWheelZoom.disable();
+//map.dragging.disable();
 
-  var zoomlevel = 12;
-  //https://stackoverflow.com/questions/16537326/leafletjs-how-to-remove-the-zoom-control
-  var map = L.map('map', { zoomControl: true }).setView([19.0760,72.8777], zoomlevel);
-  //map.scrollWheelZoom.disable();
-  //map.dragging.disable();
-
-  var tiles_osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: 'Map: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>', minZoom: zoomlevel, maxZoom: 18}).addTo(map);
-  // mapLinkCarto = '<a href="https://www.carto.com/basemaps">Map tiles by Carto, under CC BY 3.0. Data by OpenStreetMap, under ODbL. </a>';
-
-  // var tiles_carto = L.tileLayer(
-  //     'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',{
-  //     attribution: '&copy; ' + mapLinkCarto + ' Contributors',minZoom: zoomlevel,maxZoom: zoomlevel,}).addTo(map);
- // "Carto":tiles_carto
-  //var baseLayers = {"OpenStreetMap": tiles_osm};
-
-  L.control.layers(tiles_osm).addTo(map);
+//initialize tiles for map
+var tiles_osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: 'Map: &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>', minZoom: zoomlevel, maxZoom: 18}).addTo(map);
+L.control.layers(tiles_osm).addTo(map);
 
 </script>
 
-<script>
+<script> //initialize items for D3 selections
 var a = 0;
 var click = a + 1;
 var o_id;
@@ -330,33 +276,14 @@ var origin_lon;
 var dest_lat;
 var dest_lon;
 
+//make SVG and G elements
 //https://gist.github.com/d3noob/9211665
 var svg = d3.select(map.getPanes().overlayPane).append("svg"),
   g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
 g.attr('pointer-events','all');
 
-//display the CBD and residential points as circles
-var places = d3.csv("places.csv");
-
-console.log(places);
-
-Promise.all([places]).then(
-  function(values)
-  {
-    g.selectAll("circle")
-      .data(values[0])
-      .enter()
-      .append("circle")
-      .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
-      .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y })
-      .attr("r", "10px")
-      .style("fill", function(d){ if(d.Type=="residential") { return "#ea5153"; } else { return "blue"; } })
-      .attr("id", function(d, i){ return "circle" + i; });
-  }
-);
-
-//also display the centroid points which are within the Joined file
+//import and display TAZ tiles
 d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
 //code from http://bl.ocks.org/phil-pedruco/7381401
 
@@ -375,19 +302,19 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
     map.on("viewreset", reset);
     reset();
 
+  //assign features to mouseover, mouseout, onclick
   d3_features.on("mouseover", mouseOver)
   .on("mouseout", mouseOut)
   .on("click", onClick)
 
-  // Use Leaflet to implement a D3 geometric transformation.
+  //use Leaflet to implement a D3 geometric transformation
   function projectPoint(x, y) {
     var point = map.latLngToLayerPoint(new L.LatLng(y, x));
     this.stream.point(point.x, point.y);
   }
 
-  // fit the SVG element to leaflet's map layer
+  //fit the SVG element to leaflet's map layer
   function reset() {
-
     bounds = path.bounds(geoShape);
     var topLeft = bounds[0],
       bottomRight = bounds[1];
@@ -395,39 +322,34 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
       .attr("height", bottomRight[1] - topLeft[1])
       .style("left", topLeft[0] + "px")
       .style("top", topLeft[1] + "px");
-
     g .attr("transform", "translate(" + -topLeft[0] + ","
                                      + -topLeft[1] + ")");
-
     // initialize the path data
     d3_features.attr("d",path)
     .style("fill-opacity",0)
     .attr("fill","#ea5153");
-
   }
 
+  //mouseover function
   function mouseOver(d) {
       d3.select(this)
       .transition()
       .style("stroke","#ea5153")
       .style("fill-opacity",1);
-      // .style("fill-opacity",0)
-      // .style("stroke-opacity",1)
-      // .style("stroke-width",5)
-      // .style("stroke", "#ea5153");
-        }
+    }
 
+  //mouseout function
   function mouseOut(d){
       d3.select(this)
       .transition()
       .style("fill-opacity",0)
-      // .style("fill","#F0F0F0")
       .style("stroke-opacity",0);
-      // .style('stroke','lightgray');
-  }
+    }
 
-var highlightedRect = d3.select(null);
+  //keep track of the highlighted polygon and reassign colours based on new clicks
+  var highlightedRect = d3.select(null);
 
+  //onclick function
   function onClick(d){
     d3.select(this)
     .style("fill-opacity",0.5)
@@ -439,26 +361,22 @@ var highlightedRect = d3.select(null);
     console.log(click);
     console.log("a");
     console.log(a);
-    if(click % 3 == 0){
+    if(click % 3 == 0){ //reset all colours of TAZs
       console.log("i'm divisible by 3");
-      // d3.selectAll("g.path")
-        // .style("stroke-opacity", 0.5)
-        // .style("fill-opacity",0.1)
-        // .attr("fill","black")
-        // .attr('stroke','lightgray')
+      //reset colours
     }
 
-    if(a % 2 == 0) {
+    if(a % 2 == 0) { //if first click on the map
       origin_lat = d.properties.mumbai_centroids_Lat;
       origin_lon = d.properties.mumbai_centroids_Lon;
 
-      if(a == 0){ //click 1
+      if(a == 0){ //if first click on the map
         o_id = d.properties.MOVEMENT_ID; //get the o_id
         // highlightedRect = d3.select(this)
         // .style("fill-opacity",1)
         // .style("fill","white");
       }
-      else if(a != 0){ //a = 2, 4, 6, 8, 10
+      else if(a != 0){ //if odd clicks on map (not 1st click)
         o_id = d_id;
         d_id = d.properties.MOVEMENT_ID;
         // highlightedRect = d3.select(this)
@@ -467,7 +385,7 @@ var highlightedRect = d3.select(null);
       }
     }
 
-      else if(a % 2 != 0){ //second click
+      else if(a % 2 != 0){ //if second click on the map
         dest_lat = d.properties.mumbai_centroids_Lat;
         dest_lon = d.properties.mumbai_centroids_Lon;
 
@@ -478,7 +396,7 @@ var highlightedRect = d3.select(null);
           // .style("fill","white");
 
         }
-        else{ //fourth click
+        else{ //if even click on map
           o_id = d_id;
           d_id = d.properties.MOVEMENT_ID;
           // highlightedRect = d3.select(this)
@@ -494,7 +412,9 @@ var highlightedRect = d3.select(null);
     o_d_pair = o_id.concat("-",d_id)
     console.log(o_d_pair);
 
+    //call DrawARoute function between Origin and Destination TAZs
     DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon);
+
     //read the CSV and get all the values needed for the user
       d3.csv("mumbai_all_tazs.csv", function(data){
         for(var i = 0; i < data.length; i++){
@@ -505,7 +425,6 @@ var highlightedRect = d3.select(null);
             //((probability of working * wage cost) + (probability of leisure * (wage cost/2)))
             //9 hour workday, 7 day workweek. what's weekly equation, then convert to hourly
             // wage = 12600;
-            // var slider_year = document.getElementById("demo").value;
 
             dist = data[i].distance;
             oc = data[i].additional_hours_commuting*((0.5*(wage/9/7/4))+(0.5*(wage/9/7/4)));
@@ -517,36 +436,22 @@ var highlightedRect = d3.select(null);
             d3.select("#TextFuelCost").text(Math.round(econ) + " INR");
             d3.select("#TextEnvCost").text(Math.round(env) + " INR");
 
-            //make 2 points
-            d3.select("#point_src");
-            d3.select("#point_dest");
           }
         }
-      })
-
-    console.log("done");
+      }) //end CSV
     reset();
-  }
-
-    });
+  }// end onClick
+}); //end geoJSON
 
 
   //https://www.d3-graph-gallery.com/graph/bubblemap_leaflet_basic.html
   function update()
   {
-  //     d3.selectAll("circle")
-  //       .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
-  //       .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y });
-  //
-  //     d3.selectAll("text")
-  //       .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
-  //       .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 5; })
-
-  d3.selectAll("polygon")
-  .attr("cx", function(d){ return map.latLngToLayerPoint([d.properties.mumbai_centroids_Lat, d.properties.mumbai_centroids_Lon]).x })
-  .attr("cy", function(d){ return map.latLngToLayerPoint([d.properties.mumbai_centroids_Lat, d.properties.mumbai_centroids_Lon]).y });
-
-}
+    d3.selectAll("polygon")
+    .attr("cx", function(d){ return map.latLngToLayerPoint([d.properties.mumbai_centroids_Lat, d.properties.mumbai_centroids_Lon]).x })
+    .attr("cy", function(d){ return map.latLngToLayerPoint([d.properties.mumbai_centroids_Lat, d.properties.mumbai_centroids_Lon]).y });
+  }
+  
   map.on("moveend", update)
 
 </script>
