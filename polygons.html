@@ -226,16 +226,16 @@ d3.select("#TextEnvCost").text("- INR");
 //makes routing variable
 var route = L.Routing.control({
     createMarker: function() { return null; },
-    waypoints: []
+    waypoints: [],
+    router: new L.Routing.OSRMv1({
+       serviceUrl: 'http://15.206.6.188:5000/route/v1'
+     })
   });
 
 //routing function to draw route
 function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
 {
   map.removeControl(route);
-
-  var full_url = "https://15.206.6.188:9966/route/v1/driving/"+OriginLat+","+OriginLon+";"+DestLat+","+DestLon+"?overview=false&alternatives=true&steps=true"
-  console.log(full_url)
 
   //https://www.liedman.net/leaflet-routing-machine/tutorials/basic-usage/
   route = L.Routing.control({
@@ -453,7 +453,7 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
     .attr("cx", function(d){ return map.latLngToLayerPoint([d.properties.mumbai_centroids_Lat, d.properties.mumbai_centroids_Lon]).x })
     .attr("cy", function(d){ return map.latLngToLayerPoint([d.properties.mumbai_centroids_Lat, d.properties.mumbai_centroids_Lon]).y });
   }
-  
+
   map.on("moveend", update)
 
 </script>
