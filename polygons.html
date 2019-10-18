@@ -179,7 +179,8 @@
     <div id="navigation" style="text-align:center">
       <h1>Mumbai:<br>Costs of Commuting</h1>
       <CENTER><h4>Ease of mobility is crucial for cities’ productivity. Better mobility allows better access to jobs and allows firms access to a larger pool of workers. As cities grow, congestion can rapidly erode productivity as well as impose heavy environmental costs. We used publicly-available Uber Movement data to measure congestion in the three years up to and including 2018. (We assume here a 50 INR/hour wage and that 70 INR = 1 USD.)</h4></CENTER>
-      <h3>Select your home and work.</h3>
+      <h3>Select your <span style="color:orange">home</span> and <span style="color:red">work.</span></h3>
+      <h3>Tap anywhere on the map a third time to clear it.</h3>
 
       <div class="row">
         <div class="column">
@@ -203,9 +204,9 @@
         </div>
       </div>
 
-      <div class="row">
+      <!-- <div class="row">
       <button><a type=button class="text_input form-control" value="Segment_Value" onClick="clearMap();" class="segment_button">Clear Map</a>
-      </div>
+      </div> -->
 
     </div>
   </div>
@@ -233,7 +234,7 @@ var env;
 var active;
 var zoomlevel = 12; //set initial zoom level of map
 
-var colors = { clickable: 'black', origin: 'blue', dest: "red", clickhover: "lightgreen", none:"white" };
+var colors = { clickable: 'black', origin: 'orange', dest: "red", clickhover: "lightgreen", none:"white" };
 
 function clearMap(){
   d3.selectAll("path").remove();
@@ -398,6 +399,10 @@ g.attr('pointer-events','all');
       console.log(click);
       console.log("a");
       console.log(a);
+      if(click == 3){
+        clearMap();
+      }
+
       if(click % 3 == 0){
          console.log("i'm divisible by 3");
        }
