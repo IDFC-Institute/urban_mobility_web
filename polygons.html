@@ -73,10 +73,10 @@
   } */
 
 
-  .navigation {
-      float:right;
-      background:red;
-      width:25vh;
+  #navigation {
+      /* float:right; */
+      /* background:red; */
+      width:100vh;
       height:90vh;
     }
   #map{
@@ -85,6 +85,7 @@
      flex:100%;
      background:white;
      height:100vh;
+     width:50vh;
     }
   .row{
     display:flex;
@@ -95,18 +96,18 @@
   }
   h1{
     color:#ea5153;
-    font-size:3rem;
+    font-size:2rem;
     font-family: Futura, Arial, "sans-serif";
     padding: 10px;
   }
   h2{
-    font-size:2rem;
+    font-size:1rem;
     font-family: Futura, Arial, "sans-serif";
     padding: 10px;
     color:#ea5153;
   }
   h3{
-    font-size:1.8rem;
+    font-size:0.7rem;
     color:#FFFFFF;
     font-family: Futura, Arial, "sans-serif";
     margin: 0 auto;
@@ -114,15 +115,15 @@
   }
   h4{
     color:#FFFFFF;
-    font-size:1rem;
+    font-size:0.7rem;
     font-family: Futura, Arial, "sans-serif";
     padding: 10px;
     width: 50%;
   }
-  rect {
+  /* rect {
   fill: none;
   pointer-events: all;
-  }
+  } */
   .stroke {
     fill: none;
     stroke: #000;
@@ -179,7 +180,7 @@
     <div id="navigation" style="text-align:center">
       <h1>Mumbai:<br>Costs of Commuting</h1>
       <CENTER><h4>Ease of mobility is crucial for cities’ productivity. Better mobility allows better access to jobs and allows firms access to a larger pool of workers. As cities grow, congestion can rapidly erode productivity as well as impose heavy environmental costs. We used publicly-available Uber Movement data to measure congestion in the three years up to and including 2018. (We assume here a 50 INR/hour wage and that 70 INR = 1 USD.)</h4></CENTER>
-      <h3>Select your <span style="color:orange">home</span> and <span style="color:red">work.</span></h3>
+      <h3>Select your <span style="color:green">home</span> and <span style="color:red">work.</span></h3>
       <h3>Tap anywhere on the map a third time to clear it.</h3>
 
       <div class="row">
@@ -232,9 +233,9 @@ var oc;
 var econ;
 var env;
 var active;
-var zoomlevel = 12; //set initial zoom level of map
+var zoomlevel = 11; //set initial zoom level of map
 
-var colors = { clickable: 'black', origin: 'orange', dest: "red", clickhover: "lightgreen", none:"white" };
+var colors = { clickable: 'black', origin: 'green', dest: "red", clickhover: "lightgreen", none:"white" };
 
 function clearMap(){
   d3.selectAll("path").remove();
@@ -315,7 +316,6 @@ var svg = d3.select(map.getPanes().overlayPane).append("svg"),
   .attr("class", "leaflet-zoom-hide");
 
 g.attr('pointer-events','all');
-
 
   //import and display TAZ tiles
   d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
@@ -527,6 +527,7 @@ showJSON();
   //https://www.d3-graph-gallery.com/graph/bubblemap_leaflet_basic.html
   function update()
   {
+    clearMap();
     d3.selectAll("polygon")
     .attr("cx", function(d){ return map.latLngToLayerPoint([d.properties.mumbai_centroids_Lat, d.properties.mumbai_centroids_Lon]).x })
     .attr("cy", function(d){ return map.latLngToLayerPoint([d.properties.mumbai_centroids_Lat, d.properties.mumbai_centroids_Lon]).y });
