@@ -191,8 +191,7 @@ h3{
           <h3 style="color:#A9A9A9";>Environmental Cost</h3>
           </div>
         </div>
-
-</div>
+    </div>
 
 
 <script> //initialize global values
@@ -206,9 +205,8 @@ d3.select("#TextDistance").text(" - km");
 d3.select("#TextOC").text("- INR");
 d3.select("#TextFuelCost").text("- INR");
 d3.select("#TextEnvCost").text("- INR");
-</script>
 
-<script> //dropdown function
+//dropdown function
 function dynamicdropdown(listindex)
 {
     switch (listindex)
@@ -307,7 +305,6 @@ function submitSegment(){
       console.log("i am within json comparing");
       console.log(origin_dest);
 
-
       //match with the two elements clicked
       d3_subset = geoShape.features.filter(function(d){return d.properties.all_segments_formatted_csv_commute_id == origin_dest});
 
@@ -317,25 +314,21 @@ function submitSegment(){
             .enter().append("path");
 
           map.on("viewreset", reset);
-
           reset();
 
           // fit the SVG element to leaflet's map layer
           function reset() {
-
             bounds = path.bounds(geoShape);
-
             var topLeft = bounds[0],
               bottomRight = bounds[1];
-
             svg .attr("width", bottomRight[0] - topLeft[0])
               .attr("height", bottomRight[1] - topLeft[1])
               .style("left", topLeft[0] + "px")
               .style("top", topLeft[1] + "px");
-
             g .attr("transform", "translate(" + -topLeft[0] + ","
                                               + -topLeft[1] + ")");
 
+            //set color ramp
             var ramp = d3.scale.linear().domain([0,20,40,60,80]).range(["red","orange","yellow","green"]);
 
             //split up into segments by colour
@@ -345,60 +338,16 @@ function submitSegment(){
                 .attr('stroke-width',3)
                 .attr("stroke", function(d) { return ramp(d.properties.all_segments_formatted_csv_avg_speed_kmh) });
 
-          }
+          }//end reset function
 
           // Use Leaflet to implement a D3 geometric transformation.
           function projectPoint(x, y) {
             var point = map.latLngToLayerPoint(new L.LatLng(y, x));
             this.stream.point(point.x, point.y);
-          }
+          }//end projectPoint function
         })//end json
 }
 
-var route = L.Routing.control({
-    createMarker: function() { return null; },
-    waypoints: [],
-    router: new L.Routing.OSRMv1({
-       serviceUrl: 'http://15.206.6.188:5000/route/v1'
-     })
-  });
-
-function DrawSpeeds(o_id, d_id)
-{
-  //draw the geoJSON route on the map
-console.log("i'm going to draw the speeds between o_id and d_id");
-//concatenate the id's
-o_d_pair = o_id.concat("-",d_id);
-console.log(o_d_pair);
-} //end DrawSpeeds
-
-
-function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
-{
-  map.removeControl(route);
-
-  var full_url = "https://15.206.6.188:9966/route/v1/driving/"+OriginLat+","+OriginLon+";"+DestLat+","+DestLon+"?overview=false&alternatives=true&steps=true"
-  console.log(full_url)
-
-  //https://www.liedman.net/leaflet-routing-machine/tutorials/basic-usage/
-  route = L.Routing.control({
-    createMarker: function() { return null; },
-    waypoints: [
-      L.latLng(OriginLat, OriginLon),
-      L.latLng(DestLat, DestLon)
-    ],
-
-     router: new L.Routing.OSRMv1({
-        serviceUrl: 'https://15.206.6.188:5000/route/v1'
-      }),
-
-    lineOptions: { styles: [{color: 'navy', opacity: 1, weight: 5}]},
-    routeWhileDragging: false,
-    geometryOnly: true,
-    show: false,
-    addWaypoints: false
-  }).addTo(map);
-}
 
 var map = L.map('map').setView([19.0879, 72.84136], 11);
 
