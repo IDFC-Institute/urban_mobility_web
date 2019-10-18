@@ -162,14 +162,14 @@ h3{
         <br></br>
         <br></br>
 
-        <br></br>
+        <!-- <br></br>
         <br></br>
         <div class="rangeslider">
-        <input type="range" min="1" max="100" value="50"
+        <input type="range" min="12000" max="100000" value="50000"
                 class="myslider" id="sliderRange">
         <p>Your Monthly Wage (INR): <span id="demo"></span></p>
         </div>
-      </div>
+      </div> -->
 
         </div>
       </div>
@@ -197,20 +197,13 @@ var output = document.getElementById("demo");
 output.innerHTML = rangeslider.value;
 
 rangeslider.oninput = function() {
-output.innerHTML = this.value;
+  output.innerHTML = this.value;
 }
-
-document.getElementById("demo").addEventListener("click", updateWage);
-function updateWage() {
-  wage = output.innerHTML;
-  console.log(wage);
-}
-
 </script>
 
 
 <script>
-var wage;
+var wage = 12600;
 var dist;
 var oc;
 var econ;
@@ -270,9 +263,9 @@ d3.select("#TextEnvCost").text("- INR");
   //     'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',{
   //     attribution: '&copy; ' + mapLinkCarto + ' Contributors',minZoom: zoomlevel,maxZoom: zoomlevel,}).addTo(map);
  // "Carto":tiles_carto
-  var baseLayers = {"OpenStreetMap": tiles_osm};
+  //var baseLayers = {"OpenStreetMap": tiles_osm};
 
-  L.control.layers(baseLayers).addTo(map);
+  L.control.layers(tiles_osm).addTo(map);
 
 </script>
 
@@ -461,6 +454,8 @@ var highlightedRect = d3.select(null);
             //((probability of working * wage cost) + (probability of leisure * (wage cost/2)))
             //9 hour workday, 7 day workweek. what's weekly equation, then convert to hourly
             // wage = 12600;
+            // var slider_year = document.getElementById("demo").value;
+
             dist = data[i].distance;
             oc = data[i].additional_hours_commuting*((0.5*(wage/9/7/4))+(0.5*(wage/9/7/4)));
             econ = data[i].total_economic_costs;
