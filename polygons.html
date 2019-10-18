@@ -65,14 +65,6 @@ h3{
   padding: 10px;
 }
 
-h4{
-  font-size:1.5rem;
-  color:#FFFFFF;
-  font-family: Futura, Arial, "sans-serif";
-  margin: 0 auto;
-  padding: 10px;
-}
-
 p{
   color:#FFFFFF;
   font-size:0.5rem;
@@ -176,25 +168,7 @@ p{
         </div>
         <br></br>
         <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <div class="row">
-          <div class="b">
-            <h3 style="text-align:center">Definitions</h3>
-            <h4 style="padding-left:1rem">Distance (km): Total distance.<br>
-            Opportunity Cost (INR): Cost of spending additional time commuting, which could have been used for work or leisure. Assumes equal probability of work and leisure and takes as inputs additional commuting hours and an assumed monthly wage of 2.5 lakh INR.<br>
-            Total Economic Cost (INR): Opportunity cost plus additional fuel cost for the selected route.<br>
-            Total Environmental Cost (INR): Total cost of additional CO<sub>2</sub> emissions for the selected route.<br>
-            Note: Generalised exchange rate of USD 1 to INR 70.
-          </h4>
-          </div>
-        </div>
+
         <!-- <br></br>
         <br></br>
         <div class="rangeslider">
@@ -207,6 +181,20 @@ p{
         </div>
       </div>
 
+
+
+
+        <!-- <div class="row">
+          <div class="b">
+            <h3 style="text-align:center">Definitions</h3>
+            <h4 style="padding-left:1rem">Distance: Total distance (km).<br>
+            Opportunity Cost: Cost of spending additional time commuting, which could have been used for work or leisure (INR). <br>Assumes equal probability of work and leisure and takes as inputs additional commuting hours and a user-supplied monthly wage using this page's slider.<br>
+            Total Economic Cost: Opportunity cost plus additional fuel cost for the selected route (INR).<br>
+            Total Environmental Cost: Total cost of additional CO<sub>2</sub> emissions for the selected route (INR).<br>
+            Note: Generalised exchange rate of USD 1 to INR 70.
+            </h4>
+          </div>
+        </div> -->
         </div>
 
       </div>
@@ -222,7 +210,7 @@ rangeslider.oninput = function() {
 
 
 <script>
-var wage = 250000;
+var wage = 12600;
 var dist;
 var oc;
 var econ;

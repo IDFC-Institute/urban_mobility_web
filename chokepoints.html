@@ -305,6 +305,7 @@ function submitSegment(){
                 path = d3.geo.path().projection(transform);
 
       //subset the entire JSON based on the origin and destination points
+      console.log("i am within json comparing");
       console.log(origin_dest);
 
 
@@ -497,6 +498,7 @@ L.tileLayer(
     var places = d3.csv("places.csv");
     console.log(places);
 
+    console.log(places);
     var a = 1;
     var o_id;
     var d_id;
