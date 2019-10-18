@@ -119,7 +119,19 @@
     padding: 10px;
     width: 50%;
   }
+  rect {
+  fill: none;
+  pointer-events: all;
+  }
+  .stroke {
+    fill: none;
+    stroke: #000;
+    stroke-width: 1px;
+  }
 
+  .fill {
+    fill: #f2f2f2;
+  }
 </style>
 </head>
 
@@ -217,6 +229,8 @@ var env;
 var active;
 var zoomlevel = 12; //set initial zoom level of map
 
+var colors = { clickable: 'black', origin: 'blue', dest: "red", clickhover: "lightgreen", none:"white" };
+
 //sets blank values initially
 d3.select("#TextDistance").text(" - km");
 d3.select("#TextOC").text("- INR");
@@ -281,7 +295,13 @@ var dest_lon;
 //make SVG and G elements
 //https://gist.github.com/d3noob/9211665
 var svg = d3.select(map.getPanes().overlayPane).append("svg"),
-  g = svg.append("g").attr("class", "leaflet-zoom-hide");
+  g = svg.append("g")
+  .attr("class", "leaflet-zoom-hide");
+  // .on("click",resetRect);
+
+function resetRect(){
+  g.selectAll(".active").classed("active", active = false);
+}
 
 g.attr('pointer-events','all');
 
@@ -299,7 +319,14 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
   d3_features = g.selectAll("path")
     .data(geoShape.features)
     .enter()
-    .append("path");
+    .append("path")
+    .classed("clicked",false)
+    .classed("origin",false)
+    .classed("dest",false)
+    .classed("non-od",true)
+    .style("stroke-opacity",1)
+    .style("stroke-width",3)
+    .style("fill-opacity",0);
 
     map.on("viewreset", reset);
     reset();
@@ -327,85 +354,139 @@ d3.json("joined_centroidshexclusters.geojson", function(geoShape) {
     g .attr("transform", "translate(" + -topLeft[0] + ","
                                      + -topLeft[1] + ")");
     // initialize the path data
-    d3_features.attr("d",path)
-    .style("fill-opacity",0)
-    .attr("fill","#ea5153");
+    d3_features.attr("d",path);
   }
+
 
   //mouseover function
   function mouseOver(d) {
-      d3.select(this)
-      .transition()
-      .style("stroke","#ea5153")
-      .style("fill-opacity",1);
+    c = d3.select(this);
+    // if(c.classed("clicked")){
+    //   c.attr("stroke",colors.hover);
+    //   c.attr("fill",colors.clicked);
+    // }
+    // else{
+    //   c.attr("stroke",colors.hover);
+    // }
     }
 
   //mouseout function
   function mouseOut(d){
-      d3.select(this)
-      .transition()
-      .style("fill-opacity",0)
-      .style("stroke-opacity",0);
+    // c = d3.select(this);
+    // if(c.classed("clicked")){
+    //   c.attr("stroke-opacity",1)
+    //   c.attr("fill",colors.clicked);
+    // }
+    // c.attr("stroke-opacity",0);
     }
-
-  //keep track of the highlighted polygon and reassign colours based on new clicks
-  var highlightedRect = d3.select(null);
 
   //onclick function
   function onClick(d){
-    d3.select(this)
-    .style("fill-opacity",0.5)
-    .style("fill","#ea5153")
-    .style("stroke-width",5)
-    .style("stroke","black");
+    // d3.selectAll(".clicked") //make everything before unclicked
+    // .classed("clicked", true)
+    // .attr("stroke", colors.clickable); //make the non-active click gray
+    //
+
+    // d3.select(this)
+    // .classed("clicked",true)
+    // .attr("stroke",colors.clicked); //most recent one is RED, the destination
+
+    //second-most recent one is BLUE, the origin
+
+var all_clicked;
+var all_clicked2;
 
     console.log("click number");
     console.log(click);
     console.log("a");
     console.log(a);
-    if(click % 3 == 0){ //reset all colours of TAZs
-      console.log("i'm divisible by 3");
-      //reset colours
-    }
+    if(click % 3 == 0){
+       console.log("i'm divisible by 3");
+     }
 
     if(a % 2 == 0) { //if first click on the map
       origin_lat = d.properties.mumbai_centroids_Lat;
       origin_lon = d.properties.mumbai_centroids_Lon;
 
-      if(a == 0){ //if first click on the map
-        o_id = d.properties.MOVEMENT_ID; //get the o_id
-        // highlightedRect = d3.select(this)
-        // .style("fill-opacity",1)
-        // .style("fill","white");
-      }
-      else if(a != 0){ //if odd clicks on map (not 1st click)
-        o_id = d_id;
-        d_id = d.properties.MOVEMENT_ID;
-        // highlightedRect = d3.select(this)
-        // .style("fill-opacity",1)
-        // .style("fill","red");
-      }
-    }
+            if(a == 0){ //if click 1
+              o_id = d.properties.MOVEMENT_ID; //get the o_id
+              //origin = true
+              d3.select(this)
+              .classed("clicked",true)
+              .classed("origin",true)
+              .classed("non-od",false)
+              .attr("stroke",colors.dest);
+            }
 
-      else if(a % 2 != 0){ //if second click on the map
+            else if(a != 0){ //if click 3, 5, 7
+              o_id = d_id;
+              d_id = d.properties.MOVEMENT_ID;
+
+              //on third click, hide all non-active strokes
+
+              all_clicked = d3.selectAll(".clicked"); //select everything
+              all_clicked.classed("non-od",true);
+              all_clicked.classed("origin",false); //everything origin = false
+
+              d3.select(this)
+              .classed("clicked",true)
+              .classed("dest",true)
+              .classed("non-od",false)
+              .attr("stroke",colors.dest);
+
+                  //for everything not active, make opacity 0
+                    //if clicked AND destination, attr origin
+                        // if(all_clicked.classed("dest")){ //for everything with dest=true --> make this new origin
+                        //   all_clicked.classed("origin",true);
+                        //   all_clicked.classed("non-od",false);
+                        //   all_clicked.attr("stroke",colors.origin);
+                        //   all_clicked.classed("dest",false);
+                        //
+                        // }
+              }
+      }
+
+      else if(a % 2 != 0){ //if click 2
         dest_lat = d.properties.mumbai_centroids_Lat;
         dest_lon = d.properties.mumbai_centroids_Lon;
 
         if(d_id == null){
           d_id = d.properties.MOVEMENT_ID;
-          // highlightedRect = d3.select(this)
-          // .style("fill-opacity",1)
-          // .style("fill","white");
-
+          d3.select(this)
+          .classed("clicked",true)
+          .classed("non-od",false)
+          .classed("dest",true)
+          .attr("stroke",colors.dest);
         }
-        else{ //if even click on map
+        else{ //if click 4, 6, 8
           o_id = d_id;
           d_id = d.properties.MOVEMENT_ID;
-          // highlightedRect = d3.select(this)
-          // .style("fill-opacity",1)
-          // .style("fill","blue");
+          console.log("i'm even #4");
+
+          d3.select(this)
+          .classed("clicked",true)
+          .classed("non-od",false)
+          .classed("dest",true)
+          .attr("stroke",colors.dest);
+          // all_clicked2 = d3.selectAll(".clicked"); //select everything
+          // all_clicked2.classed("origin",false); //everything origin = false
+          // //for everything not active, make opacity 0
+          //   if(all_clicked2.classed("active")){
+          //   //if clicked AND destination, attr origin
+          //     if(all_clicked2.classed("dest")){ //for everything with dest=true --> make this new origin
+          //       console.log("i'm reading dest value and resetting it to origin");
+          //       all_clicked2.classed("origin",true);
+          //       all_clicked2.attr("stroke",colors.origin);
+          //       all_clicked2.classed("dest",false);
+                //
+                // d3.select(this)
+                // .classed("clicked",true)
+                // .classed("dest",true)
+                // .attr("stroke",colors.dest);
+              // }
+            // }
+          }
         }
-      }
 
     a = a + 1; //advance the counter
     click = click + 1; //advance the click
