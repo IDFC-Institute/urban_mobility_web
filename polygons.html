@@ -57,9 +57,10 @@
     color:#FFFFFF;
     font-size:0.7rem;
     font-family: Futura, Arial, "sans-serif";
-    padding: 10px;
+    padding: 0px;
     width: 80%;
   }
+
 
   .stroke {
     fill: none;
@@ -76,6 +77,36 @@
   font-family: Futura, Arial, "sans-serif";
   }
 
+  .slider {
+  -webkit-appearance: none;
+  width: 50%;
+  height: 15px;
+  border-radius: 5px;
+  background: #ffffff;
+  outline: none;
+  opacity: 1;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #ea5153;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ea5153;
+  cursor: pointer;
+}
+
 </style>
 </head>
 
@@ -85,15 +116,18 @@
   <div id="map"></div>
     <div id="navigation" style="text-align:center">
       <h1>Mumbai:<br>Costs of Commuting</h1>
-      <CENTER><h4>Ease of mobility is crucial for cities’ productivity. Better mobility allows better access to jobs and allows firms access to a larger pool of workers. As cities grow, congestion can rapidly erode productivity as well as impose heavy environmental costs. We used publicly-available Uber Movement data to measure congestion in the three years up to and including 2018. (We assume here a 50 INR/hour wage and that 70 INR = 1 USD.)</h4>
+      <CENTER><h4>Ease of mobility is crucial for cities’ productivity. Better mobility allows better access to jobs and allows firms access to a larger pool of workers. As cities grow, congestion can rapidly erode productivity as well as impose heavy environmental costs. <br></br>We used publicly-available Uber Movement data to measure congestion in the three years up to and including 2018. (We assume here a 50 INR/hour wage and that 70 INR = 1 USD.)</h4>
         <h4>Step 1: Input your monthly wage using the slider.</h4><CENTER>
         <div>
           <p>
               <!-- <label><h3>Your Monthly Wage:</h3></label> -->
-              <input type="range" id="toPrice" value="12600" min="12600" max="500000"
+              <div class="slidecontainer">
+                <input type="range" id="toPrice" class = "slider" value="12600" min="12600" max="500000"
                   oninput="document.getElementById('tPrice').innerHTML = this.value" />
+              </div>
               <br></br>
               <label id="tPrice"></label>
+              <h4> INR</hr>
           </p>
           <p><input type="submit" value="Save Wage" onclick="ti()" /></p>
         </div>
