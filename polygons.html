@@ -14,73 +14,12 @@
   @import url(https://d19vzq90twjlae.cloudfront.net/leaflet-0.6.1/leaflet.css);
   /* old url http://cdn.leafletjs.com/leaflet-0.6.1/leaflet.css); */
 
-  /* #map{ THIS SEEMS CLEANER BUT NOT SURE WHY NOT WORKING; NOT WORTH WORKING OUT RIGHT NOW
-    float:left;
-    display:flex;
-    flex:75%;
-    background:#000000;
-    height:100vh;
-  }
-
-  .navigation{
-    float:right;
-    background:red;
-    width:25vh;
-    height:90vh;
-  }
-
-  .row{
-    display: flex;
-  }
-
-  .column{
-    flex: 50%;
-    padding: 10px;
-  }
-
-  h1{
-    color:#ea5153;
-    font-size:3rem;
-    font-family: Futura, Arial, "sans-serif";
-    padding: 5px;
-    text-align: center;
-  }
-
-  h2{
-    font-size:2rem;
-    font-family: Futura, Arial, "sans-serif";
-    padding: 5px;
-    color:#ea5153;
-    text-align: center;
-  }
-
-  h3{
-    font-size:1.8rem;
-    color:#FFFFFF;
-    font-family: Futura, Arial, "sans-serif";
-    margin: 0 auto;
-    padding: 10px;
-    text-align: center;
-  }
-
-  p{
-    color:#FFFFFF;
-    font-size:0.8rem;
-    font-family: Futura, Arial, "sans-serif";
-    padding: 10px;
-    width: 50%;
-    text-align: center;
-  } */
-
-
   #navigation {
-      /* float:right; */
-      /* background:red; */
+
       width:100vh;
       height:90vh;
     }
   #map{
-    /* float:left; */
      display:flex;
      flex:100%;
      background:white;
@@ -120,10 +59,7 @@
     padding: 10px;
     width: 80%;
   }
-  /* rect {
-  fill: none;
-  pointer-events: all;
-  } */
+
   .stroke {
     fill: none;
     stroke: #000;
@@ -137,43 +73,6 @@
 </head>
 
 <body style="background-color:#000000">
-
-<!-- <div class="row"> THIS SEEMS CLEANER BUT NOT SURE WHY NOT WORKING; NOT WORTH WORKING OUT RIGHT NOW
-  <div class="column">
-      <div id="map"></div>
-  </div>
-  <div class="column">
-
-      <h1>Mumbai:<br>Costs of Commuting</h1>
-      <p>Ease of mobility is crucial for cities’ productivity. Better mobility allows better access to jobs and allows firms access to a larger pool of workers. As cities grow, congestion can rapidly erode productivity as well as impose heavy environmental costs. We used publicly-available Uber Movement data to measure congestion in the three years up to and including 2018.</p>
-      <h3>Select your home and work.</h3>
-
-      <div class="row">
-        <div class="column">
-        <h2 id="TextDistance"></h2>
-        <h3>Distance</h3>
-      </div>
-
-      <div class="column">
-        <h2 id="TextOC"></h2>
-        <h3>Opportunity Cost</h3>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="column">
-        <h2 id="TextFuelCost"></h2>
-        <h3>Fuel Cost</h3>
-      </div>
-
-      <div class="column">
-        <h2 id="TextEnvCost"></h2>
-        <h3>CO₂ Cost</h3>
-        </div>
-      </div>
-
-  </div>
-</div> -->
 
 <div class="row">
   <div id="map"></div>
@@ -210,18 +109,6 @@
     </div>
   </div>
 </div>
-
-        <!-- <div class="row">
-          <div class="b">
-            <h3 style="text-align:center">Definitions</h3>
-            <h4 style="padding-left:1rem">Distance: Total distance (km).<br>
-            Opportunity Cost: Cost of spending additional time commuting, which could have been used for work or leisure (INR). <br>Assumes equal probability of work and leisure and takes as inputs additional commuting hours and a user-supplied monthly wage using this page's slider.<br>
-            Total Economic Cost: Opportunity cost plus additional fuel cost for the selected route (INR).<br>
-            Total Environmental Cost: Total cost of additional CO<sub>2</sub> emissions for the selected route (INR).<br>
-            Note: Generalised exchange rate of USD 1 to INR 70.
-            </h4>
-          </div>
-        </div> -->
 
 <script> //sets initial variables
 var hourly_wage = 50; // THIS NEEDS CHANGING IF WE DECIDE TO CHANGE THE HOURLY WAGE
