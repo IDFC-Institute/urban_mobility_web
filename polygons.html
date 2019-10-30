@@ -14,12 +14,11 @@
   @import url(https://d19vzq90twjlae.cloudfront.net/leaflet-0.6.1/leaflet.css);
   /* old url http://cdn.leafletjs.com/leaflet-0.6.1/leaflet.css); */
 
-
   #navigation {
-
       width:100vh;
       height:90vh;
     }
+
   #map{
      display:flex;
      flex:100%;
@@ -27,122 +26,131 @@
      height:100vh;
      width:50vh;
     }
+
     #selectedWage{
       font-size:1rem;
     }
-  .row{
-    display:flex;
-  }
-  .column{
-    flex:50%;
-    text-align:center;
-  }
-  h1{
-    color:#ea5153;
-    font-size:2rem;
+
+    .row{
+      display:flex;
+    }
+
+    .column{
+      flex:50%;
+      text-align:center;
+    }
+
+    h1{
+      color:#ea5153;
+      font-size:2rem;
+      font-family: Futura, Arial, "sans-serif";
+      padding: 10px;
+    }
+
+    h2{
+      font-size:1rem;
+      font-family: Futura, Arial, "sans-serif";
+      padding: 10px;
+      color:#ea5153;
+    }
+
+    h3{
+      font-size:0.7rem;
+      color:#FFFFFF;
+      font-family: Futura, Arial, "sans-serif";
+      margin: 0 auto;
+      padding: 10px;
+    }
+
+    h4{
+      color:#FFFFFF;
+      font-size:0.7rem;
+      font-family: Futura, Arial, "sans-serif";
+      padding: 0px;
+      width: 80%;
+    }
+
+    .stroke {
+      fill: none;
+      stroke: #000;
+      stroke-width: 1px;
+    }
+
+    .fill {
+      fill: #f2f2f2;
+    }
+
+    label{
+    color:#f2f2f2;
     font-family: Futura, Arial, "sans-serif";
-    padding: 10px;
+    }
+
+    .slider {
+    -webkit-appearance: none;
+    width: 35%;
+    height: 15px;
+    border-radius: 5px;
+    background: #ffffff;
+    outline: none;
+    opacity: 0.8;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    }
+
+  .slider:hover {
+    opacity: 1;
   }
-  h2{
-    font-size:1rem;
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #ea5153;
+    cursor: pointer;
+  }
+
+  .slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ea5153;
+    cursor: pointer;
+  }
+
+  .button{
+    background-color: #ea5153; /* red */
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    text-align: center;
+    border-radius:0.2rem;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 0.8rem;
     font-family: Futura, Arial, "sans-serif";
-    padding: 10px;
-    color:#ea5153;
-  }
-  h3{
-    font-size:0.7rem;
-    color:#FFFFFF;
-    font-family: Futura, Arial, "sans-serif";
-    margin: 0 auto;
-    padding: 10px;
-  }
-  h4{
-    color:#FFFFFF;
-    font-size:0.7rem;
-    font-family: Futura, Arial, "sans-serif";
-    padding: 0px;
-    width: 80%;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    /*box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);*/
   }
 
-
-  .stroke {
-    fill: none;
-    stroke: #000;
-    stroke-width: 1px;
+  .button:hover{
+    background-color: #4CAF50; /* Green */
+    color: white;
   }
 
-  .fill {
-    fill: #f2f2f2;
+  /* .button:active {
+    background-color: #f7e91e;
+    box-shadow: 0 5px #ffffff;
+    transform: translateY(0.5rem);
+  } */
+
+  .disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 
-  label{
-  color:#f2f2f2;
-  font-family: Futura, Arial, "sans-serif";
-  }
-
-  .slider {
-  -webkit-appearance: none;
-  width: 35%;
-  height: 15px;
-  border-radius: 5px;
-  background: #ffffff;
-  outline: none;
-  opacity: 0.8;
-  -webkit-transition: .2s;
-  transition: opacity .2s;
-}
-
-/* Mouse-over effects */
-.slider:hover {
-  opacity: 1; /* Fully shown on mouse-over */
-}
-
-.slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  background: #ea5153;
-  cursor: pointer;
-}
-
-.slider::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #ea5153;
-  cursor: pointer;
-}
-
-.button{
-  background-color: #ea5153; /* red */
-  border: none;
-  color: white;
-  padding: 0.5rem 1rem;
-  text-align: center;
-  border-radius:0.2rem;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 0.8rem;
-  font-family: Futura, Arial, "sans-serif";
-  -webkit-transition-duration: 0.4s; /* Safari */
-  transition-duration: 0.4s;
-  /*box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);*/
-}
-.button:hover{
-  background-color: #4CAF50; /* Green */
-  color: white;
-}
-/* .button:active {
-  background-color: #f7e91e;
-  box-shadow: 0 5px #ffffff;
-  transform: translateY(0.5rem);
-} */
-.disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
 </style>
 </head>
 
@@ -203,7 +211,6 @@ var monthlyWage;
 //check for current wage slider
 function ti() { //when the user drags and stops the slider...
     monthlyWage = document.getElementById('selectedWage').innerHTML; //get the slider value
-    console.log(monthlyWage); //print value
 }
 
 var dist;
@@ -222,7 +229,6 @@ function clearMap(){
   d3.select("#TextOC").text("- INR");
   d3.select("#TextFuelCost").text("- INR");
   d3.select("#TextEnvCost").text("- INR");
-  console.log("map cleared");
   showJSON();
 }
 //sets blank values initially
@@ -277,7 +283,8 @@ L.control.layers(tiles_osm).addTo(map);
 </script>
 
 <script>
-function showJSON(){//initialize items for D3 selections
+//initialize items for D3 selections
+function showJSON(){
 var a = 0;
 var click = a + 1;
 var o_id;
@@ -347,7 +354,6 @@ g.attr('pointer-events','all');
       d3_features.attr("d",path);
     }
 
-
     //mouseover function
     function mouseOver(d) {
       c = d3.select(this);
@@ -372,19 +378,12 @@ g.attr('pointer-events','all');
 
     //onclick function
     function onClick(d){
-
-      console.log("click number");
-      console.log(click);
-      console.log("a");
-      console.log(a);
+      //clear map on 3rd click
       if(click == 3){
         clearMap();
       }
 
-      if(click % 3 == 0){
-         console.log("i'm divisible by 3");
-       }
-
+      //on 1st click and alternating
       if(a % 2 == 0) { //if click not divisible by 2 (1, 3, 5, 7)
         origin_lat = d.properties.mumbai_centroids_Lat;
         origin_lon = d.properties.mumbai_centroids_Lon;
@@ -425,6 +424,7 @@ g.attr('pointer-events','all');
                 }
         }
 
+        //on 2nd click and alternating
         else if(a % 2 != 0){ //if click not divisible by 2
           dest_lat = d.properties.mumbai_centroids_Lat;
           dest_lon = d.properties.mumbai_centroids_Lon;
@@ -465,30 +465,21 @@ g.attr('pointer-events','all');
 
       //make a unique O-D pair variable to filter the CSV data
       o_d_pair = o_id.concat("-",d_id)
-      console.log(o_d_pair);
 
       //call DrawARoute function between Origin and Destination TAZs
       DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon);
 
+      //update cost values
       function updateValues(){
       //read the CSV and get all the values needed for the user
         d3.csv("mumbai_all_tazs.csv", function(data){
           for(var i = 0; i < data.length; i++){
             if(data[i].unique_id == o_d_pair){
-              console.log("calculating for TAZs: ");
-              console.log(data[i].unique_id);
-              //Opportunity cost of congestion = Additional hours in commute *
-              //((probability of working * wage cost) + (probability of leisure * (wage cost/2)))
-              //9 hour workday, 7 day workweek. what's weekly equation, then convert to hourly
 
-              if(monthlyWage != null){
-                console.log("found monthly wage");
+              if(monthlyWage != null){ //read from user's saved input
                 hourlyWage = monthlyWage/7/9/4;
-                console.log("hourly wage is now");
-                console.log(hourlyWage);
               }
-              else{
-                console.log("no monthly wage");
+              else{//if user has not yet moved the slider
                 hourlyWage = 50;
               }
 
@@ -505,9 +496,11 @@ g.attr('pointer-events','all');
             }
           }
         }) //end CSV
-        }
+      } //end updateValues function
+
       updateValues();
       reset();
+
     }// end onClick
   }); //end geoJSON
 
