@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 <script src="https://d3js.org/d3.v3.min.js"></script>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   @import url(https://d19vzq90twjlae.cloudfront.net/leaflet-0.6.1/leaflet.css);
   /* old url http://cdn.leafletjs.com/leaflet-0.6.1/leaflet.css); */
@@ -20,16 +20,31 @@
     }
     #map{
       display:flex;
-      /* flex:100%; */
       width:100%;
-      height:30rem;
+      height:20rem;
     }
     .row-main{
       display:flex;
       flex-direction:column;
     }
+    #row-title{
+      display:flex;
+      width:50%;
+      flex-direction:row;
+    }
+    #row-description{
+      display:flex;
+      width:50%;
+      flex-direction:row;
+      text-align:right;
+    }
+    .row-slider{
+      display:flex;
+      flex-direction:row;
+    }
+
     h1{
-      text-align:left;
+      text-align:center;
       color:#ea5153;
       font-size:2vh;
       font-family: Futura, Arial, "sans-serif";
@@ -56,7 +71,12 @@
       font-size:0.2rem;
       font-family: Futura, Arial, "sans-serif";
       padding: 0px;
-      width: 80%;
+      margin:1rem 1rem 1rem;
+      text-align:center;
+    }
+    .row-title_description{
+      display:flex;
+      flex-direction:row;
       margin:0rem 1rem 0rem;
     }
 
@@ -90,26 +110,46 @@
         display:flex;
         flex-direction:row;
       }
+      #row-title{
+        display:flex;
+        flex-direction:row;
+      }
+      #row-description{
+        display:flex;
+        flex-direction:row;
+      }
+      .row-slider{
+        display:flex;
+        flex-direction:row;
+      }
+      .row-title_description{
+        display:flex;
+        flex-direction:column;
+      }
+
       h1{
         color:#ea5153;
-        font-size:4vh;
+        font-size:1.8rem;
         font-family: Futura, Arial, "sans-serif";
         padding: 0.25rem;
+        margin:0rem 2rem 0rem;
       }
 
       h2{
+        color:#ea5153;
         font-size:1rem;
         font-family: Futura, Arial, "sans-serif";
         padding: 0.25rem;
-        color:#ea5153;
+        margin:1rem 2rem 1rem;
       }
 
       h3{
-        font-size:0.7rem;
         color:#FFFFFF;
+        font-size:0.7rem;
         font-family: Futura, Arial, "sans-serif";
         margin: 0 auto;
         padding: 0.25rem;
+        margin:1rem 2rem 1rem;
       }
 
       h4{
@@ -118,7 +158,7 @@
         font-family: Futura, Arial, "sans-serif";
         padding: 0.25rem;
         /* width: 80%; */
-        margin:0rem 2rem 0rem;
+        margin:1rem 2rem 1rem;
         text-align:center;
       }
     }
@@ -131,7 +171,6 @@
     .row{
       display:flex;
     }
-
     .leaflet-routing-container-hide{
       display:none;
     }
@@ -242,13 +281,18 @@
   <div id="map"></div>
 
   <div id="navigation">
+    <div class="row-title_description">
+      <div id="row-title">
       <h1>Mumbai:<br>Costs of Congestion</h1>
+      </div>
+      <div id="row-description">
       <h4>Ease of mobility is crucial for cities’ productivity. Better mobility allows better access to jobs and allows firms access to a larger pool of workers. As cities grow, congestion can rapidly erode productivity as well as impose heavy environmental costs. <br></br>We used publicly-available Uber Movement data to measure congestion in the three years up to and including 2018. (We assume here a 50 INR/hour wage and that 70 INR = 1 USD.)</h4>
-<br></br>
+    </div>
+  </div>
         <h4>Step 1: Input your monthly wage using the slider.</h4>
         <div>
           <p>
-            <div class="row">
+            <div class="row-slider">
               <div class="column-75">
               <input type="range" id="toPrice" class = "slider" value="12600" min="12600" max="500000" step="100"
                 oninput="document.getElementById('selectedWage').innerHTML = this.value" />
