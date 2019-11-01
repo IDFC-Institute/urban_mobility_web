@@ -29,14 +29,13 @@
     }
     #row-title{
       display:flex;
-      width:50%;
+      width:100%;
       flex-direction:row;
     }
     #row-description{
       display:flex;
-      width:50%;
+      width:100%;
       flex-direction:row;
-      text-align:right;
     }
     .row-slider{
       display:flex;
@@ -48,18 +47,19 @@
       color:#ea5153;
       font-size:2vh;
       font-family: Futura, Arial, "sans-serif";
-      padding: 0.25rem;
+      margin:0.25rem 5rem 0.25rem;
     }
 
     h2{
-      font-size:0.5rem;
+      font-size:0.8rem;
       font-family: Futura, Arial, "sans-serif";
       padding: 0.25rem;
       color:#ea5153;
+      text-align:center;
     }
 
     h3{
-      font-size:0.2rem;
+      font-size:0.7rem;
       color:#FFFFFF;
       font-family: Futura, Arial, "sans-serif";
       margin: 0 auto;
@@ -68,16 +68,25 @@
 
     h4{
       color:#FFFFFF;
-      font-size:0.2rem;
+      font-size:0.5rem;
       font-family: Futura, Arial, "sans-serif";
       padding: 0px;
-      margin:1rem 1rem 1rem;
+      margin:0.5rem 1rem 0.5rem;
       text-align:center;
     }
     .row-title_description{
       display:flex;
-      flex-direction:row;
-      margin:0rem 1rem 0rem;
+      flex-direction:column;
+      margin:0rem 0rem 0rem;
+      width:100%;
+      text-align:center;
+
+    }
+    #row-slider-all{
+      display:flex;
+      flex-direction:column;
+      width:100%;
+      margin:0rem 0rem 0rem;
     }
 
     /* .column{
@@ -110,6 +119,7 @@
         display:flex;
         flex-direction:row;
       }
+
       #row-title{
         display:flex;
         flex-direction:row;
@@ -283,12 +293,14 @@
   <div id="navigation">
     <div class="row-title_description">
       <div id="row-title">
-      <h1>Mumbai:<br>Costs of Congestion</h1>
+      <h1>Mumbai: Costs of Congestion</h1>
       </div>
       <div id="row-description">
       <h4>Ease of mobility is crucial for cities’ productivity. Better mobility allows better access to jobs and allows firms access to a larger pool of workers. As cities grow, congestion can rapidly erode productivity as well as impose heavy environmental costs. <br></br>We used publicly-available Uber Movement data to measure congestion in the three years up to and including 2018. (We assume here a 50 INR/hour wage and that 70 INR = 1 USD.)</h4>
     </div>
-  </div>
+    </div>
+
+      <div id="row-slider-all">
         <h4>Step 1: Input your monthly wage using the slider.</h4>
         <div>
           <p>
@@ -303,6 +315,7 @@
             </div>
           </p>
         </div>
+      </div>
 
         <CENTER><h4>Step 2: Select your <span style="color:green">home</span> and <span style="color:red">work</span>. Tap anywhere on the map a third time to clear it.</h4></CENTER>
         <h2>Costs Per Trip</h2>
