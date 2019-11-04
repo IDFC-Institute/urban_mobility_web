@@ -16,7 +16,7 @@
 /* http://cdn.leafletjs.com/leaflet-0.6.1/leaflet.css); */
 
 .navigation {
-  float:right;
+  /* float:right; */
   background:gray;
   width:25vh;
   height:90vh;
@@ -38,6 +38,10 @@
   .row{
     display:flex;
     padding:10px;
+  }
+
+  .button{
+    margin: 0 auto;
   }
 
   .column{
@@ -167,10 +171,18 @@ h3{
           <h2 id="Route"></h2>
         </div>
 
-        <div class="row">
-        <!-- <button><a type=button class="text_input form-control" value="Segment_Value" onClick="submitSegment();" class="segment_button">Show Chokepoints</a> -->
-        <button><a type=button class="text_input form-control" value="Segment_Value" onClick="reverseRoute();" class="segment_button">Reverse Route</a>
+        <div>
+          <h3 id="Time"></h3>
         </div>
+
+        <div class="row">
+          <div class="button">
+            <!-- <button><a type=button class="text_input form-control" value="Segment_Value" onClick="submitSegment();" class="segment_button">Show Chokepoints</a> -->
+            <button><a type=button class="text_input form-control" value="Segment_Value" onClick="reverseRoute();" class="segment_button">Reverse Route</a>
+          </div>
+        </div>
+
+        <h2>Costs Per Trip</h2>
 
         <div class="row">
           <div class="column">
@@ -192,7 +204,7 @@ h3{
 
           <div class="column">
           <h2 id="TextEnvCost"></h2>
-          <h3 style="color:#A9A9A9";>Environmental Cost</h3>
+          <h3 style="color:#A9A9A9";>Environmental Cost of CO<sub>2</sub> Emissions</h3>
           </div>
         </div>
     </div>
@@ -264,6 +276,7 @@ var a = 0;
 var click = a + 1;
 var o_id;
 var d_id;
+var time;
 var o_id_new;
 var d_id_new;
 var colors = { clickable: 'black', origin: 'purple', dest: "green", clickhover: "lightgreen", none:"white" };
@@ -385,9 +398,15 @@ d3.csv("places.csv",function(data){
               d3.select("#Route").text("Select a destination.")
             }
             else{
-              d3.select("#Route")
-              .attr("color","green")
-              .text(o_id+" to "+d_id)
+              d3.select("#Route").text(o_id+" to "+d_id)
+              if(o_id == "Borivali" + o_id == "Andheri West" | o_id == "Chembur" | o_id == "Marine Drive"){
+                time = "Morning";
+                d3.select("#Time").text(time+ " Commute")
+              }
+              else{
+                d3.select("#Time").text("Evening Commute")
+              }
+
             }
 
             }); //end onClick
