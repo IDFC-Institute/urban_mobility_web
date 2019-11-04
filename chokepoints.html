@@ -249,6 +249,56 @@ function clearSegment(){
   d3.selectAll("path").remove();
 }
 
+d3.csv("places.csv",function(data){
+  svg.attr("width",500).attr("height",800);
+      g.selectAll("circle")
+          .data(data)
+          .enter()
+          .append("circle")
+          .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
+          .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y })
+          .attr("r", "10px")
+          .style("fill", function(d){ if(d.Type=="residential") { return "red"; } else { return "blue"; } })
+          .attr("id", function(d, i){ return "circle" + i; })
+          .on("mouseout", function (d, i){
+            d3.select("#circle" + i).attr("r", "10px");
+            // d3.select("#text" + i).attr("fill", "red");
+        });
+
+            //displays Names for points
+            g.selectAll("text")
+                .data(data)
+                .enter()
+                .append("text")
+                .text(function(d) { return d.Name; })
+                // .attr("font-weight",function(d,i) {return i*100+100;})
+                .attr("font-family","Georgia")
+                .attr("fill", "black")
+                .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
+                .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; })
+                .attr("id", function(d, i){ return "text" + i; })
+
+                .on("mouseover", function (d, i){
+                  d3.select("#circle" + i).attr("r", "20px");
+                  d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 30; })
+                  d3.select("#text" + i).attr("y", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; })
+
+                  if(d.Type=="residential"){
+
+                    d3.select("#text" + i).attr("fill","red");
+                  }
+                  else{
+                    d3.select("#text" + i).attr("fill","blue");
+                  }
+
+                })
+                .on("mouseout", function (d, i){
+                  d3.select("#circle" + i).attr("r", "10px");
+                  d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
+                  d3.select("#text" + i).attr("fill","black");
+                });
+});
+
 function submitSegment(){
   clearSegment();
 
@@ -259,18 +309,22 @@ function submitSegment(){
   var dest = yourSelectEnd.value;
   origin_dest = origin.concat("-",dest);
 
+
+
   //lookup the value in places.csv
   d3.csv("places_unique.csv",function(data){
     var lookup_unique_id;
 
     console.log(origin_dest);
     console.log("i opened the csv");
+    //check for ID match
     for(var i = 0; i < data.length; i++){
       if(data[i].od == origin_dest){
         lookup_unique_id = data[i].unique_id;
         console.log(lookup_unique_id);
       }
     }
+
 
   //match the path's unique_id with the TAZ lookup table, and find the cost values
     d3.csv("mumbai_all_tazs.csv",function(data){
@@ -292,8 +346,8 @@ function submitSegment(){
           d3.select("#TextEnvCost").text(Math.round(env) + " INR");
     }
   }
-})
-})
+  })
+})//end places unique csv
 
   d3.json("segments_merged_2.json", function(geoShape) {
 
@@ -318,15 +372,15 @@ function submitSegment(){
 
           // fit the SVG element to leaflet's map layer
           function reset() {
-            bounds = path.bounds(geoShape);
-            var topLeft = bounds[0],
-              bottomRight = bounds[1];
-            svg .attr("width", bottomRight[0] - topLeft[0])
-              .attr("height", bottomRight[1] - topLeft[1])
-              .style("left", topLeft[0] + "px")
-              .style("top", topLeft[1] + "px");
-            g .attr("transform", "translate(" + -topLeft[0] + ","
-                                              + -topLeft[1] + ")");
+            // bounds = path.bounds(geoShape);
+            // var topLeft = bounds[0],
+            //   bottomRight = bounds[1];
+            // svg .attr("width", bottomRight[0] - topLeft[0])
+            //   .attr("height", bottomRight[1] - topLeft[1])
+            //   .style("left", topLeft[0] + "px")
+            //   .style("top", topLeft[1] + "px");
+            // g .attr("transform", "translate(" + -topLeft[0] + ","
+            //                                   + -topLeft[1] + ")");
 
             //set color ramp
             var ramp = d3.scale.linear().domain([0,20,40,60,80]).range(["red","orange","yellow","green"]);
@@ -433,157 +487,7 @@ L.tileLayer(
     ////////////// legend ////////////////////
 
 
-    ///////////trying commenting all this out /////////////////
-    //https://leafletjs.com/examples/quick-start/
-    //L.svg().addTo(map);
-
-    //var g = d3.select("#map").select("svg"); // Condenses the SVG selection into g
-
     g.attr('pointer-events', 'all'); //https://stackoverflow.com/a/17495417/7207315
-
-    var places = d3.csv("places.csv");
-    console.log(places);
-
-    var a = 1;
-    var o_id;
-    var d_id;
-    var o_type;
-    var d_type;
-
-    Promise.all([places]).then(
-        function(values)
-        {
-            g.selectAll("circle")
-                .data(values[0])
-                .enter()
-                .append("circle")
-                .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
-                .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y })
-                .attr("r", "10px")
-                .style("fill", function(d){ if(d.Type=="residential") { return "red"; } else { return "blue"; } })
-                .attr("id", function(d, i){ return "circle" + i; })
-                .on("mouseout", function (d, i){
-                  d3.select("#circle" + i).attr("r", "10px");
-                  // d3.select("#text" + i).attr("fill", "red");
-              })
-
-                .on("click", function (d){
-
-                  //allow for two clicks anywhere on the map
-                  //1 means first click, 0 means second click; pattern alternates between 1 and 0
-                  if(a == 1){
-                    origin_lat = d.Lat;
-                    origin_lon = d.Lon;
-
-                    if(o_id == null){
-                      o_id = d.Name; //get the o_id
-                      o_type = d.Type;
-                      console.log("case 1");
-                      console.log("type:");
-                      console.log(o_type);
-                      console.log("origin");
-                      console.log(o_id);
-                      console.log("dest");
-                      console.log(d_id);
-                      a = a - 1;
-
-                    }
-                    else {
-                      console.log("case 2");
-                      o_id = d_id;
-                      o_type = d_type;
-                      d_id = d.Name;
-                      d_type = d.Type;
-                      console.log("origin");
-                      console.log(o_id);
-                      console.log(o_type);
-                      console.log("dest");
-                      console.log(d_id);
-                      console.log(d_type);
-                      a = a - 1;
-                    }
-                        }
-                  else if(a == 0){
-                    dest_lat = d.Lat;
-                    dest_lon = d.Lon;
-                    if(d_id == null){
-                      console.log("case 3");
-                      d_id = d.Name;
-                      d_type = d.Type;
-                      console.log("origin");
-                      console.log(o_id);
-                      console.log(o_type);
-                      console.log("dest");
-                      console.log(d_id);
-                      console.log(d_type);
-                      a = a + 1;
-                    }
-                    else{
-                      console.log("case 4");
-                      o_id = d_id;
-                      o_type = d_type;
-                      d_id = d.Name;
-                      d_type = d.Type;
-                      console.log("origin");
-                      console.log(o_id);
-                      console.log(o_type);
-                      console.log("dest");
-                      console.log(d_id);
-                      console.log(d_type);
-                      a = a + 1;
-                    }
-                  }
-
-                  //displays Names for points
-                  g.selectAll("text")
-                      .data(values[0])
-                      .enter()
-                      .append("text")
-                      .text(function(d) { return d.Name; })
-                      // .attr("font-weight",function(d,i) {return i*100+100;})
-                      .attr("font-family","Georgia")
-                      .attr("fill", "black")
-                      .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
-                      .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; })
-                      .attr("id", function(d, i){ return "text" + i; })
-
-                      .on("mouseover", function (d, i){
-                        d3.select("#circle" + i).attr("r", "20px");
-                        d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 30; })
-                        d3.select("#text" + i).attr("y", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; })
-
-                        if(d.Type=="residential"){
-
-                          d3.select("#text" + i).attr("fill","red");
-                        }
-                        else{
-                          d3.select("#text" + i).attr("fill","blue");
-                        }
-
-                      })
-                      .on("mouseout", function (d, i){
-                        d3.select("#circle" + i).attr("r", "10px");
-                        d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
-                        d3.select("#text" + i).attr("fill","black");
-
-
-                    }
-
-                  );
-
-
-                if(o_type != d_type){ //draw the route if different types selected
-                  DrawARoute(origin_lat,origin_lon, dest_lat, dest_lon);
-                  DrawSpeeds(o_id, d_id);
-
-                }
-                else{ //don't draw the route if they're the same type
-                  console.log("you selected two of the same type.");
-                }
-              });
-
-                }
-      );
 
     //https://www.d3-graph-gallery.com/graph/bubblemap_leaflet_basic.html
     function update()
@@ -593,12 +497,12 @@ L.tileLayer(
           .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y });
 
         d3.selectAll("text")
-          .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
-          .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 5; })
+          .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x; })
+          .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y; })
     }
 
     map.on("moveend", update)
-    ////////////end done commenting/////////////
+
 
 </script>
 </body>
