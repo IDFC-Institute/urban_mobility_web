@@ -116,7 +116,7 @@ h3{
 
     <div id="navigation" style="text-align:center">
         <h1>Traffic Chokepoints in Mumbai</h1>
-        <h3>Select a time, a residential area and business district to show traffic-choked segments.</h3>
+        <h3>Select a time, a <span style="color:red">residential area</span> and <span style="color:#1E90FF">business district</span> to show traffic-choked segments.</h3>
 
         <div class="row" id="category_div">
         <select id="source" name="source" class="text_input form-control" onchange="javascript: dynamicdropdown(this.options[this.selectedIndex].value);">
@@ -250,7 +250,8 @@ function clearSegment(){
 }
 
 d3.csv("places.csv",function(data){
-  svg.attr("width",500).attr("height",800);
+  svg.attr("width",1000).attr("height",1000);
+
       g.selectAll("circle")
           .data(data)
           .enter()
@@ -258,7 +259,7 @@ d3.csv("places.csv",function(data){
           .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
           .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y })
           .attr("r", "10px")
-          .style("fill", function(d){ if(d.Type=="residential") { return "red"; } else { return "blue"; } })
+          .style("fill", function(d){ if(d.Type=="residential") { return "red"; } else { return "#1E90FF"; } })
           .attr("id", function(d, i){ return "circle" + i; })
           .on("mouseout", function (d, i){
             d3.select("#circle" + i).attr("r", "10px");
@@ -497,8 +498,8 @@ L.tileLayer(
           .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y });
 
         d3.selectAll("text")
-          .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x; })
-          .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y; })
+          .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
+          .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 5; })
     }
 
     map.on("moveend", update)
