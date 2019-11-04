@@ -116,17 +116,17 @@ h3{
 
     <div id="navigation" style="text-align:center">
         <h1>Traffic Chokepoints in Mumbai</h1>
-        <h3>Select a time, a <span style="color:red">residential area</span> and <span style="color:#1E90FF">business district</span> to show traffic-choked segments.</h3>
+        <h3>Select a <span style="color:red">residential area</span> and <span style="color:#1E90FF">business district</span> to show traffic-choked segments.</h3>
 
-        <div class="row" id="category_div">
+        <!-- <div class="row" id="category_div">
         <select id="source" name="source" class="text_input form-control" onchange="javascript: dynamicdropdown(this.options[this.selectedIndex].value);">
             <option value="" selected >Select commute period</option>
             <option value="am">Morning</option>
             <option value="pm">Afternoon</option>
           </select>
-        </div>
+        </div> -->
 
-        <div class="row" id="startbox">
+        <!-- <div class="row" id="startbox">
             <script type="text/javascript" language="JavaScript">
             document.write('<select name="startpoint" id="startpoint" class="text_input form-control"><option value="" selected>Start point</option></select>')
             </script>
@@ -162,7 +162,7 @@ h3{
               <option value="Nariman Point">Nariman Point</option>
             </select>
             </noscript>
-        </div>
+        </div> -->
         <div>
           <h2 id="Route"></h2>
         </div>
@@ -385,7 +385,9 @@ d3.csv("places.csv",function(data){
               d3.select("#Route").text("Select a destination.")
             }
             else{
-              d3.select("#Route").text(o_id+" to "+d_id)
+              d3.select("#Route")
+              .attr("color","green")
+              .text(o_id+" to "+d_id)
             }
 
             }); //end onClick
