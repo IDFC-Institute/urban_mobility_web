@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
-  <title>Mumbai: Costs of Commuting</title>
+  <title>Mumbai: Traffic Chokepoints</title>
 <meta charset="utf-8">
 <!-- https://www.d3-graph-gallery.com/graph/backgroundmap_leaflet_buttonLayer.html -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
@@ -143,7 +143,6 @@
    width:50vh;
   }
 
-
   .row-main{
     display:flex;
     flex-direction:row;
@@ -233,6 +232,10 @@
     display:flex;
   }
   .leaflet-routing-container-hide{
+    display:none;
+  }
+
+  .leaflet-control-zoom{
     display:none;
   }
 
@@ -377,7 +380,7 @@
     <div id="navigation">
       <div class="row-title-description">
         <div id="row-title">
-          <h1>Traffic Chokepoints in Mumbai</h1>
+          <h1>Mumbai: Traffic Chokepoints</h1>
         </div>
         <div id="row-description">
           <h3>Select a <span style="color:red">residential area</span> and <span style="color:#1E90FF">business district</span> to show traffic-choked segments.</h3>
