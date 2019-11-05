@@ -16,8 +16,111 @@
 /* http://cdn.leafletjs.com/leaflet-0.6.1/leaflet.css); */
 
 @media only screen and (max-width:768px){ /*mobile version*/
+  #navigation{
+    width:100%;
+  }
+  #map{
+    display:flex;
+    width:100%;
+    height:20rem;
+  }
+  .row-main{
+    display:flex;
+    flex-direction:column;
+  }
+  #row-title{
+    display:flex;
+    width:100%;
+    flex-direction:row;
+  }
+  #row-description{
+    display:flex;
+    width:100%;
+    flex-direction:row;
+  }
+  .row-slider{
+    display:flex;
+    flex-direction:row;
+  }
 
+  h1{
+    text-align:center;
+    color:#ea5153;
+    font-size:2vh;
+    font-family: Futura, Arial, "sans-serif";
+    margin:0.25rem 5rem 0.25rem;
+  }
 
+  h2{
+    font-size:0.8rem;
+    font-family: Futura, Arial, "sans-serif";
+    padding: 0.25rem;
+    color:#ea5153;
+    text-align:center;
+  }
+
+  h3{
+    font-size:0.7rem;
+    color:#FFFFFF;
+    font-family: Futura, Arial, "sans-serif";
+    margin: 0 auto;
+    padding: 0.25rem;
+    text-align:center;
+  }
+
+  h4{
+    color:#FFFFFF;
+    font-size:0.5rem;
+    font-family: Futura, Arial, "sans-serif";
+    padding: 0px;
+    margin:0.5rem 1rem 0.5rem;
+    text-align:center;
+  }
+  .row-title_description{
+    display:flex;
+    flex-direction:column;
+    margin:0rem 0rem 0rem;
+    width:100%;
+    text-align:center;
+
+  }
+  #row-slider-all{
+    display:flex;
+    flex-direction:column;
+    width:100%;
+    margin:0 auto;
+  }
+
+  /* Legend Position Style */
+  .legend {
+  	position:absolute;
+  	left:1rem;
+  	top:1rem;
+  }
+
+.leaflet-container .leaflet-control-attribution, .leaflet-container .leaflet-control-scale{
+  font-size:0.25rem;
+}
+
+  .axis text {
+  	font: 0.75rem sans-serif;
+    font-family: Futura, Arial, "sans-serif";
+  }
+
+  .axis line, .axis path {
+  	fill: none;
+  	stroke: #000;
+  	shape-rendering: crispEdges;
+  }
+
+  .button{
+    background-color:black;
+    margin:0 auto;
+    display: inline-block;
+  }
+  .text_input{
+    font-size:0.5rem;
+  }
 
 }
 
@@ -95,6 +198,31 @@
     margin:1rem 2rem 1rem;
     text-align:center;
   }
+
+  /* Legend Position Style */
+  .legend {
+  	position:absolute;
+  	left:20px;
+  	top:30px;
+  }
+
+  .axis text {
+  	font: 0.75rem sans-serif;
+    font-family: Futura, Arial, "sans-serif";
+  }
+
+  .axis line, .axis path {
+  	fill: none;
+  	stroke: #000;
+  	shape-rendering: crispEdges;
+  }
+
+  .button{
+    background-color:black;
+    margin:0 auto;
+    display: inline-block;
+  }
+
 }
 
   #selectedWage{
@@ -173,11 +301,7 @@
   cursor: pointer;
 }
 
-.button{
-  background-color:black;
-  margin:0 auto;
-  display: inline-block;
-}
+
 /*
 .button{
   background-color: #3D3D3D;
@@ -217,22 +341,7 @@
     padding:10px;
   }
 
-/* Legend Position Style */
-.legend {
-	position:absolute;
-	left:20px;
-	top:30px;
-}
 
-.axis text {
-	font: 1rem sans-serif;
-}
-
-.axis line, .axis path {
-	fill: none;
-	stroke: #000;
-	shape-rendering: crispEdges;
-}
 
 
 .text_input {
@@ -255,6 +364,7 @@
 .text_input:focus {
   border-color: #<?php echo $highlight; ?>;
 }
+
 
 </style>
 </head>
@@ -451,7 +561,7 @@ d3.csv("places.csv",function(data){
             d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
           })
           .on("mouseover", function (d, i){
-            d3.select("#circle" + i).attr("r", "20px");
+            d3.select("#circle" + i).attr("r", "15px");
             d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 30; })
             d3.select("#text" + i).attr("y", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; });
             d3.select("#text" + i).attr("font-weight",function(d,i) {return i*100+100;})
@@ -757,57 +867,119 @@ L.tileLayer(
     //////////////// legend //////////////////////
     var w = 140, h = 550;
 
-    var key = d3.select("body")
-      .append("svg")
-      .attr("width", w)
-      .attr("height", h)
-      .attr("class", "legend");
 
-    var legend = key.append("defs")
-      .append("svg:linearGradient")
-      .attr("id", "gradient")
-      .attr("x1", "100%")
-      .attr("y1", "0%")
-      .attr("x2", "100%")
-      .attr("y2", "100%")
-      .attr("spreadMethod", "pad");
+          if(window.innerWidth<768){ //mobile
+            var key = d3.select("body")
+              .append("svg")
+              .attr("width", w)
+              .attr("height", h)
+              .attr("class", "legend");
 
-    legend.append("stop")
-      .attr("offset", "0%")
-      .attr("stop-color", "green")
-      .attr("stop-opacity", 1);
+            var legend = key.append("defs")
+              .append("svg:linearGradient")
+              .attr("id", "gradient")
+              .attr("x1", "100%")
+              .attr("y1", "0%")
+              .attr("x2", "100%")
+              .attr("y2", "100%")
+              .attr("spreadMethod", "pad");
 
-    legend.append("stop")
-      .attr("offset","33%")
-      .attr("stop-color", "yellow")
-      .attr("stop-opacity", 1);
+            legend.append("stop")
+              .attr("offset", "0%")
+              .attr("stop-color", "green")
+              .attr("stop-opacity", 1);
 
-    legend.append("stop")
-        .attr("offset","66%")
-        .attr("stop-color", "orange")
-        .attr("stop-opacity", 1);
+            legend.append("stop")
+              .attr("offset","33%")
+              .attr("stop-color", "yellow")
+              .attr("stop-opacity", 1);
 
-    legend.append("stop")
-      .attr("offset", "100%")
-      .attr("stop-color", "red")
-      .attr("stop-opacity", 1);
+            legend.append("stop")
+                .attr("offset","66%")
+                .attr("stop-color", "orange")
+                .attr("stop-opacity", 1);
 
-    key.append("rect")
-      .attr("width", w - 100)
-      .attr("height", h)
-      .style("fill", "url(#gradient)")
-      .attr("transform", "translate(0,100)");
+            legend.append("stop")
+              .attr("offset", "100%")
+              .attr("stop-color", "red")
+              .attr("stop-opacity", 1);
 
-    var y = d3.scale.linear()
-      .range([h,1])
-      .domain([0,80]);
+              key.append("rect")
+                .attr("width", w - 120)
+                .attr("height", h - 400)
+                .style("fill", "url(#gradient)")
+                .attr("transform", "translate(0,100)");
 
-    var yAxis = d3.svg.axis().orient("right").scale(y);
 
-    key.append("g")
-      .attr("class", "y axis")
-      .attr("transform", "translate(41,100)")
-      .call(yAxis);
+            var y = d3.scale.linear()
+              .range([h - 400,1])
+              .domain([0,80]);
+
+            var yAxis = d3.svg.axis().orient("right").scale(y);
+
+            key.append("g")
+              .attr("class", "y axis")
+              .attr("transform", "translate(41,100)")
+              .call(yAxis);
+          }
+
+          else{ //desktop
+            var key = d3.select("body")
+              .append("svg")
+              .attr("width", w)
+              .attr("height", h)
+              .attr("class", "legend");
+
+            var legend = key.append("defs")
+              .append("svg:linearGradient")
+              .attr("id", "gradient")
+              .attr("x1", "100%")
+              .attr("y1", "0%")
+              .attr("x2", "100%")
+              .attr("y2", "100%")
+              .attr("spreadMethod", "pad");
+
+            legend.append("stop")
+              .attr("offset", "0%")
+              .attr("stop-color", "green")
+              .attr("stop-opacity", 1);
+
+            legend.append("stop")
+              .attr("offset","33%")
+              .attr("stop-color", "yellow")
+              .attr("stop-opacity", 1);
+
+            legend.append("stop")
+                .attr("offset","66%")
+                .attr("stop-color", "orange")
+                .attr("stop-opacity", 1);
+
+            legend.append("stop")
+              .attr("offset", "100%")
+              .attr("stop-color", "red")
+              .attr("stop-opacity", 1);
+
+              key.append("rect")
+                .attr("width", w - 120)
+                .attr("height", h)
+                .style("fill", "url(#gradient)")
+                .attr("transform", "translate(0,100)");
+
+
+            var y = d3.scale.linear()
+              .range([h,1])
+              .domain([0,80]);
+
+            var yAxis = d3.svg.axis().orient("right").scale(y);
+
+            key.append("g")
+              .attr("class", "y axis")
+              .attr("transform", "translate(41,100)")
+              .call(yAxis);
+
+          }
+
+
 
     ////////////// legend ////////////////////
 
