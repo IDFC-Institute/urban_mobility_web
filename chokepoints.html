@@ -480,12 +480,12 @@
         <div class="row">
           <div class="column">
           <h2 id="TextFuelCost"></h2>
-          <h3 style="color:#A9A9A9";>Fuel Cost</h3>
+          <h3 style="color:#A9A9A9";>Additional Fuel Cost</h3>
           </div>
 
           <div class="column">
           <h2 id="TextEnvCost"></h2>
-          <h3 style="color:#A9A9A9";>Environmental Cost of CO<sub>2</sub> Emissions</h3>
+          <h3 style="color:#A9A9A9";>Additional Cost of CO<sub>2</sub> Emissions</h3>
           </div>
         </div>
     </div>
@@ -497,6 +497,20 @@ var highColor = '#ff0000'
 var minVal = 0;
 var maxVal = 80;
 var origin_dest;
+
+var hourlyWage;
+var monthlyWage;
+
+//assign range slider value to monthly wage
+var rangeInput = document.getElementById('toPrice');
+rangeInput.addEventListener("change", function() {
+    document.getElementById("toPrice").textContent = rangeInput.value;
+    monthlyWage = document.getElementById('selectedWage').innerHTML;
+    clearSegment();
+}, false);
+
+
+
 
 d3.select("#TextDistance").text(" - km");
 d3.select("#TextOC").text("- INR");
@@ -670,11 +684,18 @@ d3.csv("places.csv",function(data){
 
             //make a unique O-D pair variable to filter the CSV data
             o_d_pair = o_id.concat("-",d_id);
+
+
+
+
+
+
             clearSegment();
             origin_dest = o_d_pair;
-            console.log(origin_dest);
+            // console.log(origin_dest);
             submitSegment();
 
+            //update values
             if(d_id == null){
               d3.select("#Route").text("Select a destination.")
             }
@@ -771,27 +792,34 @@ function submitSegment(){
     var lookup_unique_id;
 
     console.log(origin_dest);
-    console.log("i opened the csv");
+    // console.log("i opened the csv");
     //check for ID match
     for(var i = 0; i < data.length; i++){
       if(data[i].od == origin_dest){
         lookup_unique_id = data[i].unique_id;
+        console.log("the lookup unique id is")
         console.log(lookup_unique_id);
       }
     }
 
 
+function updateValues(){
+
   //match the path's unique_id with the TAZ lookup table, and find the cost values
     d3.csv("mumbai_all_tazs.csv",function(data){
-      console.log("i opened the second csv");
+      // console.log("i opened the second csv");
       for(var i = 0; i < data.length; i++){
         if(data[i].unique_id == lookup_unique_id){
-          console.log("calculating for TAZs: ");
-          console.log(data[i].unique_id);
-
-          wage = 12600;
+          if(monthlyWage != null){ //read from user's saved input
+            hourlyWage = monthlyWage/7/9/4;
+          }
+          else{//if user has not yet moved the slider
+            hourlyWage = 50;
+          }
+          console.log(hourlyWage);
+          // wage = 12600;
           dist = data[i].distance;
-          oc = data[i].additional_hours_commuting*((0.5*(wage/9/7/4))+(0.5*(wage/9/7/4)));
+          oc = data[i].additional_hours_commuting*((0.5*(hourlyWage))+(0.5*(hourlyWage)));
           econ = data[i].add_petrol_costs;
           env = data[i].total_petrol_emissions;
 
@@ -802,6 +830,8 @@ function submitSegment(){
     }
   }
   })
+}
+updateValues();
 })//end places unique csv
 
   d3.json("segments_merged_2.json", function(geoShape) {
@@ -811,8 +841,7 @@ function submitSegment(){
                 path = d3.geo.path().projection(transform);
 
       //subset the entire JSON based on the origin and destination points
-      console.log("i am within json comparing");
-      console.log(origin_dest);
+      // console.log(origin_dest);
 
       //match with the two elements clicked
       d3_subset = geoShape.features.filter(function(d){return d.properties.all_segments_formatted_csv_commute_id == origin_dest});
