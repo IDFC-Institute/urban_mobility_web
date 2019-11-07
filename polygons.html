@@ -315,11 +315,11 @@
           <p>
             <div class="row-slider">
               <div class="column-slider">
-              <input type="range" id="toPrice" class = "slider" value="12600" min="12600" max="500000" step="100"
+              <input type="range" id="toPrice" name="amount" class = "slider" value="12600" min="12600" max="500000" step="100"
                 oninput="document.getElementById('selectedWage').innerHTML = this.value" />
               </div>
               <div class="column-slider-value">
-                  <h4 id="selectedWage">12600</h4>
+                  <h4 id="selectedWage">12,600</h4>
               </div>
               <div class="column-slider-currency">
                 <h4 id="selectedWage">INR</h4>
@@ -362,12 +362,33 @@
 var hourlyWage;
 var monthlyWage;
 
+
 //assign range slider value to monthly wage
 var rangeInput = document.getElementById('toPrice');
 rangeInput.addEventListener("change", function() {
+  console.log(rangeInput.value);
     document.getElementById("toPrice").textContent = rangeInput.value;
     monthlyWage = document.getElementById('selectedWage').innerHTML;
+    console.log(localeString(monthlyWage));
+    clearMap();
+
 }, false);
+
+
+function localeString(x, sep, grp) {
+    var sx = (''+x).split('.'), s = '', i, j;
+    sep || (sep = ','); // default seperator
+    grp || grp === 0 || (grp = 3); // default grouping
+    i = sx[0].length;
+    while (i > grp) {
+        j = i - grp;
+        s = sep + sx[0].slice(j, i) + s;
+        i = j;
+    }
+    s = sx[0].slice(0, i) + s;
+    sx[0] = s;
+    return sx.join('.');
+}
 
 var dist;
 var oc;
