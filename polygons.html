@@ -330,7 +330,7 @@
       </div>
 
         <CENTER><h4>Step 2: Select your <span style="color:red">home</span> and <span style="color:#1E90FF">work</span>. Tap anywhere on the map a third time to clear it.</h4></CENTER>
-        <h2>Costs Per Trip</h2>
+        <h2 style="color:white">Costs Per Roundtrip</h2>
 
       <div class="row">
         <div class="column">
@@ -367,9 +367,12 @@ var monthlyWage;
 var rangeInput = document.getElementById('toPrice');
 rangeInput.addEventListener("change", function() {
   console.log(rangeInput.value);
+  console.log((rangeInput.value).toLocaleString('en-IN'));
     document.getElementById("toPrice").textContent = rangeInput.value;
     monthlyWage = document.getElementById('selectedWage').innerHTML;
     console.log(localeString(monthlyWage));
+    console.log("locale string");
+    console.log(monthlyWage.toLocaleString('en-IN'));
     clearMap();
 
 }, false);
