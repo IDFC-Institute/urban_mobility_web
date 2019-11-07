@@ -191,18 +191,23 @@
       text-align:center;
     }
 
-    .column-75{
-      flex:75%;
+    .column-slider{
+      flex:50%;
       text-align:center;
       margin:0.5rem 0rem 0.5rem;
       padding:0px;
     }
 
-    .column-25{
-      flex:40%;
+    .column-slider-value{
+      flex:15%;
       text-align:left;
       margin:0.1rem 0rem 0.1rem;
+    }
 
+    .column-slider-currency{
+      flex:25%;
+      text-align:left;
+      margin:0.1rem 0rem 0.1rem;
     }
 
     .stroke {
@@ -305,16 +310,19 @@
     </div>
 
       <div id="row-slider-all">
-        <h4>Step 1: Input your monthly wage in INR using the slider.</h4>
+        <h4>Step 1: Input your monthly wage using the slider.</h4>
         <div>
           <p>
             <div class="row-slider">
-              <div class="column-75">
+              <div class="column-slider">
               <input type="range" id="toPrice" class = "slider" value="12600" min="12600" max="500000" step="100"
                 oninput="document.getElementById('selectedWage').innerHTML = this.value" />
               </div>
-              <div class="column-25">
+              <div class="column-slider-value">
                   <h4 id="selectedWage">12600</h4>
+              </div>
+              <div class="column-slider-currency">
+                <h4 id="selectedWage">INR</h4>
               </div>
             </div>
           </p>
@@ -359,7 +367,6 @@ var rangeInput = document.getElementById('toPrice');
 rangeInput.addEventListener("change", function() {
     document.getElementById("toPrice").textContent = rangeInput.value;
     monthlyWage = document.getElementById('selectedWage').innerHTML;
-
 }, false);
 
 var dist;

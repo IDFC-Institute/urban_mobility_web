@@ -177,17 +177,17 @@
     font-size:1rem;
     font-family: Futura, Arial, "sans-serif";
     padding: 0.25rem;
-    margin:1rem 2rem 1rem;
+    margin:0.5rem 2rem 0.5rem;
   }
 
   h3{
     color:#FFFFFF;
     font-size:0.7rem;
     font-family: Futura, Arial, "sans-serif";
-    margin: 0 auto;
     padding: 0.25rem;
     margin:1rem 2rem 1rem;
   }
+
   h4{
     color:#FFFFFF;
     font-size:0.7rem;
@@ -226,6 +226,8 @@
 
   #selectedWage{
     font-size:1rem;
+    text-align:left;
+    margin: 0.1rem 0rem 0.1rem;
   }
 
   .row{
@@ -244,15 +246,23 @@
     text-align:center;
   }
 
-  .column-75{
-    flex:75%;
+  .column-slider{
+    flex:50%;
     text-align:center;
+    margin:0.5rem 0rem 0.5rem;
     padding:0px;
   }
 
-  .column-25{
+  .column-slider-value{
+    flex:15%;
+    text-align:left;
+    margin:0.1rem 0rem 0.1rem;
+  }
+
+  .column-slider-currency{
     flex:25%;
-    text-align:center;
+    text-align:left;
+    margin:0.1rem 0rem 0.1rem;
   }
 
   .stroke {
@@ -389,12 +399,15 @@
         <div>
           <p>
             <div class="row-slider">
-              <div class="column-75">
+              <div class="column-slider">
               <input type="range" id="toPrice" class = "slider" value="12600" min="12600" max="500000" step="100"
                 oninput="document.getElementById('selectedWage').innerHTML = this.value" />
               </div>
-              <div class="column-25">
+              <div class="column-slider-value">
                   <h4 id="selectedWage">12600</h4>
+              </div>
+              <div class="column-slider-currency">
+                <h4 id="selectedWage">INR</h4>
               </div>
             </div>
           </p>
@@ -452,7 +465,7 @@
         </div>
 
         <div>
-          <h3 id="Time"></h3>
+          <h3 id="Time" style="margin:0.5rem 1rem 1rem"></h3>
         </div>
 
         <div class="row">
@@ -468,24 +481,24 @@
         <div class="row">
           <div class="column">
           <h2 id="TextDistance"></h2>
-          <h3 style="color:#A9A9A9";>Distance</h3>
+          <h3>Distance</h3>
           </div>
 
           <div class="column">
           <h2 id="TextOC"></h2>
-          <h3 style="color:#A9A9A9";>Opportunity Cost</h3>
+          <h3>Opportunity Cost</h3>
           </div>
         </div>
 
         <div class="row">
           <div class="column">
           <h2 id="TextFuelCost"></h2>
-          <h3 style="color:#A9A9A9";>Additional Fuel Cost</h3>
+          <h3>Additional Fuel Cost</h3>
           </div>
 
           <div class="column">
           <h2 id="TextEnvCost"></h2>
-          <h3 style="color:#A9A9A9";>Additional Cost of CO<sub>2</sub> Emissions</h3>
+          <h3>Additional Cost of CO<sub>2</sub> Emissions</h3>
           </div>
         </div>
     </div>
