@@ -28,7 +28,7 @@
       flex-direction:column;
     }
     #row-title{
-      display:flex;
+      display:block;
       width:100%;
       flex-direction:row;
     }
@@ -45,7 +45,7 @@
     h1{
       text-align:center;
       color:#ea5153;
-      font-size:2vh;
+      font-size:0.8rem;
       font-family: Futura, Arial, "sans-serif";
       margin:0.25rem 5rem 0.25rem;
     }
@@ -97,6 +97,12 @@
       display:flex;
       flex:40%;
     } */
+
+    #selectedWage{
+      font-size:0.7rem;
+      text-align:left;
+      margin:0.1rem 0rem 0.1rem;
+    }
   }
 
   @media only screen and (min-width:769px){ /*desktop version*/
@@ -170,15 +176,16 @@
         /* width: 80%; */
         margin:1rem 2rem 1rem;
       }
+      #selectedWage{
+        font-size:1rem;
+        text-align:left;
+        margin:0.1rem 0rem 0.1rem;
+      }
     }
 
     /*apply to all*/
 
-    #selectedWage{
-      font-size:1rem;
-      text-align:left;
-      margin:0.1rem 0rem 0.1rem;
-    }
+
     .row{
       display:flex;
     }
