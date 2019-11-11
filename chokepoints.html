@@ -9,6 +9,7 @@
 <!-- <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin=""></script> -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+ <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <style>
@@ -236,7 +237,6 @@
 }
 
 
-
   .row{
     display:flex;
   }
@@ -353,6 +353,10 @@
 .disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.material-icons{
+  font-size:0.8rem;
 }
 
   .column{
@@ -519,7 +523,7 @@
           <div class="column">
             <h2 id="TextOC"></h2>
             <div class="tooltip">
-              <h3>Opportunity Cost <span class="tooltiptext">Your personalised commute cost based on the value of your time, as calculated by your wage.</span></h3>
+              <h3>Opportunity Cost <i class="material-icons">info_outline</i><span class="tooltiptext">Your personalised commute cost based on the value of your time, as calculated by your wage.</span></h3>
             </div>
           </div>
         </div>
@@ -553,9 +557,6 @@ rangeInput.addEventListener("change", function() {
     monthlyWage = document.getElementById('selectedWage').innerHTML;
     clearSegment();
 }, false);
-
-
-
 
 d3.select("#TextDistance").text(" - km");
 d3.select("#TextOC").text("- INR");
