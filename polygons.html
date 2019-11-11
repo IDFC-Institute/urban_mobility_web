@@ -291,6 +291,31 @@
     cursor: not-allowed;
   }
 
+  .tooltip {
+    position:relative;
+  }
+
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 10rem;
+    background-color: gray;
+    color: #fff;
+    text-align: center;
+    padding: 1rem 0.8rem 1rem;
+    border-radius: 1rem;
+
+    top: 100%;
+    left: 50%;
+    margin-left: -5rem; /* half of the width to center the tooltip */
+
+    position: absolute;
+    z-index: 1;
+  }
+
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
+
 </style>
 </head>
 
@@ -339,7 +364,9 @@
        </div>
        <div class="column">
          <h2 id="TextOC"></h2>
-         <h3>Opportunity Cost</h3>
+         <div class="tooltip">
+           <h3>Opportunity Cost <span class="tooltiptext">Your personalised commute cost based on the value of your time, as calculated by your wage.</span></h3>
+         </div>
        </div>
       </div>
 
