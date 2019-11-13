@@ -748,8 +748,18 @@ d3.csv("places.csv",function(data){
           .attr("font-family","Futura")
           .attr("font-size", function(d){if(window.innerWidth<768){ return "10"; } else { return "12"; } })
           .style("fill", function(d){ if(d.Type=="residential") { return "red"; } else { return "#1E90FF"; } })
-          .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
-          .attr("y", function(d){ if(window.innerWidth<768){return map.latLngToLayerPoint([d.Lat, d.Lon]).y - 5; } else {return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; } })
+          .attr("x", function(d){
+            if(window.innerWidth<768)
+            { return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 12; }
+            else{ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; } })
+          .attr("y", function(d){
+            if(window.innerWidth<768)
+              if(d.Name=="Nariman Point")
+              {return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; }
+              else
+              {return map.latLngToLayerPoint([d.Lat, d.Lon]).y - 8; }
+            else
+              {return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; } })
           .attr("id", function(d, i){ return "text" + i; })
 
         .on("mouseout", function (d, i){
