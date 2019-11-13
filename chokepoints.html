@@ -29,16 +29,19 @@
     display:flex;
     flex-direction:column;
   }
+
   #row-title{
     display:flex;
     width:100%;
     flex-direction:row;
   }
+
   #row-description{
     display:flex;
     width:100%;
     flex-direction:row;
   }
+
   .row-slider{
     display:flex;
     flex-direction:row;
@@ -85,12 +88,6 @@
     width:100%;
     text-align:center;
 
-  }
-  #row-slider-all{
-    display:flex;
-    flex-direction:column;
-    width:100%;
-    margin:0 auto;
   }
 
   /* Legend Position Style */
@@ -610,18 +607,27 @@ d3.csv("places.csv",function(data){
           .append("circle")
           .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
           .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y })
-          .attr("r", "10px")
+          .attr("r", function(d){
+            if(window.innerWidth<768)
+            { return "8px"; }
+            else { return "10px";} })
           .style("fill", function(d){ if(d.Type=="residential") { return "red"; } else { return "#1E90FF"; } })
           .attr("id", function(d, i){ return "circle" + i; })
           .on("mouseout", function (d, i){
-            d3.select("#circle" + i).attr("r", "10px");
-            d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 30; })
+            d3.select("#circle" + i).attr("r", function(d){
+              if(window.innerWidth<768)
+              { return "8px"; }
+              else { return "10px";} })
+            d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 20; })
             d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
           })
           .on("mouseover", function (d, i){
-            d3.select("#circle" + i).attr("r", "15px");
-            d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 30; })
-            d3.select("#text" + i).attr("y", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; });
+            d3.select("#circle" + i).attr("r", function(d){
+            if(window.innerWidth<768)
+            { return "10px"; }
+            else { return "12px";} });
+            // d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 20; })
+            // d3.select("#text" + i).attr("y", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 150; });
             d3.select("#text" + i).attr("font-weight",function(d,i) {return i*100+100;})
           })
 
@@ -750,7 +756,7 @@ d3.csv("places.csv",function(data){
           .style("fill", function(d){ if(d.Type=="residential") { return "red"; } else { return "#1E90FF"; } })
           .attr("x", function(d){
             if(window.innerWidth<768)
-            { return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 12; }
+            { return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 10; }
             else{ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; } })
           .attr("y", function(d){
             if(window.innerWidth<768)
