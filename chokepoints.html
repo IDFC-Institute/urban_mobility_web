@@ -31,7 +31,7 @@
   }
 
   #row-title{
-    display:flex;
+    display:block;
     width:100%;
     flex-direction:row;
   }
@@ -328,10 +328,10 @@
   background-color: #ea5153;
 }
 
-.disabled {
+/* .disabled {
   opacity: 0.6;
   cursor: not-allowed;
-}
+} */
 
 .material-icons{
   font-size:0.8rem;
@@ -516,6 +516,7 @@
         </div>
 
 <script> //initialize global values
+
 var lowColor = '#00ff00'
 var highColor = '#ff0000'
 var minVal = 0;
@@ -952,6 +953,7 @@ L.tileLayer(
     g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
     //////////////// legend //////////////////////
+
     var w = 140, h = 550;
 
 
@@ -959,7 +961,7 @@ L.tileLayer(
             var key = d3.select("body")
               .append("svg")
               .attr("width", w)
-              .attr("height", h)
+              .attr("height", h - 275)
               .attr("class", "legend");
 
             var legend = key.append("defs")
