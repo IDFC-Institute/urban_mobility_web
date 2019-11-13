@@ -77,6 +77,7 @@
     margin:0.5rem 1rem 0.5rem;
     text-align:center;
   }
+
   .row-title_description{
     display:flex;
     flex-direction:column;
@@ -99,9 +100,9 @@
   	top:1rem;
   }
 
-.leaflet-container .leaflet-control-attribution, .leaflet-container .leaflet-control-scale{
-  font-size:0.25rem;
-}
+  .leaflet-container .leaflet-control-attribution, .leaflet-container .leaflet-control-scale{
+    font-size:0.25rem;
+  }
 
   .axis text {
   	font: 0.75rem sans-serif;
@@ -154,18 +155,22 @@
     display:flex;
     flex-direction:row;
   }
+
   #row-title{
     display:flex;
     flex-direction:row;
   }
+
   #row-description{
     display:flex;
     flex-direction:row;
   }
+
   .row-slider{
     display:flex;
     flex-direction:row;
   }
+
   .row-title_description{
     display:flex;
     flex-direction:column;
@@ -236,6 +241,7 @@
 
 }
 
+/*apply to all*/
 
   .row{
     display:flex;
@@ -321,34 +327,9 @@
   cursor: pointer;
 }
 
-
-/*
-.button{
-  background-color: #3D3D3D;
-  border: none;
-  color: white;
-  margin: 0 auto;
-  padding: 0.5rem 1rem;
-  text-align: center;
-  border-radius:0.2rem;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 0.8rem;
-  font-family: Futura, Arial, "sans-serif";
-  -webkit-transition-duration: 0.4s;
-  transition-duration: 0.4s;
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-}*/
-
 .button:hover{
   background-color: #ea5153;
 }
-
-/* .button:active {
-  background-color: #f7e91e;
-  box-shadow: 0 5px #ffffff;
-  transform: translateY(0.5rem);
-} */
 
 .disabled {
   opacity: 0.6;
@@ -359,26 +340,24 @@
   font-size:0.8rem;
 }
 
-  .column{
-    flex:50%;
-    text-align:center;
-    padding:10px;
-  }
+.column{
+  flex:50%;
+  text-align:center;
+  padding:10px;
+}
 
 .text_input {
-/*        border: 0;*/
-        padding: 0.1rem;
-        box-shadow: none;
-        font-size:0.75rem;
-        background-color: #<?php echo $background; ?>;
-        font-family: Futura, Arial, "sans-serif";
-        color: #<?php echo $text; ?>;
-        outline: 0;
-        border-style: solid;
-        border-width: 0 0 2px;
-/*        border-bottom: 2px #<?php echo $text; ?>;*/
-        border-color: #<?php echo $text; ?>;
-        border-radius: 0px;
+  padding: 0.1rem;
+  box-shadow: none;
+  font-size:0.75rem;
+  background-color: #<?php echo $background; ?>;
+  font-family: Futura, Arial, "sans-serif";
+  color: #<?php echo $text; ?>;
+  outline: 0;
+  border-style: solid;
+  border-width: 0 0 2px;
+  border-color: #<?php echo $text; ?>;
+  border-radius: 0px;
 /*    https://stackoverflow.com/questions/37465458/input-text-field-with-only-bottom-border/37465540*/
 }
 
@@ -407,7 +386,6 @@
   z-index: 1;
 }
 
-
 .tooltip:hover .tooltiptext {
   visibility: visible;
 }
@@ -431,7 +409,7 @@
       </div>
 
       <div id="row-slider-all">
-        <h4>Step 1: Input your monthly wage in INR using the slider.</h4>
+        <h3>Step 1: Input your monthly wage using the slider.</h3>
         <div>
           <p>
             <div class="row-slider">
@@ -450,7 +428,7 @@
         </div>
       </div>
 
-    <h3>Step 2: Select a <span style="color:red">residential area</span> and <span style="color:#1E90FF">business district</span> to show traffic-choked segments.</h3>
+    <h3>Step 2: Select a <span style="color:red">residential area</span> and <span style="color:#1E90FF">business district</span> to show traffic-choked segments along that commute.</h3>
         <!-- <div class="row" id="category_div">
         <select id="source" name="source" class="text_input form-control" onchange="javascript: dynamicdropdown(this.options[this.selectedIndex].value);">
             <option value="" selected >Select commute period</option>
@@ -523,7 +501,7 @@
           <div class="column">
             <h2 id="TextOC"></h2>
             <div class="tooltip">
-              <h3>Opportunity Cost <i class="material-icons">info_outline</i><span class="tooltiptext">Your personalised commute cost based on the value of your time, as calculated by your wage.</span></h3>
+              <h3>Opportunity Cost <i class="material-icons">info_outline</i><span class="tooltiptext">In addition to what you pay for transit, you waste this amount while caught in traffic.</span></h3>
             </div>
           </div>
         </div>
@@ -731,11 +709,6 @@ d3.csv("places.csv",function(data){
             //make a unique O-D pair variable to filter the CSV data
             o_d_pair = o_id.concat("-",d_id);
 
-
-
-
-
-
             clearSegment();
             origin_dest = o_d_pair;
             // console.log(origin_dest);
@@ -773,16 +746,12 @@ d3.csv("places.csv",function(data){
           .append("text")
           .text(function(d) { return d.Name; })
           .attr("font-family","Futura")
+          .attr("font-size", function(d){if(window.innerWidth<768){ return "10"; } else { return "12"; } })
           .style("fill", function(d){ if(d.Type=="residential") { return "red"; } else { return "#1E90FF"; } })
           .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
-          .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; })
+          .attr("y", function(d){ if(window.innerWidth<768){return map.latLngToLayerPoint([d.Lat, d.Lon]).y - 5; } else {return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; } })
           .attr("id", function(d, i){ return "text" + i; })
 
-        .on("mouseover", function (d, i){
-          // d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 30; })
-          // d3.select("#text" + i).attr("y", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; });
-          // d3.select("#text" + i).attr("font-weight",function(d,i) {return i*100+100;})
-        })
         .on("mouseout", function (d, i){
           d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
           d3.select("#text" + i).attr("fill","black");
@@ -932,8 +901,15 @@ updateValues();
         })//end json
 }
 
+var zoomlevel;
+if(window.innerWidth<768){ //mobile
+zoomlevel = 10;
+}
+else{ //desktop
+zoomlevel = 11; //set initial zoom level of map
+}
 
-var map = L.map('map').setView([19.0879, 72.84136], 11);
+var map = L.map('map').setView([19.0879, 72.84136], zoomlevel);
 
 // Tile type: openstreetmap normal
 
@@ -952,8 +928,8 @@ var map = L.map('map').setView([19.0879, 72.84136], 11);
 L.tileLayer(
     'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',{
     attribution: '&copy; ' + mapLink + ' Contributors',
-    minZoom: 11,
-    maxZoom: 11,
+    minZoom: zoomlevel,
+    maxZoom: zoomlevel,
   }).addTo(map);
 
   var svg = d3.select(map.getPanes().overlayPane).append("svg"),
@@ -1005,6 +981,22 @@ L.tileLayer(
                 .style("fill", "url(#gradient)")
                 .attr("transform", "translate(0,100)");
 
+                key.append("text")
+                .attr("width", 450)
+                .attr("height", 200)
+                .attr("transform", "translate(52,105)")
+                .style("font-family","Futura")
+                .attr("font-size","0.75rem")
+                .text(function(d){return "km/hr"});
+
+                key.append("text")
+                .attr("width", 450)
+                .attr("height", 200)
+                .attr("transform", "translate(20,80)")
+                .style("font-family","Futura")
+                .attr("font-size","0.75rem")
+                .text(function(d){return "Speed"});
+
 
             var y = d3.scale.linear()
               .range([h - 400,1])
@@ -1014,7 +1006,7 @@ L.tileLayer(
 
             key.append("g")
               .attr("class", "y axis")
-              .attr("transform", "translate(41,100)")
+              .attr("transform", "translate(20,100)")
               .call(yAxis);
           }
 
@@ -1060,6 +1052,22 @@ L.tileLayer(
                 .style("fill", "url(#gradient)")
                 .attr("transform", "translate(0,100)");
 
+              key.append("text")
+              .attr("width", 450)
+              .attr("height", 200)
+              .attr("transform", "translate(52,105)")
+              .style("font-family","Futura")
+              .attr("font-size","0.75rem")
+              .text(function(d){return "km/hr"});
+
+              key.append("text")
+              .attr("width", 450)
+              .attr("height", 200)
+              .attr("transform", "translate(20,80)")
+              .style("font-family","Futura")
+              .attr("font-size","0.75rem")
+              .text(function(d){return "Speed"});
+
 
             var y = d3.scale.linear()
               .range([h,1])
@@ -1069,7 +1077,7 @@ L.tileLayer(
 
             key.append("g")
               .attr("class", "y axis")
-              .attr("transform", "translate(41,100)")
+              .attr("transform", "translate(20,100)")
               .call(yAxis);
 
           }

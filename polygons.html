@@ -337,7 +337,7 @@
       <h1>Mumbai: Costs of Congestion</h1>
       </div>
       <div id="row-description">
-      <h4>Ease of mobility is crucial for cities’ productivity. Better mobility allows better access to jobs and allows firms access to a larger pool of workers. As cities grow, congestion can rapidly erode productivity as well as impose heavy environmental costs. <br></br>We used publicly-available Uber Movement data to measure congestion in the three years up to and including 2018. (We assume here a 50 INR/hour wage and that 70 INR = 1 USD.)</h4>
+      <h4>Ease of mobility is crucial for cities’ productivity. Better mobility allows better access to jobs and allows firms access to a larger pool of workers. As cities grow, congestion can rapidly erode productivity as well as impose heavy environmental costs. <br></br>We used publicly-available Uber Movement data to measure congestion in the three years up to and including 2018. <br>(We assume here that 70 INR = 1 USD.)</br></h4>
     </div>
     </div>
 
@@ -351,7 +351,7 @@
                 oninput="document.getElementById('selectedWage').innerHTML = this.value" />
               </div>
               <div class="column-slider-value">
-                  <h4 id="selectedWage">12,600</h4>
+                  <h4 id="selectedWage">12600</h4>
               </div>
               <div class="column-slider-currency">
                 <h4 id="selectedWage">INR</h4>
@@ -361,7 +361,7 @@
         </div>
       </div>
 
-        <CENTER><h4>Step 2: Select your <span style="color:red">home</span> and <span style="color:#1E90FF">work</span>. Tap anywhere on the map a third time to clear it.</h4></CENTER>
+        <CENTER><h4>Step 2: Select your <span style="color:red">home</span> and <span style="color:#1E90FF">work</span> to see your personal congestion costs. Tap anywhere on the map a third time to clear it.</h4></CENTER>
         <h2 style="color:white">Costs Per Roundtrip</h2>
 
       <div class="row">
@@ -400,13 +400,13 @@ var monthlyWage;
 //assign range slider value to monthly wage
 var rangeInput = document.getElementById('toPrice');
 rangeInput.addEventListener("change", function() {
-  console.log(rangeInput.value);
-  console.log((rangeInput.value).toLocaleString('en-IN'));
+  // console.log((rangeInput.value).toLocaleString('en-IN'));
+  // console.log(rangeInput.value);
     document.getElementById("toPrice").textContent = rangeInput.value;
     monthlyWage = document.getElementById('selectedWage').innerHTML;
-    console.log(localeString(monthlyWage));
-    console.log("locale string");
-    console.log(monthlyWage.toLocaleString('en-IN'));
+    // console.log(localeString(monthlyWage));
+    // console.log("locale string");
+    // console.log(monthlyWage.toLocaleString('en-IN'));
     clearMap();
 
 }, false);
@@ -432,7 +432,13 @@ var oc;
 var econ;
 var env;
 var active;
-var zoomlevel = 11; //set initial zoom level of map
+var zoomlevel;
+if(window.innerWidth<768){ //mobile
+zoomlevel = 10;
+}
+else{ //desktop
+zoomlevel = 11; //set initial zoom level of map
+}
 
 var colors = { clickable: 'black', origin: '#1E90FF', dest: "red", clickhover: "lightgreen", none:"white" };
 
