@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <head>
+  <link rel="shortcut icon" href="http://www.idfcinstitute.org/favicon.png">
   <title>Mumbai: Traffic Chokepoints</title>
 <meta charset="utf-8">
 <!-- https://www.d3-graph-gallery.com/graph/backgroundmap_leaflet_buttonLayer.html -->
@@ -20,11 +21,13 @@
   #navigation{
     width:100%;
   }
+
   #map{
     display:flex;
     width:100%;
     height:20rem;
   }
+
   .row-main{
     display:flex;
     flex-direction:column;
@@ -117,6 +120,7 @@
     margin:0 auto;
     display: inline-block;
   }
+
   .text_input{
     font-size:0.2rem;
   }
@@ -243,6 +247,8 @@
   .row{
     display:flex;
   }
+
+
   .leaflet-routing-container-hide{
     display:none;
   }
@@ -328,19 +334,8 @@
   background-color: #ea5153;
 }
 
-/* .disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-} */
-
 .material-icons{
   font-size:0.8rem;
-}
-
-.column{
-  flex:50%;
-  text-align:center;
-  padding:10px;
 }
 
 .text_input {
@@ -400,9 +395,9 @@
         <div id="row-title">
           <h1>Mumbai: Traffic Chokepoints</h1>
         </div>
-        <div id="row-description">
+        <!-- <div id="row-description">
           <h3></h3>
-        </div>
+        </div> -->
       </div>
 
       <div id="row-slider-all">
@@ -514,6 +509,7 @@
           <h3>Additional Cost of CO<sub>2</sub> Emissions</h3>
           </div>
         </div>
+  </div>
 
 <script> //initialize global values
 
@@ -598,9 +594,9 @@ var o_id_new;
 var d_id_new;
 var colors = { clickable: 'black', origin: 'purple', dest: "green", clickhover: "lightgreen", none:"white" };
 
-
 d3.csv("places.csv",function(data){
-  svg.attr("width",1000).attr("height",1000);
+  svg.attr("width",1000)
+  .attr("height",1000);
 
       g.selectAll("circle")
           .data(data)
@@ -1107,18 +1103,31 @@ L.tileLayer(
     g.attr('pointer-events', 'all'); //https://stackoverflow.com/a/17495417/7207315
 
     //https://www.d3-graph-gallery.com/graph/bubblemap_leaflet_basic.html
-    function update()
+    function updateCircle()
     {
         d3.selectAll("circle")
           .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
           .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y });
-
-        d3.selectAll("text")
-        .attr("x", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
-        .attr("y", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; })
     }
+    // function updateText()
+    // {
+    //   d3.selectAll("text")
+    //   .attr("x", function(d){
+    //     if(window.innerWidth<768)
+    //     { return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 10; }
+    //     else{ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; } })
+    //   .attr("y", function(d){
+    //     if(window.innerWidth<768)
+    //       if(d.Name=="Nariman Point")
+    //       {return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; }
+    //       else
+    //       {return map.latLngToLayerPoint([d.Lat, d.Lon]).y - 8; }
+    //     else
+    //       {return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; } })
+    // }
 
-    map.on("moveend", update)
+    map.on("moveend", updateCircle)
+    // map.on("moveend", updateText)
 
 
 </script>
