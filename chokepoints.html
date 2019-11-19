@@ -421,51 +421,7 @@
       </div>
 
     <h3>Step 2: Select a <span style="color:red">residential area</span> and <span style="color:#1E90FF">business district</span> to show traffic-choked segments along that commute.</h3>
-        <!-- <div class="row" id="category_div">
-        <select id="source" name="source" class="text_input form-control" onchange="javascript: dynamicdropdown(this.options[this.selectedIndex].value);">
-            <option value="" selected >Select commute period</option>
-            <option value="am">Morning</option>
-            <option value="pm">Afternoon</option>
-          </select>
-        </div> -->
 
-        <!-- <div class="row" id="startbox">
-            <script type="text/javascript" language="JavaScript">
-            document.write('<select name="startpoint" id="startpoint" class="text_input form-control"><option value="" selected>Start point</option></select>')
-            </script>
-            <noscript>
-            <select id="startpoint" class="text_input form-control" name="startpoint">
-              <option value="Andheri West">Andheri West</option>
-              <option value="Borivali">Borivali</option>
-              <option value="Chembur">Chembur</option>
-              <option value="Marine Drive">Marine Drive</option>
-              <option value="Andheri East">Andheri East</option>
-              <option value="BKC">BKC</option>
-              <option value="Lower Parel">Lower Parel</option>
-              <option value="Malad">Malad</option>
-              <option value="Nariman Point">Nariman Point</option>
-            </select>
-            </noscript>
-        </div>
-
-        <div class="row" id="endbox">
-            <script type="text/javascript" language="JavaScript">
-            document.write('<select name="endpoint" class="text_input form-control" id="endpoint"><option value="" selected>End point</option></select>')
-            </script>
-            <noscript>
-            <select id="endpoint" name="endpoint" class="text_input form-control">
-              <option value="Andheri West">Andheri West</option>
-              <option value="Borivali">Borivali</option>
-              <option value="Chembur">Chembur</option>
-              <option value="Marine Drive">Marine Drive</option>
-              <option value="Andheri East">Andheri East</option>
-              <option value="BKC">BKC</option>
-              <option value="Lower Parel">Lower Parel</option>
-              <option value="Malad">Malad</option>
-              <option value="Nariman Point">Nariman Point</option>
-            </select>
-            </noscript>
-        </div> -->
         <div>
           <h2 id="Route"></h2>
         </div>
@@ -509,7 +465,8 @@
           <h3>Additional Cost of CO<sub>2</sub> Emissions</h3>
           </div>
         </div>
-  </div>
+  </div> <!--end navigation-->
+</div>
 
 <script> //initialize global values
 
@@ -574,7 +531,7 @@ function dynamicdropdown(listindex)
 
 //map functions
 function clearSegment(){
-  console.log("activated clear segment");
+  // console.log("activated clear segment");
   origin_dest = "";
   d3.selectAll("path").remove();
   // d3.selectAll("circle").attr("stroke-width",10);
@@ -819,14 +776,14 @@ function submitSegment(){
   d3.csv("places_unique.csv",function(data){
     var lookup_unique_id;
 
-    console.log(origin_dest);
+    // console.log(origin_dest);
     // console.log("i opened the csv");
     //check for ID match
     for(var i = 0; i < data.length; i++){
       if(data[i].od == origin_dest){
         lookup_unique_id = data[i].unique_id;
-        console.log("the lookup unique id is")
-        console.log(lookup_unique_id);
+        // console.log("the lookup unique id is")
+        // console.log(lookup_unique_id);
       }
     }
 
@@ -844,7 +801,7 @@ function updateValues(){
           else{//if user has not yet moved the slider
             hourlyWage = 50;
           }
-          console.log(hourlyWage);
+          // console.log(hourlyWage);
           // wage = 12600;
           dist = data[i].distance;
           oc = data[i].additional_hours_commuting*((0.5*(hourlyWage))+(0.5*(hourlyWage)));
