@@ -319,6 +319,19 @@
     visibility: visible;
   }
 
+  /*link style*/
+  a:link {
+    color:#ea5153;
+  }
+
+  a:visited {
+    color:#ea5153;
+  }
+
+  a:hover {
+    color:#fff;
+  }
+
 </style>
 </head>
 
@@ -385,8 +398,11 @@
         </div>
       </div>
 
-  </div> <!--end navigation-->
+      <div class="row-title_description">
+        <h4>For details, see the <a href="paper.pdf">full paper</a></h4>
+      </div>
 
+  </div> <!--end navigation-->
 </div>
 
 <script> //sets initial variables
@@ -459,7 +475,7 @@ var route = L.Routing.control({
     createMarker: function() { return null; },
     waypoints: [],
     router: new L.Routing.OSRMv1({
-       serviceUrl: 'http://15.206.6.188:5000/route/v1'
+       serviceUrl: 'http://idfcosrmserver.com:5000/route/v1'
      })
   });
 
@@ -477,7 +493,7 @@ function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
     ],
 
      router: new L.Routing.OSRMv1({
-        serviceUrl: 'http://15.206.6.188:5000/route/v1'
+        serviceUrl: 'http://idfcosrmserver.com:5000/route/v1'
       }),
     fitSelectedRoutes: false,
     lineOptions: { styles: [{color: 'black', opacity: 1, weight: 5}]},
@@ -737,6 +753,5 @@ showJSON();
   map.on("moveend", update)
 
 </script>
-
 </body>
 </html>

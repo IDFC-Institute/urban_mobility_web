@@ -381,11 +381,24 @@
   visibility: visible;
 }
 
+/*link style*/
+a:link {
+  color:#ea5153;
+}
+
+a:visited {
+  color:#ea5153;
+}
+
+a:hover {
+  color:#fff;
+}
+
 </style>
 </head>
 
 
-<body style="background-color:#000000"></body>
+<body style="background-color:#000000">
   <div class="row-main">
     <div id="map"></div>
 
@@ -394,9 +407,6 @@
         <div id="row-title">
           <h1>Mumbai: Traffic Chokepoints</h1>
         </div>
-        <!-- <div id="row-description">
-          <h3></h3>
-        </div> -->
       </div>
 
       <div id="row-slider-all">
@@ -421,13 +431,13 @@
 
     <h3>Step 2: Select a <span style="color:red">residential area</span> and <span style="color:#1E90FF">business district</span> to show traffic-choked segments along that commute.</h3>
 
-        <div>
+        <!-- <div>
           <h2 id="Route"></h2>
         </div>
 
         <div>
           <h3 id="Time" style="margin:0.5rem 1rem 1rem"></h3>
-        </div>
+        </div> -->
 
         <div class="row">
           <div class="button">
@@ -464,6 +474,11 @@
           <h3>Additional Cost of CO<sub>2</sub> Emissions</h3>
           </div>
         </div>
+
+        <div class="row-title_description">
+          <h4>For details, see the <a href="paper.pdf">full paper</a></h4>
+        </div>
+
   </div> <!--end navigation-->
 </div>
 
@@ -1065,22 +1080,6 @@ L.tileLayer(
           .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
           .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y });
     }
-    // function updateText()
-    // {
-    //   d3.selectAll("text")
-    //   .attr("x", function(d){
-    //     if(window.innerWidth<768)
-    //     { return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 10; }
-    //     else{ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; } })
-    //   .attr("y", function(d){
-    //     if(window.innerWidth<768)
-    //       if(d.Name=="Nariman Point")
-    //       {return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; }
-    //       else
-    //       {return map.latLngToLayerPoint([d.Lat, d.Lon]).y - 8; }
-    //     else
-    //       {return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; } })
-    // }
 
     map.on("moveend", updateCircle)
     // map.on("moveend", updateText)
