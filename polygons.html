@@ -477,7 +477,7 @@ var route = L.Routing.control({
     router: new L.Routing.OSRMv1({
       crossOrigin: 'anonymous',
        //serviceUrl: 'http://15.206.6.188:5000/route/v1'
-       serviceUrl: 'http://idfcosrmserver.com/route/v1'
+       serviceUrl: 'http://osrm.urbanflux.org/route/v1'
      })
   });
 
@@ -497,7 +497,7 @@ function DrawARoute(OriginLat, OriginLon, DestLat, DestLon)
      router: new L.Routing.OSRMv1({
       crossOrigin: 'anonymous',
         //serviceUrl: 'http://15.206.6.188:5000/route/v1'
-       serviceUrl: 'http://idfcosrmserver.com/route/v1'
+       serviceUrl: 'http://osrm.urbanflux.org/route/v1'
       }),
     fitSelectedRoutes: false,
     lineOptions: { styles: [{color: 'black', opacity: 1, weight: 5}]},
