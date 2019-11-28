@@ -495,8 +495,6 @@ var origin_dest;
 
 var hourlyWage;
 var monthlyWage;
-var inr = false;
-var exchange = 70;
 
 //assign range slider value to monthly wage
 var rangeInput = document.getElementById('toPrice');
@@ -507,17 +505,9 @@ rangeInput.addEventListener("change", function() {
 }, false);
 
 d3.select("#TextDistance").text(" - km");
-if(inr == true){
-  d3.select("#TextOC").text("- INR");
-  d3.select("#TextFuelCost").text("- INR");
-  d3.select("#TextEnvCost").text("- INR");
-}
-else if(inr == false){
-  d3.select("#TextOC").text("- USD");
-  d3.select("#TextFuelCost").text("- USD");
-  d3.select("#TextEnvCost").text("- USD");
-}
-
+d3.select("#TextOC").text("- INR");
+d3.select("#TextFuelCost").text("- INR");
+d3.select("#TextEnvCost").text("- INR");
 
 //dropdown function
 function dynamicdropdown(listindex)
@@ -564,17 +554,9 @@ function clearSegment(){
   // d3.selectAll("circle").attr("stroke-width",10);
   //sets blank values initially
   d3.select("#TextDistance").text(" - km");
-  if(inr == true){
-    d3.select("#TextOC").text("- INR");
-    d3.select("#TextFuelCost").text("- INR");
-    d3.select("#TextEnvCost").text("- INR");
-  }
-  else if(inr == false){
-    d3.select("#TextOC").text("- USD");
-    d3.select("#TextFuelCost").text("- USD");
-    d3.select("#TextEnvCost").text("- USD");
-  }
-
+  d3.select("#TextOC").text("- INR");
+  d3.select("#TextFuelCost").text("- INR");
+  d3.select("#TextEnvCost").text("- INR");
 }
 
 var a = 0;
@@ -836,31 +818,17 @@ function updateValues(){
           else{//if user has not yet moved the slider
             hourlyWage = 50;
           }
+          // console.log(hourlyWage);
+          // wage = 12600;
+          dist = data[i].distance;
+          oc = data[i].additional_hours_commuting*((0.5*(hourlyWage))+(0.5*(hourlyWage)));
+          econ = data[i].add_petrol_costs;
+          env = data[i].total_petrol_emissions;
 
-          if(inr==true){
-            console.log("showing inr");
-            dist = data[i].distance;
-            oc = data[i].additional_hours_commuting*((0.5*(hourlyWage))+(0.5*(hourlyWage)));
-            econ = data[i].add_petrol_costs;
-            env = data[i].total_petrol_emissions;
-            d3.select("#TextDistance").text(dist + " km");
-            d3.select("#TextOC").text(Math.round(oc) +" INR");
-            d3.select("#TextFuelCost").text(Math.round(econ) + " INR");
-            d3.select("#TextEnvCost").text(Math.round(env) + " INR");
-          }
-          else if(inr==false){
-            console.log("showing usd");
-            dist = (data[i].distance)/exchange;
-            oc = (data[i].additional_hours_commuting*((0.5*(hourlyWage))+(0.5*(hourlyWage))))/exchange;
-            econ = (data[i].add_petrol_costs)/exchange;
-            env = (data[i].total_petrol_emissions)/exchange;
-
-            d3.select("#TextDistance").text(Math.round(dist*100)/100 + " km");
-            d3.select("#TextOC").text(Math.round(oc) +" USD");
-            d3.select("#TextFuelCost").text(Math.round(econ) + " USD");
-            d3.select("#TextEnvCost").text(Math.round(env) + " USD");
-          };
-
+          d3.select("#TextDistance").text(dist + " km");
+          d3.select("#TextOC").text(Math.round(oc) +" INR");
+          d3.select("#TextFuelCost").text(Math.round(econ) + " INR");
+          d3.select("#TextEnvCost").text(Math.round(env) + " INR");
     }
   }
   })
