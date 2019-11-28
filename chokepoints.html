@@ -131,6 +131,11 @@
     text-align:left;
     margin:0.1rem 0rem 0.1rem;
   }
+  #currency{
+    font-size:0.7rem;
+    text-align:left;
+    margin:0.1rem 0rem 0.1rem;
+  }
 
 }
 
@@ -239,6 +244,11 @@
     font-size:1rem;
     text-align:left;
     margin: 0.1rem 0rem 0.1rem;
+  }
+  #currency{
+    font-size:1rem;
+    text-align:left;
+    margin:0.1rem 0rem 0.1rem;
   }
 
 }
@@ -422,10 +432,10 @@ a:hover {
                 oninput="document.getElementById('selectedWage').innerHTML = this.value" />
               </div>
               <div class="column-slider-value">
-                  <h4 id="selectedWage">12600</h4>
+                  <h4 id="selectedWage"></h4>
               </div>
               <div class="column-slider-currency">
-                <h4 id="selectedWage">INR</h4>
+                <h4 id="currency"></h4>
               </div>
             </div>
           </p>
@@ -448,7 +458,6 @@ a:hover {
             <button><a type=button class="text_input form-control" value="Segment_Value" onClick="reverseRoute();" class="segment_button">Reverse Route</a>
           </div>
         </div>
-
 
         <h2 style="color:white">Costs Per Roundtrip</h2>
 
@@ -495,10 +504,16 @@ var origin_dest;
 
 var hourlyWage;
 var monthlyWage;
-var inr = false;
+var currency = "USD";
 var exchange = 70;
 
 //assign range slider value to monthly wage
+document.getElementById("toPrice").defaultValue = 12600/exchange;
+document.getElementById("toPrice").step = (12600/exchange)/100;
+document.getElementById("toPrice").min = 12600/exchange;
+document.getElementById("toPrice").max = (12600/exchange)*40;
+document.getElementById("currency").innerHTML = currency;
+
 var rangeInput = document.getElementById('toPrice');
 rangeInput.addEventListener("change", function() {
     document.getElementById("toPrice").textContent = rangeInput.value;
@@ -507,17 +522,9 @@ rangeInput.addEventListener("change", function() {
 }, false);
 
 d3.select("#TextDistance").text(" - km");
-if(inr == true){
-  d3.select("#TextOC").text("- INR");
-  d3.select("#TextFuelCost").text("- INR");
-  d3.select("#TextEnvCost").text("- INR");
-}
-else if(inr == false){
-  d3.select("#TextOC").text("- USD");
-  d3.select("#TextFuelCost").text("- USD");
-  d3.select("#TextEnvCost").text("- USD");
-}
-
+d3.select("#TextOC").text("- "+ currency);
+d3.select("#TextFuelCost").text("- " + currency);
+d3.select("#TextEnvCost").text("- " + currency);
 
 //dropdown function
 function dynamicdropdown(listindex)
@@ -564,17 +571,9 @@ function clearSegment(){
   // d3.selectAll("circle").attr("stroke-width",10);
   //sets blank values initially
   d3.select("#TextDistance").text(" - km");
-  if(inr == true){
-    d3.select("#TextOC").text("- INR");
-    d3.select("#TextFuelCost").text("- INR");
-    d3.select("#TextEnvCost").text("- INR");
-  }
-  else if(inr == false){
-    d3.select("#TextOC").text("- USD");
-    d3.select("#TextFuelCost").text("- USD");
-    d3.select("#TextEnvCost").text("- USD");
-  }
-
+  d3.select("#TextOC").text("- " + currency);
+  d3.select("#TextFuelCost").text("- " + currency);
+  d3.select("#TextEnvCost").text("- " + currency);
 }
 
 var a = 0;
@@ -795,17 +794,7 @@ function reverseRoute(){
 
 }
 
-
-
 function submitSegment(){
-
-  //get start point and end point values
-  // var yourSelectStart = document.getElementById("startpoint");
-  // var yourSelectEnd = document.getElementById("endpoint");
-  // var origin = yourSelectStart.value;
-  // var dest = yourSelectEnd.value;
-  // origin_dest = origin.concat("-",dest);
-
 
   //lookup the value in places.csv
   d3.csv("places_unique.csv",function(data){
@@ -822,7 +811,6 @@ function submitSegment(){
       }
     }
 
-
 function updateValues(){
 
   //match the path's unique_id with the TAZ lookup table, and find the cost values
@@ -834,32 +822,18 @@ function updateValues(){
             hourlyWage = monthlyWage/7/9/4;
           }
           else{//if user has not yet moved the slider
-            hourlyWage = 50;
+            hourlyWage = 50/exchange;
           }
 
-          if(inr==true){
-            console.log("showing inr");
             dist = data[i].distance;
-            oc = data[i].additional_hours_commuting*((0.5*(hourlyWage))+(0.5*(hourlyWage)));
-            econ = data[i].add_petrol_costs;
-            env = data[i].total_petrol_emissions;
-            d3.select("#TextDistance").text(dist + " km");
-            d3.select("#TextOC").text(Math.round(oc) +" INR");
-            d3.select("#TextFuelCost").text(Math.round(econ) + " INR");
-            d3.select("#TextEnvCost").text(Math.round(env) + " INR");
-          }
-          else if(inr==false){
-            console.log("showing usd");
-            dist = (data[i].distance)/exchange;
-            oc = (data[i].additional_hours_commuting*((0.5*(hourlyWage))+(0.5*(hourlyWage))))/exchange;
+            oc = (data[i].additional_hours_commuting*((0.5*(hourlyWage))+(0.5*(hourlyWage))));
             econ = (data[i].add_petrol_costs)/exchange;
             env = (data[i].total_petrol_emissions)/exchange;
 
             d3.select("#TextDistance").text(Math.round(dist*100)/100 + " km");
-            d3.select("#TextOC").text(Math.round(oc) +" USD");
-            d3.select("#TextFuelCost").text(Math.round(econ) + " USD");
-            d3.select("#TextEnvCost").text(Math.round(env) + " USD");
-          };
+            d3.select("#TextOC").text(Math.round(oc) +" "+ currency);
+            d3.select("#TextFuelCost").text(Math.round(econ) + " " + currency);
+            d3.select("#TextEnvCost").text(Math.round(env) + " " + currency);
 
     }
   }
