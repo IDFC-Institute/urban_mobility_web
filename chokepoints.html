@@ -508,10 +508,10 @@ var currency = "USD";
 var exchange = 70;
 
 //assign range slider value to monthly wage
-document.getElementById("toPrice").defaultValue = 12600/exchange;
-document.getElementById("toPrice").step = (12600/exchange)/100;
-document.getElementById("toPrice").min = 12600/exchange;
-document.getElementById("toPrice").max = (12600/exchange)*40;
+document.getElementById("toPrice").defaultValue = Math.round(12600/exchange);
+document.getElementById("toPrice").step = Math.round((12600/exchange)/100);
+document.getElementById("toPrice").min = Math.round(12600/exchange);
+document.getElementById("toPrice").max = Math.round((12600/exchange)*40);
 document.getElementById("currency").innerHTML = currency;
 
 var rangeInput = document.getElementById('toPrice');
@@ -823,7 +823,6 @@ function updateValues(){
           }
           else{//if user has not yet moved the slider
             hourlyWage = 50/exchange;
-            console.log(hourlyWage);
           }
 
             dist = data[i].distance;
