@@ -59,7 +59,7 @@
     }
 
     h3{
-      font-size:0.7rem;
+      font-size:0.85rem;
       color:#FFFFFF;
       font-family: Futura, Arial, "sans-serif";
       margin: 0 auto;
@@ -74,6 +74,15 @@
       margin:0.5rem 1rem 0.5rem;
       text-align:center;
     }
+
+    h5{
+      color:white;
+      font-size:0.75rem;
+      font-family: Futura, Arial, "sans-serif";
+      padding: 0.25rem;
+      text-align:center;
+    }
+
     .row-title_description{
       display:flex;
       flex-direction:column;
@@ -162,7 +171,7 @@
 
       h3{
         color:#FFFFFF;
-        font-size:0.7rem;
+        font-size:0.85rem;
         font-family: Futura, Arial, "sans-serif";
         margin: 0 auto;
         padding: 0.25rem;
@@ -351,7 +360,7 @@
     </div>
 
       <div id="row-slider-all">
-        <h4>Step 1: Input your monthly wage using the slider.</h4>
+        <h3>Step 1: Input your monthly wage using the slider.</h3>
         <div>
           <p>
             <div class="row-slider">
@@ -370,19 +379,19 @@
         </div>
       </div>
 
-        <CENTER><h4>Step 2: Select your <span style="color:red">home</span> and <span style="color:#1E90FF">work</span> to see your personal congestion costs. Tap anywhere on the map a third time to clear it.</h4></CENTER>
+        <CENTER><h3>Step 2: Select your <span style="color:red">home</span> and <span style="color:#1E90FF">work</span> to see your personal congestion costs. Tap anywhere on the map a third time to clear it.</h3></CENTER>
         <h2 style="color:white">Costs Per Roundtrip</h2>
 
       <div class="row">
         <div class="column">
          <h2 id="TextDistance"></h2>
-         <h3>Distance</h3>
+         <h4>Distance</h4>
        </div>
 
        <div class="column">
          <h2 id="TextOC"></h2>
          <div class="tooltip">
-           <h3>Opportunity Cost <span class="tooltiptext">Your personalised commute cost based on the value of your time, as calculated by your wage.</span></h3>
+           <h4>Opportunity Cost <span class="tooltiptext">Your personalised commute cost based on the value of your time, as calculated by your wage.</span></h4>
          </div>
        </div>
       </div>
@@ -390,11 +399,11 @@
       <div class="row">
         <div class="column">
           <h2 id="TextFuelCost"></h2>
-          <h3>Additional Fuel Cost</h3>
+          <h4>Additional Fuel Cost</h4>
         </div>
         <div class="column">
          <h2 id="TextEnvCost"></h2>
-         <h3>Additional Cost of CO<sub>2</sub> Emissions</h3>
+         <h4>Additional Cost of CO<sub>2</sub> Emissions</h4>
         </div>
       </div>
 
@@ -453,7 +462,7 @@ else{ //desktop
 zoomlevel = 11; //set initial zoom level of map
 }
 
-var colors = { clickable: 'black', origin: '#1E90FF', dest: "red", clickhover: "lightgreen", none:"white" };
+var colors = { clickable: 'black', origin: 'red', dest: "#1E90FF", clickhover: "lightgreen", none:"white" };
 
 function clearMap(){
   d3.selectAll("path").remove();
@@ -709,7 +718,7 @@ g.attr('pointer-events','all');
       //update cost values
       function updateValues(){
       //read the CSV and get all the values needed for the user
-        d3.csv("mumbai_all_tazs.csv", function(data){
+        d3.csv("mumbai_all_tazs_short.csv", function(data){
           for(var i = 0; i < data.length; i++){
             if(data[i].unique_id == o_d_pair){
 

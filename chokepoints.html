@@ -68,7 +68,7 @@
   }
 
   h3{
-    font-size:0.7rem;
+    font-size:0.85rem;
     color:#FFFFFF;
     font-family: Futura, Arial, "sans-serif";
     margin: 0 auto;
@@ -196,7 +196,7 @@
 
   h3{
     color:#FFFFFF;
-    font-size:0.7rem;
+    font-size:0.85rem;
     font-family: Futura, Arial, "sans-serif";
     padding: 0.25rem;
     margin:1rem 2rem 1rem;
@@ -401,6 +401,7 @@ a:hover {
 
 
 <body style="background-color:#000000">
+
   <div class="row-main">
     <div id="map"></div>
 
@@ -433,13 +434,13 @@ a:hover {
 
     <h3>Step 2: Select a <span style="color:red">residential area</span> and <span style="color:#1E90FF">business district</span> to show traffic-choked segments along that commute.</h3>
 
-        <!-- <div>
+        <div>
           <h2 id="Route"></h2>
         </div>
 
         <div>
           <h3 id="Time" style="margin:0.5rem 1rem 1rem"></h3>
-        </div> -->
+        </div>
 
         <div class="row">
           <div class="button">
@@ -454,13 +455,13 @@ a:hover {
         <div class="row">
           <div class="column">
             <h2 id="TextDistance"></h2>
-            <h3>Distance</h3>
+            <h4>Distance</h4>
           </div>
 
           <div class="column">
             <h2 id="TextOC"></h2>
             <div class="tooltip">
-              <h3>Opportunity Cost <i class="material-icons">info_outline</i><span class="tooltiptext">In addition to what you pay for transit, you waste this amount while caught in traffic.</span></h3>
+              <h4>Opportunity Cost <i class="material-icons">info_outline</i><span class="tooltiptext">In addition to what you pay for transit, you waste this amount while caught in traffic.</span></h4>
             </div>
           </div>
         </div>
@@ -468,12 +469,12 @@ a:hover {
         <div class="row">
           <div class="column">
           <h2 id="TextFuelCost"></h2>
-          <h3>Additional Fuel Cost</h3>
+          <h4>Additional Fuel Cost</h4>
           </div>
 
           <div class="column">
           <h2 id="TextEnvCost"></h2>
-          <h3>Additional Cost of CO<sub>2</sub> Emissions</h3>
+          <h4>Additional Cost of CO<sub>2</sub> Emissions</h4>
           </div>
         </div>
 
@@ -807,7 +808,7 @@ function submitSegment(){
 function updateValues(){
 
   //match the path's unique_id with the TAZ lookup table, and find the cost values
-    d3.csv("mumbai_all_tazs.csv",function(data){
+    d3.csv("mumbai_all_tazs_short.csv",function(data){
       // console.log("i opened the second csv");
       for(var i = 0; i < data.length; i++){
         if(data[i].unique_id == lookup_unique_id){
