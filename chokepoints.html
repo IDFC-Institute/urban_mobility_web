@@ -406,6 +406,25 @@ a:hover {
   color:#fff;
 }
 
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: green;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 16px;
+  z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
 </style>
 </head>
 
@@ -434,9 +453,21 @@ a:hover {
               <div class="column-slider-value">
                   <h4 id="selectedWage"></h4>
               </div>
+
+              <!-- <div class="column-slider-currency">
+                <h4 id="currency" class="currency_class"></h4>
+              </div> -->
+
               <div class="column-slider-currency">
-                <h4 id="currency"></h4>
-              </div>
+                <form>
+                 <select name="dropdown" id="dropdown">
+                    <option value = "USD">USD</option>
+                    <option value = "INR">INR</option>
+                    <option value = "GBP">GBP</option>
+                 </select>
+              </form>
+            </div>
+
             </div>
           </p>
         </div>
@@ -488,7 +519,7 @@ a:hover {
         </div>
 
         <div class="row-title_description">
-          <h4>For more, read IDFC Institute's paper:<h2><a href="/papers/201910.pdf">Assessing Cities’ Labour Market Efficiencies Using Mumbai Commuting Data</a></h2></h4>
+          <h4>For more, read IDFC Institute's paper:<h2><a href="paper.pdf">Assessing Cities’ Labour Market Efficiencies Using Mumbai Commuting Data</a></h2></h4>
         </div>
 
   </div> <!--end navigation-->
@@ -512,14 +543,63 @@ document.getElementById("toPrice").defaultValue = Math.round(12600/exchange);
 document.getElementById("toPrice").step = Math.round((12600/exchange)/100);
 document.getElementById("toPrice").min = Math.round(12600/exchange);
 document.getElementById("toPrice").max = Math.round((12600/exchange)*40);
-document.getElementById("currency").innerHTML = currency;
+// document.getElementById("currency").innerHTML = currency;
 
+//event listener for slider
 var rangeInput = document.getElementById('toPrice');
 rangeInput.addEventListener("change", function() {
     document.getElementById("toPrice").textContent = rangeInput.value;
     monthlyWage = document.getElementById('selectedWage').innerHTML;
     clearSegment();
+
+    d3.select("#TextDistance").text(" - km");
+    d3.select("#TextOC").text("- "+ currency);
+    d3.select("#TextFuelCost").text("- " + currency);
+    d3.select("#TextEnvCost").text("- " + currency);
+
 }, false);
+
+//1. change dropdown
+//2. change slider range
+//3. listen for slider change
+
+//event listener for dropdown
+//get the dropdown
+var dropdownCurrency = document.getElementById('dropdown');
+var currency;
+
+dropdownCurrency.addEventListener("change", function() {
+  currency = dropdownCurrency.value;
+  clearSegment();
+  //clear slider
+  //update currency label
+  console.log(currency);
+  if(currency == "USD"){
+    exchange = 70;
+    console.log(exchange);
+  }
+  else if(currency == "INR"){
+    exchange = 1;
+    console.log(exchange);
+  }
+  else if(currency == "GBP"){
+    exchange = 93;
+    console.log(exchange);
+  }
+
+  document.getElementById("toPrice").defaultValue = Math.round(12600/exchange);
+  document.getElementById("toPrice").step = Math.round((12600/exchange)/100);
+  document.getElementById("toPrice").min = Math.round(12600/exchange);
+  document.getElementById("toPrice").max = Math.round((12600/exchange)*40);
+  document.getElementById("selectedWage") = document.getElementById("toPrice").defaultValue;
+
+  d3.select("#TextDistance").text(" - km");
+  d3.select("#TextOC").text("- "+ currency);
+  d3.select("#TextFuelCost").text("- " + currency);
+  d3.select("#TextEnvCost").text("- " + currency);
+
+}, false);
+
 
 d3.select("#TextDistance").text(" - km");
 d3.select("#TextOC").text("- "+ currency);
