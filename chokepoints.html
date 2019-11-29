@@ -463,8 +463,8 @@ a:hover {
               <div class="column-slider-currency">
                 <form>
                  <select name="dropdown" id="dropdown" style="font-family: Futura, Arial">
-                    <option value = "USD">USD</option>
                     <option value = "INR">INR</option>
+                    <option value = "USD">USD</option>
                     <option value = "GBP">GBP</option>
                  </select>
               </form>
@@ -537,8 +537,11 @@ var origin_dest;
 
 var hourlyWage;
 var monthlyWage;
-var currency = "USD";
-var exchange = 70;
+
+var currency = "<?php echo $currency; ?>";
+
+var currency = "INR";
+var exchange = 1;
 
 //assign range slider value to monthly wage
 document.getElementById("toPrice").defaultValue = Math.round(12600/exchange);
