@@ -5,6 +5,7 @@
 <meta charset="utf-8" />
 <!-- https://www.d3-graph-gallery.com/graph/backgroundmap_leaflet_buttonLayer.html -->
 <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin=""></script>
+
 <!-- <script src="http://cdn.leafletjs.com/leaflet-0.6.1/leaflet.js"></script> -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
@@ -62,7 +63,7 @@
       font-size:0.85rem;
       color:#FFFFFF;
       font-family: Futura, Arial, "sans-serif";
-      margin: 0 auto;
+      margin: 0rem 0rem 0rem;
       padding: 0.25rem;
     }
 
@@ -116,7 +117,7 @@
 
   @media only screen and (min-width:769px){ /*desktop version*/
     #navigation {
-        width:100vh;
+        width:120vh;
         height:90vh;
         flex-direction:row;
         text-align:center;
@@ -125,10 +126,10 @@
     #map{
        display:flex;
        flex-direction:row;
+       width:50vh;
+       height:100vh;
        flex:100%;
        background:white;
-       height:100vh;
-       width:50vh;
       }
 
       .row-main{
@@ -166,7 +167,7 @@
         font-size:1rem;
         font-family: Futura, Arial, "sans-serif";
         padding: 0.25rem;
-        margin:1rem 2rem 1rem;
+        margin:0.5rem 2rem 0.5rem;
       }
 
       h3{
@@ -175,7 +176,7 @@
         font-family: Futura, Arial, "sans-serif";
         margin: 0 auto;
         padding: 0.25rem;
-        margin:1rem 2rem 1rem;
+        margin:0rem 0rem 0rem;
       }
 
       h4{
@@ -184,7 +185,7 @@
         font-family: Futura, Arial, "sans-serif";
         padding: 0.25rem;
         /* width: 80%; */
-        margin:1rem 2rem 1rem;
+        margin:0.5rem 2rem 0.5rem;
       }
       #selectedWage{
         font-size:1rem;
@@ -225,7 +226,7 @@
     .column-slider-currency{
       flex:25%;
       text-align:left;
-      margin:0.1rem 0rem 0.1rem;
+      margin:0.4rem 0rem 0.4rem;
     }
 
     .stroke {
@@ -341,6 +342,22 @@
     color:#fff;
   }
 
+
+  .dropdown-content {
+    display: none;
+    background-color:purple;
+    position: absolute;
+    background-color: green;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 12px 16px;
+    z-index: 1;
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
 </style>
 </head>
 
@@ -355,7 +372,7 @@
       <h1>Mumbai: Costs of Congestion</h1>
       </div>
       <div id="row-description">
-      <h4>Ease of mobility is crucial for cities’ productivity. Better mobility allows better access to jobs and allows firms access to a larger pool of workers. As cities grow, congestion can rapidly erode productivity as well as impose heavy environmental costs. <br></br>We used publicly-available Uber Movement data to measure congestion in the three years up to and including 2018. <br>(We assume here that 70 INR = 1 USD.)</br></h4>
+      <h4>Ease of mobility is crucial for cities’ productivity. Better mobility allows better access to jobs and allows firms access to a larger pool of workers. As cities grow, congestion can rapidly erode productivity as well as impose heavy environmental costs. <br></br>We used publicly-available Uber Movement data to measure congestion in the three years up to and including 2018.</h4>
       </div>
     </div>
 
@@ -368,12 +385,21 @@
               <input type="range" id="toPrice" name="amount" class = "slider" value="12600" min="12600" max="500000" step="100"
                 oninput="document.getElementById('selectedWage').innerHTML = this.value" />
               </div>
+
               <div class="column-slider-value">
-                  <h4 id="selectedWage">12600</h4>
+                  <h4 id="selectedWage"></h4>
               </div>
+
               <div class="column-slider-currency">
-                <h4 id="selectedWage">INR</h4>
+                <form>
+                 <select name="dropdown" id="dropdown" style="font-family: Futura, Arial">
+                    <option value = "INR">INR</option>
+                    <option value = "USD">USD</option>
+                    <option value = "GBP">GBP</option>
+                 </select>
+               </form>
               </div>
+
             </div>
           </p>
         </div>
@@ -418,36 +444,72 @@
 var hourlyWage;
 var monthlyWage;
 
+var currency = "<?php echo $currency; ?>";
+var currency = "INR";
+var exchange = 1;
 
 //assign range slider value to monthly wage
+document.getElementById("toPrice").defaultValue = Math.round(12600/exchange);
+document.getElementById("toPrice").step = Math.round((12600/exchange)/100);
+document.getElementById("toPrice").min = Math.round(12600/exchange);
+document.getElementById("toPrice").max = Math.round((12600/exchange)*40);
+
 var rangeInput = document.getElementById('toPrice');
 rangeInput.addEventListener("change", function() {
-  // console.log((rangeInput.value).toLocaleString('en-IN'));
-  // console.log(rangeInput.value);
     document.getElementById("toPrice").textContent = rangeInput.value;
     monthlyWage = document.getElementById('selectedWage').innerHTML;
-    // console.log(localeString(monthlyWage));
-    // console.log("locale string");
-    // console.log(monthlyWage.toLocaleString('en-IN'));
     clearMap();
+    d3.select("#TextDistance").text(" - km");
+    d3.select("#TextOC").text("- "+ currency);
+    d3.select("#TextFuelCost").text("- " + currency);
+    d3.select("#TextEnvCost").text("- " + currency);
+
+}, false);
+
+//event listener for dropdown
+//get the dropdown
+var dropdownCurrency = document.getElementById('dropdown');
+var currency;
+
+dropdownCurrency.addEventListener("change", function() {
+  currency = dropdownCurrency.value;
+  clearMap();
+
+  //clear slider
+  //update currency label
+  console.log(currency);
+  if(currency == "USD"){
+    exchange = 70;
+    console.log(exchange);
+  }
+  else if(currency == "INR"){
+    exchange = 1;
+    console.log(exchange);
+  }
+  else if(currency == "GBP"){
+    exchange = 93;
+    console.log(exchange);
+  }
+
+  document.getElementById("toPrice").defaultValue = Math.round(12600/exchange);
+  console.log(document.getElementById("toPrice").defaultValue);
+  document.getElementById("toPrice").step = Math.round((12600/exchange)/100);
+  document.getElementById("toPrice").min = Math.round(12600/exchange);
+  document.getElementById("toPrice").max = Math.round((12600/exchange)*40);
+  document.getElementById("selectedWage") = document.getElementById("toPrice").defaultValue;
+
+  d3.select("#TextDistance").text(" - km");
+  d3.select("#TextOC").text("- "+ currency);
+  d3.select("#TextFuelCost").text("- " + currency);
+  d3.select("#TextEnvCost").text("- " + currency);
 
 }, false);
 
 
-function localeString(x, sep, grp) {
-    var sx = (''+x).split('.'), s = '', i, j;
-    sep || (sep = ','); // default seperator
-    grp || grp === 0 || (grp = 3); // default grouping
-    i = sx[0].length;
-    while (i > grp) {
-        j = i - grp;
-        s = sep + sx[0].slice(j, i) + s;
-        i = j;
-    }
-    s = sx[0].slice(0, i) + s;
-    sx[0] = s;
-    return sx.join('.');
-}
+d3.select("#TextDistance").text(" - km");
+d3.select("#TextOC").text("- "+ currency);
+d3.select("#TextFuelCost").text("- " + currency);
+d3.select("#TextEnvCost").text("- " + currency);
 
 var dist;
 var oc;
@@ -468,16 +530,17 @@ function clearMap(){
   d3.selectAll("path").remove();
   //sets blank values initially
   d3.select("#TextDistance").text(" - km");
-  d3.select("#TextOC").text("- INR");
-  d3.select("#TextFuelCost").text("- INR");
-  d3.select("#TextEnvCost").text("- INR");
+  d3.select("#TextOC").text("- "+ currency);
+  d3.select("#TextFuelCost").text("- " + currency);
+  d3.select("#TextEnvCost").text("- " + currency);
   showJSON();
 }
+
 //sets blank values initially
 d3.select("#TextDistance").text(" - km");
-d3.select("#TextOC").text("- INR");
-d3.select("#TextFuelCost").text("- INR");
-d3.select("#TextEnvCost").text("- INR");
+d3.select("#TextOC").text("- "+ currency);
+d3.select("#TextFuelCost").text("- " + currency);
+d3.select("#TextEnvCost").text("- " + currency);
 
 //makes routing variable
 var route = L.Routing.control({
