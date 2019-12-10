@@ -783,37 +783,22 @@ g.attr('pointer-events','all');
                 hourlyWage = monthlyWage/7/9/4;
               }
               else{//if user has not yet moved the slider
-                hourlyWage = 50;
+                hourlyWage = 50/exchange;
               }
 
-              var inr = true;
-              var exchange = 70;
+              dist = data[i].distance;
+              oc = (data[i].additional_hours_commuting*((0.5*(hourlyWage))+(0.5*(hourlyWage))));
+              econ = (data[i].add_petrol_costs)/exchange;
+              env = (data[i].total_petrol_emissions)/exchange;
 
-              if(inr==true){
-                dist = data[i].distance;
-                oc = data[i].additional_hours_commuting*((0.5*(hourlyWage))+(0.5*(hourlyWage)));
-                econ = data[i].add_petrol_costs;
-                env = data[i].total_petrol_emissions;
-                d3.select("#TextDistance").text(dist + " km");
-                d3.select("#TextOC").text(Math.round(oc) +" INR");
-                d3.select("#TextFuelCost").text(Math.round(econ) + " INR");
-                d3.select("#TextEnvCost").text(Math.round(env) + " INR");
-              }
-              else if(inr==false){
-                dist = (data[i].distance)/exchange;
-                oc = (data[i].additional_hours_commuting*((0.5*(hourlyWage))+(0.5*(hourlyWage))))/exchange;
-                econ = (data[i].add_petrol_costs)/exchange;
-                env = (data[i].total_petrol_emissions)/exchange;
+              d3.select("#TextDistance").text(Math.round(dist*100)/100 + " km");
+              d3.select("#TextOC").text(Math.round(oc) +" "+ currency);
+              d3.select("#TextFuelCost").text(Math.round(econ) + " " + currency);
+              d3.select("#TextEnvCost").text(Math.round(env) + " " + currency);
 
-                d3.select("#TextDistance").text(dist + " km");
-                d3.select("#TextOC").text(Math.round(oc) +" USD");
-                d3.select("#TextFuelCost").text(Math.round(econ) + " USD");
-                d3.select("#TextEnvCost").text(Math.round(env) + " USD");
-              }
-
-            }
-          }
-        }) //end CSV
+            } //end if data unique id
+          } //end for loop
+        }) //end mumbai short csv
       } //end updateValues function
 
       updateValues();
