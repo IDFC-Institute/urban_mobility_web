@@ -29,11 +29,6 @@
     height:20rem;
   }
 
-  .row-main{
-    display:flex;
-    flex-direction:column;
-  }
-
   #row-title{
     display:block;
     width:100%;
@@ -44,6 +39,23 @@
     display:flex;
     width:100%;
     flex-direction:row;
+  }
+
+  #selectedWage{
+    font-size:0.7rem;
+    text-align:left;
+    margin:0.1rem 0rem 0.1rem;
+  }
+
+  #currency{
+    font-size:0.7rem;
+    text-align:left;
+    margin:0.1rem 0rem 0.1rem;
+  }
+
+  .row-main{
+    display:flex;
+    flex-direction:column;
   }
 
   .row-slider{
@@ -126,18 +138,7 @@
     font-size:0.2rem;
   }
 
-  #selectedWage{
-    font-size:0.7rem;
-    text-align:left;
-    margin:0.1rem 0rem 0.1rem;
-  }
-  #currency{
-    font-size:0.7rem;
-    text-align:left;
-    margin:0.1rem 0rem 0.1rem;
-  }
-
-}
+} /*end mobile version*/
 
 
 @media only screen and (min-width:769px){ /*desktop version*/
@@ -158,17 +159,29 @@
    width:50vh;
   }
 
-  .row-main{
-    display:flex;
-    flex-direction:row;
-  }
-
   #row-title{
     display:flex;
     flex-direction:row;
   }
 
   #row-description{
+    display:flex;
+    flex-direction:row;
+  }
+
+  #selectedWage{
+    font-size:1rem;
+    text-align:left;
+    margin: 0.1rem 0rem 0.1rem;
+  }
+
+  #currency{
+    font-size:1rem;
+    text-align:left;
+    margin:0.1rem 0rem 0.1rem;
+  }
+
+  .row-main{
     display:flex;
     flex-direction:row;
   }
@@ -240,25 +253,13 @@
     margin:0 auto;
     display: inline-block;
   }
-  #selectedWage{
-    font-size:1rem;
-    text-align:left;
-    margin: 0.1rem 0rem 0.1rem;
-  }
-  #currency{
-    font-size:1rem;
-    text-align:left;
-    margin:0.1rem 0rem 0.1rem;
-  }
-
-}
+} /*end desktop version*/
 
 /*apply to all*/
 
   .row{
     display:flex;
   }
-
 
   .leaflet-routing-container-hide{
     display:none;
@@ -438,13 +439,14 @@ a:hover {
     <div id="map"></div>
 
     <div id="navigation">
-      <div class="row-title-description">
+
+      <div class="row-title-description"> <!--title-->
         <div id="row-title">
           <h1>Mumbai: Traffic Chokepoints</h1>
         </div>
       </div>
 
-      <div id="row-slider-all">
+      <div id="row-slider-all"> <!--slider row-->
         <h3>Step 1: Set your monthly wage with the slider and choose your currency from the dropdown.</h3>
         <div>
           <p>
@@ -471,26 +473,25 @@ a:hover {
             </div>
           </p>
         </div>
-      </div>
+      </div> <!--end slider row-->
 
     <h3>Step 2: On the map, select a <span style="color:red">residential area</span> and <span style="color:#1E90FF">business district</span> to show traffic-choked segments along that commute.</h3>
 
-        <div>
+        <div> <!--Origin to Destination-->
           <h2 id="Route"></h2>
         </div>
 
-        <div>
+        <div> <!--Morning or Afternoon Commute-->
           <h3 id="Time" style="margin:0.5rem 1rem 1rem"></h3>
         </div>
 
-        <div class="row">
+        <div class="row"> <!--Reverse Route button-->
           <div class="button">
-            <!-- <button><a type=button class="text_input form-control" value="Segment_Value" onClick="submitSegment();" class="segment_button">Show Chokepoints</a> -->
             <button><a type=button class="text_input form-control" value="Segment_Value" onClick="reverseRoute();" class="segment_button">Reverse Route</a>
           </div>
         </div>
 
-        <h2 style="color:white">Costs Per Roundtrip</h2>
+        <h2 style="color:white">Costs Per Roundtrip</h2> <!--Costs Section-->
 
         <div class="row">
           <div class="column">
@@ -508,22 +509,22 @@ a:hover {
 
         <div class="row">
           <div class="column">
-          <h2 id="TextFuelCost"></h2>
-          <h4>Additional Fuel Cost</h4>
+            <h2 id="TextFuelCost"></h2>
+            <h4>Additional Fuel Cost</h4>
           </div>
 
           <div class="column">
-          <h2 id="TextEnvCost"></h2>
-          <h4>Additional Cost of CO<sub>2</sub> Emissions</h4>
+            <h2 id="TextEnvCost"></h2>
+            <h4>Additional Cost of CO<sub>2</sub> Emissions</h4>
           </div>
         </div>
 
-        <div class="row-title_description">
+        <div class="row-title_description"> <!--Additional Info-->
           <h4>For more, read IDFC Institute's paper:<h2><a href="paper.pdf">Assessing Cities’ Labour Market Efficiencies Using Mumbai Commuting Data</a></h2></h4>
         </div>
 
   </div> <!--end navigation-->
-</div>
+</div> <!--end map + navigation-->
 
 <script> //initialize global values
 
@@ -537,7 +538,6 @@ var hourlyWage;
 var monthlyWage;
 
 var currency = "<?php echo $currency; ?>";
-
 var currency = "INR";
 var exchange = 1;
 
@@ -548,12 +548,13 @@ document.getElementById("toPrice").min = Math.round(12600/exchange);
 document.getElementById("toPrice").max = Math.round((12600/exchange)*40);
 
 //event listener for slider
-var rangeInput = document.getElementById('toPrice');
-rangeInput.addEventListener("change", function() {
+var rangeInput = document.getElementById('toPrice'); //get the slider value
+rangeInput.addEventListener("change", function() { //when changed, get the slider value again
     document.getElementById("toPrice").textContent = rangeInput.value;
-    monthlyWage = document.getElementById('selectedWage').innerHTML;
+    monthlyWage = document.getElementById('selectedWage').innerHTML; //set the monthly wage as the slider value
     clearSegment();
 
+    //reset the cost values
     d3.select("#TextDistance").text(" - km");
     d3.select("#TextOC").text("- "+ currency);
     d3.select("#TextFuelCost").text("- " + currency);
@@ -562,35 +563,38 @@ rangeInput.addEventListener("change", function() {
 }, false);
 
 //event listener for dropdown
-//get the dropdown
-var dropdownCurrency = document.getElementById('dropdown');
+var dropdownCurrency = document.getElementById('dropdown'); //get the currency from dropdown
 var currency;
 
-dropdownCurrency.addEventListener("change", function() {
-  currency = dropdownCurrency.value;
+//initializes the cost values as blanks
+d3.select("#TextDistance").text(" - km");
+d3.select("#TextOC").text("- "+ currency);
+d3.select("#TextFuelCost").text("- " + currency);
+d3.select("#TextEnvCost").text("- " + currency);
+
+dropdownCurrency.addEventListener("change", function() { //when changed, get the currency value again
+  currency = dropdownCurrency.value; //set the currency as the dropdown value
   clearSegment();
-  //clear slider
-  //update currency label
-  console.log(currency);
+
+  //update currency label and assign exchange rate
   if(currency == "USD"){
     exchange = 70;
-    console.log(exchange);
   }
   else if(currency == "INR"){
     exchange = 1;
-    console.log(exchange);
   }
   else if(currency == "GBP"){
     exchange = 93;
-    console.log(exchange);
   }
 
+  //calculate new ranges for slider based on selected currency
   document.getElementById("toPrice").defaultValue = Math.round(12600/exchange);
   document.getElementById("toPrice").step = Math.round((12600/exchange)/100);
   document.getElementById("toPrice").min = Math.round(12600/exchange);
   document.getElementById("toPrice").max = Math.round((12600/exchange)*40);
   document.getElementById("selectedWage") = document.getElementById("toPrice").defaultValue;
 
+  //reset the cost values
   d3.select("#TextDistance").text(" - km");
   d3.select("#TextOC").text("- "+ currency);
   d3.select("#TextFuelCost").text("- " + currency);
@@ -598,55 +602,12 @@ dropdownCurrency.addEventListener("change", function() {
 
 }, false);
 
-
-d3.select("#TextDistance").text(" - km");
-d3.select("#TextOC").text("- "+ currency);
-d3.select("#TextFuelCost").text("- " + currency);
-d3.select("#TextEnvCost").text("- " + currency);
-
-//dropdown function
-function dynamicdropdown(listindex)
-{
-    switch (listindex)
-    {
-    case "am" :
-        document.getElementById("startpoint").options[0]=new Option("Select startpoint","");
-        document.getElementById("startpoint").options[1]=new Option("Andheri West","Andheri West");
-        document.getElementById("startpoint").options[2]=new Option("Borivali","Borivali");
-        document.getElementById("startpoint").options[3]=new Option("Chembur","Chembur");
-        document.getElementById("startpoint").options[4]=new Option("Marine Drive","Marine Drive");
-        document.getElementById("endpoint").options[0]=new Option("Select endpoint","");
-        document.getElementById("endpoint").options[1]=new Option("Andheri East","Andheri East");
-        document.getElementById("endpoint").options[2]=new Option("BKC","BKC");
-        document.getElementById("endpoint").options[3]=new Option("Lower Parel","Lower Parel");
-        document.getElementById("endpoint").options[4]=new Option("Malad","Malad");
-        document.getElementById("endpoint").options[5]=new Option("Nariman Point","Nariman Point");
-        break;
-    case "pm" :
-        document.getElementById("startpoint").options[0]=new Option("Select startpoint","");
-        document.getElementById("startpoint").options[1]=new Option("Andheri East","Andheri East");
-        document.getElementById("startpoint").options[2]=new Option("BKC","BKC");
-        document.getElementById("startpoint").options[3]=new Option("Lower Parel","Lower Parel");
-        document.getElementById("startpoint").options[4]=new Option("Malad","Malad");
-        document.getElementById("startpoint").options[5]=new Option("Nariman Point","Nariman Point");
-        document.getElementById("endpoint").options[0]=new Option("Select endpoint","");
-        document.getElementById("endpoint").options[1]=new Option("Andheri West","Andheri West");
-        document.getElementById("endpoint").options[2]=new Option("Borivali","Borivali");
-        document.getElementById("endpoint").options[3]=new Option("Chembur","Chembur");
-        document.getElementById("endpoint").options[4]=new Option("Marine Drive","Marine Drive");
-        document.getElementById("endpoint").options[5]=new Option("","");
-
-        break;
-    }
-    return true;
-}
-
 //map functions
 function clearSegment(){
-  // console.log("activated clear segment");
   origin_dest = "";
   d3.selectAll("path").remove();
   // d3.selectAll("circle").attr("stroke-width",10);
+
   //sets blank values initially
   d3.select("#TextDistance").text(" - km");
   d3.select("#TextOC").text("- " + currency);
@@ -671,6 +632,7 @@ d3.csv("places.csv",function(data){
           .data(data)
           .enter()
           .append("circle")
+          //how to make the circle?
           .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
           .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y })
           .attr("r", function(d){
@@ -679,6 +641,8 @@ d3.csv("places.csv",function(data){
             else { return "10px";} })
           .style("fill", function(d){ if(d.Type=="residential") { return "red"; } else { return "#1E90FF"; } })
           .attr("id", function(d, i){ return "circle" + i; })
+
+          //what to do when mouse out, over, click?
           .on("mouseout", function (d, i){
             d3.select("#circle" + i).attr("r", function(d){
               if(window.innerWidth<768)
@@ -687,13 +651,12 @@ d3.csv("places.csv",function(data){
             d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 20; })
             d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
           })
+
           .on("mouseover", function (d, i){
             d3.select("#circle" + i).attr("r", function(d){
             if(window.innerWidth<768)
             { return "10px"; }
             else { return "12px";} });
-            // d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 20; })
-            // d3.select("#text" + i).attr("y", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 150; });
             d3.select("#text" + i).attr("font-weight",function(d,i) {return i*100+100;})
           })
 
@@ -816,6 +779,7 @@ d3.csv("places.csv",function(data){
           .data(data)
           .enter()
           .append("text")
+          //how to make the text?
           .text(function(d) { return d.Name; })
           .attr("font-family","Futura")
           .attr("font-size", function(d){if(window.innerWidth<768){ return "10"; } else { return "12"; } })
@@ -824,7 +788,7 @@ d3.csv("places.csv",function(data){
             if(window.innerWidth<768)
             { return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 10; }
             else{ return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; } })
-          .attr("y", function(d){
+            .attr("y", function(d){
             if(window.innerWidth<768)
               if(d.Name=="Nariman Point")
               {return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; }
@@ -832,13 +796,13 @@ d3.csv("places.csv",function(data){
               {return map.latLngToLayerPoint([d.Lat, d.Lon]).y - 8; }
             else
               {return map.latLngToLayerPoint([d.Lat, d.Lon]).y + 10; } })
-          .attr("id", function(d, i){ return "text" + i; })
+          .attr("id", function(d, i){ return "text" + i;})
 
+        //what to do when mouse out, over, click?
         .on("mouseout", function (d, i){
           d3.select("#text" + i).attr("x", function(d){return map.latLngToLayerPoint([d.Lat, d.Lon]).x + 15; })
           d3.select("#text" + i).attr("fill","black");
         }); //end text functions
-
 
       }); //end CSV
 
@@ -869,7 +833,6 @@ function reverseRoute(){
   else{
     d3.select("#Time").text("Afternoon Commute");
   }
-
 }
 
 function submitSegment(){
@@ -878,19 +841,16 @@ function submitSegment(){
   d3.csv("places_unique.csv",function(data){
     var lookup_unique_id;
 
-    // console.log(origin_dest);
-    // console.log("i opened the csv");
     //check for ID match
     for(var i = 0; i < data.length; i++){
       if(data[i].od == origin_dest){
         lookup_unique_id = data[i].unique_id;
-        // console.log("the lookup unique id is")
-        // console.log(lookup_unique_id);
       }
     }
 
-function updateValues(){
+//while you have the lookup_unique_id...open the other CSV
 
+function updateValues(){
   //match the path's unique_id with the TAZ lookup table, and find the cost values
     d3.csv("mumbai_all_tazs_short.csv",function(data){
       // console.log("i opened the second csv");
@@ -912,12 +872,13 @@ function updateValues(){
             d3.select("#TextOC").text(Math.round(oc) +" "+ currency);
             d3.select("#TextFuelCost").text(Math.round(econ) + " " + currency);
             d3.select("#TextEnvCost").text(Math.round(env) + " " + currency);
+        } //end if data unique id
+      } //end for loop
+    }) //end mumbai short csv
+  } //end updateValues function
 
-    }
-  }
-  })
-}
 updateValues();
+
 })//end places unique csv
 
   d3.json("segments_merged_2.json", function(geoShape) {
@@ -1006,10 +967,9 @@ L.tileLayer(
   var svg = d3.select(map.getPanes().overlayPane).append("svg"),
     g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
-    //////////////// legend //////////////////////
+    //////////////// begin legend //////////////////////
 
     var w = 140, h = 550;
-
 
           if(window.innerWidth<768){ //mobile
             var key = d3.select("body")
@@ -1118,28 +1078,27 @@ L.tileLayer(
               .attr("stop-color", "red")
               .attr("stop-opacity", 1);
 
-              key.append("rect")
-                .attr("width", w - 120)
-                .attr("height", h)
-                .style("fill", "url(#gradient)")
-                .attr("transform", "translate(0,100)");
+            key.append("rect")
+              .attr("width", w - 120)
+              .attr("height", h)
+              .style("fill", "url(#gradient)")
+              .attr("transform", "translate(0,100)");
 
-              key.append("text")
-              .attr("width", 450)
-              .attr("height", 200)
-              .attr("transform", "translate(52,105)")
-              .style("font-family","Futura")
-              .attr("font-size","0.75rem")
-              .text(function(d){return "km/hr"});
+            key.append("text")
+            .attr("width", 450)
+            .attr("height", 200)
+            .attr("transform", "translate(52,105)")
+            .style("font-family","Futura")
+            .attr("font-size","0.75rem")
+            .text(function(d){return "km/hr"});
 
-              key.append("text")
-              .attr("width", 450)
-              .attr("height", 200)
-              .attr("transform", "translate(20,80)")
-              .style("font-family","Futura")
-              .attr("font-size","0.75rem")
-              .text(function(d){return "Speed"});
-
+            key.append("text")
+            .attr("width", 450)
+            .attr("height", 200)
+            .attr("transform", "translate(20,80)")
+            .style("font-family","Futura")
+            .attr("font-size","0.75rem")
+            .text(function(d){return "Speed"});
 
             var y = d3.scale.linear()
               .range([h,1])
@@ -1154,9 +1113,7 @@ L.tileLayer(
 
           }
 
-
-
-    ////////////// legend ////////////////////
+    ////////////// end legend ////////////////////
 
     g.attr('pointer-events', 'all'); //https://stackoverflow.com/a/17495417/7207315
 
@@ -1168,9 +1125,15 @@ L.tileLayer(
           .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y });
     }
 
-    map.on("moveend", updateCircle)
-    // map.on("moveend", updateText)
+    function updateText()
+    {
+        d3.selectAll("text")
+          .attr("cx", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).x })
+          .attr("cy", function(d){ return map.latLngToLayerPoint([d.Lat, d.Lon]).y });
+    }
 
+    map.on("moveend", updateCircle)
+    map.on("moveend", updateText)
 
 </script>
 </body>
