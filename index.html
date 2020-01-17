@@ -625,6 +625,7 @@ var d_id_new;
 var colors = { clickable: 'black', origin: 'purple', dest: "green", clickhover: "lightgreen", none:"white" };
 
 d3.csv("places.csv",function(data){
+  console.log(data);
   svg.attr("width",1000)
   .attr("height",1000);
 
