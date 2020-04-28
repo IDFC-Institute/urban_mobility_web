@@ -1,0 +1,7 @@
+PROBLEM:
+
+No server serving the OSRM stuff in order to configure stuff like CORS or https. So tried with nginx and got a handle how that was creating a proxy to the localhost:5000, which was the OSRM server. But was struggling with aspects of it, namely getting CORS and https to work. So I tried again with Apache and got to exactly the same point, but I understand Apache better than nginx.
+
+I initially used https://golb.hplar.ch/2018/07/self-hosted-tile-server.html#nginx and http://www.digital-geography.com/set-tileserver-using-tilestache-gunicorn-nginx/. Then moved onto https://vitux.com/how-to-install-and-configure-apache-web-server-on-ubuntu/ and used https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-18-04 for SSL and needed https://stackoverflow.com/questions/8541182/apache-redirect-to-another-port and also https://www.digitalocean.com/community/questions/sudo-ufw-status-return-inactive. Need to get this ProxyPass thing working with SSL: https://serverfault.com/questions/811538/ssl-and-proxypass
+
+
